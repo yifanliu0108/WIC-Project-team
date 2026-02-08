@@ -1,124 +1,65 @@
 # In Tune - Music-Based Friend Making Platform
 
-A dating/friend-making website based on music taste compatibility. Built for Women In Computing Project Team, UCSD.
-
-## Project Overview
-
-In Tune connects people based on their music preferences. Users can discover others with similar music tastes, share songs, and build connections through their shared love of music.
+A dating/friend-making website based on music taste compatibility.
 
 ## Tech Stack
 
-### Backend
-- **Python 3.9+** with **FastAPI** - Modern async web framework
-- **PostgreSQL** - Relational database
-- **SQLAlchemy** - ORM for database operations
-- **JWT** - Authentication
-- **Pydantic** - Data validation
+- **Backend**: Python + FastAPI, PostgreSQL, SQLAlchemy, JWT
+- **Frontend**: React 18, Vite, React Router
 
-### Frontend
-- **React 18** - UI library
-- **Vite** - Build tool
-- **React Router** - Routing
+## Quick Setup
 
-## Features
-
-### MVP Features
-- ✅ User authentication (register/login)
-- ✅ User profiles with music preferences
-- ✅ Song management (add, view, favorite songs)
-- ✅ Connection system (send/accept connections)
-- ✅ Similarity score calculation
-- ✅ Activity feed
-- ✅ Search functionality
-- ✅ Connection statistics
-
-### Pages
-- **Dashboard**: Network graph, search bar, profile cards, similarity scores, top songs
-- **Feed**: Activity feed and notification center
-- **Profile**: Songs, artists, genres, albums, connection statistics
-- **Login**: Registration and authentication
-
-## Getting Started
-
-**🚀 For the fastest setup, see [QUICKSTART.md](QUICKSTART.md)**
-
-### Quick Setup (Recommended)
-
-Run the automated setup script:
 ```bash
-chmod +x setup.sh
 ./setup.sh
 ```
 
 Then:
-1. Update `backend/.env` with your PostgreSQL credentials
+1. Update `backend/.env` with PostgreSQL credentials
 2. Create database: `createdb intune_db`
-3. Initialize tables: `cd backend && python init_db.py`
+3. Initialize: `cd backend && python init_db.py`
 4. Start backend: `cd backend && python run.py`
 5. Start frontend: `cd frontend && npm run dev`
 
-### Manual Setup
+## Features
 
-#### Backend Setup
-
-See [backend/README.md](backend/README.md) for detailed setup instructions.
-
-Quick start:
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-# Set up .env file
-python init_db.py  # Initialize database
-python run.py      # Start server
-```
-
-#### Frontend Setup
-
-See [frontend/README.md](frontend/README.md) for detailed setup instructions.
-
-Quick start:
-```bash
-cd frontend
-npm install
-npm run dev
-```
+- User authentication & profiles
+- Song management & favorites
+- Connection system with similarity scores
+- Activity feed & search
+- Dashboard with network graph, profile cards, top songs
 
 ## Project Structure
 
 ```
-.
-├── backend/          # FastAPI backend
-│   ├── app/
-│   │   ├── api/      # API routes
-│   │   ├── core/     # Configuration, database, security
-│   │   ├── models/   # Database models
-│   │   ├── schemas/  # Pydantic schemas
-│   │   └── services/ # Business logic
-│   └── requirements.txt
-├── frontend/         # React frontend
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   └── App.jsx
-│   └── package.json
-└── README.md
+backend/     # FastAPI API
+frontend/    # React app
 ```
 
-## Development Status
+## Git Commands
 
-This is an MVP framework. The backend API structure is complete, and the frontend has the basic page structure. Full functionality and API integration need to be implemented.
+**First time setup:**
+```bash
+git clone https://github.com/yifanliu0108/WIC-Project-team.git
+cd WIC-Project-team
+./setup.sh
+```
 
-## Future Enhancements
+**Daily workflow:**
+```bash
+git pull origin main          # Get latest changes
+git checkout -b feature/name  # Create branch for your work
+# ... make changes ...
+git add .
+git commit -m "Describe what changes you made"
+git push origin feature/name  # Push your branch
+# Then create Pull Request on GitHub
+```
 
-- Spotify API integration for automatic music data
-- Network graph visualization (D3.js or vis.js)
-- Real-time notifications
-- Advanced recommendation algorithms
-- Music player integration
-- Social media sharing
+**Basic commands:**
+- `git status` - See what changed
+- `git add .` - Stage all changes
+- `git commit -m "message"` - Save changes
+- `git push origin main` - Upload to GitHub
+- `git pull origin main` - Download from GitHub
 
-## Contributors
-
-Women In Computing Project Team, UCSD
+See [QUICKSTART.md](QUICKSTART.md) for detailed setup.
