@@ -1,7 +1,8 @@
 # Quick Start
 
 ## Prerequisites
-- Python 3.9+, Node.js 16+, PostgreSQL
+- Python 3.9+, Node.js 16+ (SQLite included with Python)
+- Optional for production-style setup: PostgreSQL
 
 ## Setup
 
@@ -18,9 +19,7 @@ cd backend
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-# Update .env with DATABASE_URL
-createdb intune_db
-python init_db.py
+python init_db.py  # Uses DATABASE_URL (defaults to SQLite)
 python run.py
 ```
 
@@ -39,7 +38,9 @@ npm run dev
 
 ## Troubleshooting
 
-- **Database error**: Check PostgreSQL is running, verify DATABASE_URL in `.env`
+- **Database error**:
+  - SQLite (default): check `backend/intune.db` path is writable and not locked
+  - PostgreSQL: ensure server is running and `DATABASE_URL` points to an existing database
 - **Port in use**: Backend: change in `run.py`, Frontend: Vite auto-finds port
 - **CORS error**: Ensure `CORS_ORIGINS` in `.env` includes frontend URL
 

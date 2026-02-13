@@ -6,8 +6,8 @@ from typing import List
 
 
 class Settings(BaseSettings):
-    # Database
-    DATABASE_URL: str = "postgresql://user:password@localhost:5432/intune_db"
+    # Database (SQLite for development, PostgreSQL for production)
+    DATABASE_URL: str = "sqlite:///./intune.db"
     
     # Security
     SECRET_KEY: str = "your-secret-key-change-in-production"

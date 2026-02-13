@@ -4,7 +4,7 @@ A dating/friend-making website based on music taste compatibility.
 
 ## Tech Stack
 
-- **Backend**: Python + FastAPI, PostgreSQL, SQLAlchemy, JWT
+- **Backend**: Python + FastAPI, SQLite (dev) / PostgreSQL (prod), SQLAlchemy, JWT
 - **Frontend**: React 18, Vite, React Router
 
 ## Quick Setup
@@ -14,11 +14,13 @@ A dating/friend-making website based on music taste compatibility.
 ```
 
 Then:
-1. Update `backend/.env` with PostgreSQL credentials
-2. Create database: `createdb intune_db`
-3. Initialize: `cd backend && python init_db.py`
-4. Start backend: `cd backend && python run.py`
-5. Start frontend: `cd frontend && npm run dev`
+1. Initialize database: `cd backend && python init_db.py`
+2. Start backend: `cd backend && python run.py`
+3. Start frontend: `cd frontend && npm run dev`
+
+Database behavior:
+- Default local setup uses SQLite (`sqlite:///./intune.db`)
+- PostgreSQL is supported by setting `DATABASE_URL` in `backend/.env` before running `python init_db.py`
 
 ## Features
 
