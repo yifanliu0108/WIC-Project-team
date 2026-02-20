@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>intune — Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-content">
+        <div class="logo-section">
+          <img src="Assets/Logo.svg" alt="intune logo" class="logo-img" />
+          <h1>Dashboard</h1>
+        </div>
+        <nav class="nav">
+          <a href="index.html" class="nav-link">Login</a>
+          <button class="user-menu" aria-label="User menu">👤</button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section class="dashboard-section">
+        <div class="section-header">
+          <h2>Network Graph</h2>
+          <p class="subtitle">Visualize connections and relationships</p>
+        </div>
+        
+        <div class="controls">
+          <button id="resetView" class="btn btn-secondary">Reset View</button>
+          <button id="toggleLabels" class="btn btn-secondary">Toggle Labels</button>
+          <select id="layoutSelect" class="select">
+            <option value="force">Force Layout</option>
+            <option value="circular">Circular</option>
+            <option value="grid">Grid</option>
+          </select>
+        </div>
+
+        <div id="networkGraph" class="graph-container">
+          <!-- D3 network graph will be rendered here -->
+        </div>
+
+        <div class="info-panel">
+          <div class="stat-card">
+            <span class="stat-label">Nodes</span>
+            <span class="stat-value" id="nodeCount">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Connections</span>
+            <span class="stat-value" id="linkCount">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Selected</span>
+            <span class="stat-value" id="selectedCount">0</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- D3.js library -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="dashboard.js"></script>
+  </body>
+</html>

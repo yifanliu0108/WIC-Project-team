@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>intune — Login</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="container">
+      <section class="card">
+        <div class="brand">
+          <img src="Assets/Logo.svg" alt="intune logo" class="logo-img" />
+          <h1>intune</h1>
+        </div>
+
+        <p class="pitch">Find friends and matches who vibe with your music taste.</p>
+
+        <form id="loginForm" class="form" autocomplete="on">
+          <label for="username">Username</label>
+          <input id="username" name="username" type="text" placeholder="musiclover92" required />
+
+          <label for="password">Password</label>
+          <div class="passwordRow">
+            <input id="password" name="password" type="password" placeholder="Enter password" required />
+            <button type="button" id="togglePwd" class="iconBtn" aria-label="Show password">Show</button>
+          </div>
+
+          <div class="row between">
+            <label class="remember"><input type="checkbox" id="remember" /> Remember me</label>
+            <a href="#" class="link">Forgot?</a>
+          </div>
+
+          <button type="submit" class="primary" onclick="window.location.href='dashboard.html'; return false;">Sign in</button>
+
+          <div class="divider">or</div>
+
+          <button type="button" id="spotifyBtn" class="spotify">Continue with Spotify</button>
+
+          <p class="signup">New to intune? <a href="#">Create an account</a></p>
+        </form>
+
+        <small class="footer">By continuing, you agree to our Terms and Privacy.</small>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

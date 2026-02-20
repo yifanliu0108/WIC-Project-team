@@ -1,0 +1,1001 @@
+user_id,rank,artist,song
+U0001,1,Bad Bunny,Tití Me Preguntó
+U0001,2,SZA,Kill Bill
+U0001,3,Phoebe Bridgers,Motion Sickness
+U0001,4,Travis Scott,SICKO MODE
+U0001,5,Billie Eilish,Happier Than Ever
+U0002,1,Lana Del Rey,Summertime Sadness
+U0002,2,BTS,Dynamite
+U0002,3,"Tyler, The Creator",EARFQUAKE
+U0002,4,Billie Eilish,Happier Than Ever
+U0002,5,Arctic Monkeys,505
+U0003,1,Phoebe Bridgers,Motion Sickness
+U0003,2,Kendrick Lamar,HUMBLE.
+U0003,3,Taylor Swift,Cruel Summer
+U0003,4,Bad Bunny,Tití Me Preguntó
+U0003,5,Arctic Monkeys,505
+U0004,1,Kendrick Lamar,HUMBLE.
+U0004,2,Harry Styles,As It Was
+U0004,3,Doja Cat,Say So
+U0004,4,"Tyler, The Creator",EARFQUAKE
+U0004,5,BTS,Dynamite
+U0005,1,SZA,Kill Bill
+U0005,2,Travis Scott,SICKO MODE
+U0005,3,Arctic Monkeys,505
+U0005,4,Phoebe Bridgers,Motion Sickness
+U0005,5,BTS,Dynamite
+U0006,1,Billie Eilish,Happier Than Ever
+U0006,2,Phoebe Bridgers,Motion Sickness
+U0006,3,"Tyler, The Creator",EARFQUAKE
+U0006,4,Doja Cat,Say So
+U0006,5,BTS,Dynamite
+U0007,1,Ariana Grande,"thank u, next"
+U0007,2,Taylor Swift,Cruel Summer
+U0007,3,Billie Eilish,Happier Than Ever
+U0007,4,Frank Ocean,Ivy
+U0007,5,Arctic Monkeys,505
+U0008,1,Billie Eilish,Happier Than Ever
+U0008,2,Kendrick Lamar,HUMBLE.
+U0008,3,Blackpink,How You Like That
+U0008,4,"Tyler, The Creator",EARFQUAKE
+U0008,5,BTS,Dynamite
+U0009,1,The Weeknd,Blinding Lights
+U0009,2,Drake,One Dance
+U0009,3,Phoebe Bridgers,Motion Sickness
+U0009,4,Bad Bunny,Tití Me Preguntó
+U0009,5,Doja Cat,Say So
+U0010,1,Phoebe Bridgers,Motion Sickness
+U0010,2,Ariana Grande,"thank u, next"
+U0010,3,Olivia Rodrigo,vampire
+U0010,4,Billie Eilish,Happier Than Ever
+U0010,5,SZA,Kill Bill
+U0011,1,Harry Styles,As It Was
+U0011,2,Bad Bunny,Tití Me Preguntó
+U0011,3,Lana Del Rey,Summertime Sadness
+U0011,4,NewJeans,Super Shy
+U0011,5,Billie Eilish,Happier Than Ever
+U0012,1,Harry Styles,As It Was
+U0012,2,Arctic Monkeys,505
+U0012,3,Olivia Rodrigo,vampire
+U0012,4,SZA,Kill Bill
+U0012,5,Bad Bunny,Tití Me Preguntó
+U0013,1,Olivia Rodrigo,vampire
+U0013,2,Lana Del Rey,Summertime Sadness
+U0013,3,Taylor Swift,Cruel Summer
+U0013,4,Kendrick Lamar,HUMBLE.
+U0013,5,"Tyler, The Creator",EARFQUAKE
+U0014,1,BTS,Dynamite
+U0014,2,Bad Bunny,Tití Me Preguntó
+U0014,3,Taylor Swift,Cruel Summer
+U0014,4,Harry Styles,As It Was
+U0014,5,Travis Scott,SICKO MODE
+U0015,1,Travis Scott,SICKO MODE
+U0015,2,The Weeknd,Blinding Lights
+U0015,3,Doja Cat,Say So
+U0015,4,SZA,Kill Bill
+U0015,5,Frank Ocean,Ivy
+U0016,1,Frank Ocean,Ivy
+U0016,2,Kendrick Lamar,HUMBLE.
+U0016,3,The Weeknd,Blinding Lights
+U0016,4,Phoebe Bridgers,Motion Sickness
+U0016,5,Billie Eilish,Happier Than Ever
+U0017,1,Phoebe Bridgers,Motion Sickness
+U0017,2,Olivia Rodrigo,vampire
+U0017,3,The Weeknd,Blinding Lights
+U0017,4,Taylor Swift,Cruel Summer
+U0017,5,Doja Cat,Say So
+U0018,1,Doja Cat,Say So
+U0018,2,Kendrick Lamar,HUMBLE.
+U0018,3,BTS,Dynamite
+U0018,4,Drake,One Dance
+U0018,5,Ariana Grande,"thank u, next"
+U0019,1,Travis Scott,SICKO MODE
+U0019,2,Arctic Monkeys,505
+U0019,3,Frank Ocean,Ivy
+U0019,4,Billie Eilish,Happier Than Ever
+U0019,5,Blackpink,How You Like That
+U0020,1,"Tyler, The Creator",EARFQUAKE
+U0020,2,NewJeans,Super Shy
+U0020,3,Harry Styles,As It Was
+U0020,4,Blackpink,How You Like That
+U0020,5,Taylor Swift,Cruel Summer
+U0021,1,Phoebe Bridgers,Motion Sickness
+U0021,2,Taylor Swift,Cruel Summer
+U0021,3,Kendrick Lamar,HUMBLE.
+U0021,4,Travis Scott,SICKO MODE
+U0021,5,Blackpink,How You Like That
+U0022,1,Taylor Swift,Cruel Summer
+U0022,2,Kendrick Lamar,HUMBLE.
+U0022,3,Doja Cat,Say So
+U0022,4,SZA,Kill Bill
+U0022,5,Billie Eilish,Happier Than Ever
+U0023,1,Taylor Swift,Cruel Summer
+U0023,2,NewJeans,Super Shy
+U0023,3,The Weeknd,Blinding Lights
+U0023,4,BTS,Dynamite
+U0023,5,SZA,Kill Bill
+U0024,1,Billie Eilish,Happier Than Ever
+U0024,2,Blackpink,How You Like That
+U0024,3,Travis Scott,SICKO MODE
+U0024,4,BTS,Dynamite
+U0024,5,Lana Del Rey,Summertime Sadness
+U0025,1,The Weeknd,Blinding Lights
+U0025,2,Arctic Monkeys,505
+U0025,3,Drake,One Dance
+U0025,4,Travis Scott,SICKO MODE
+U0025,5,Frank Ocean,Ivy
+U0026,1,Harry Styles,As It Was
+U0026,2,Billie Eilish,Happier Than Ever
+U0026,3,Blackpink,How You Like That
+U0026,4,SZA,Kill Bill
+U0026,5,Lana Del Rey,Summertime Sadness
+U0027,1,Arctic Monkeys,505
+U0027,2,BTS,Dynamite
+U0027,3,Phoebe Bridgers,Motion Sickness
+U0027,4,Lana Del Rey,Summertime Sadness
+U0027,5,NewJeans,Super Shy
+U0028,1,The Weeknd,Blinding Lights
+U0028,2,Doja Cat,Say So
+U0028,3,Bad Bunny,Tití Me Preguntó
+U0028,4,Billie Eilish,Happier Than Ever
+U0028,5,Phoebe Bridgers,Motion Sickness
+U0029,1,The Weeknd,Blinding Lights
+U0029,2,"Tyler, The Creator",EARFQUAKE
+U0029,3,Harry Styles,As It Was
+U0029,4,Taylor Swift,Cruel Summer
+U0029,5,NewJeans,Super Shy
+U0030,1,Harry Styles,As It Was
+U0030,2,Bad Bunny,Tití Me Preguntó
+U0030,3,Kendrick Lamar,HUMBLE.
+U0030,4,NewJeans,Super Shy
+U0030,5,Taylor Swift,Cruel Summer
+U0031,1,Kendrick Lamar,HUMBLE.
+U0031,2,Billie Eilish,Happier Than Ever
+U0031,3,Lana Del Rey,Summertime Sadness
+U0031,4,The Weeknd,Blinding Lights
+U0031,5,Travis Scott,SICKO MODE
+U0032,1,Taylor Swift,Cruel Summer
+U0032,2,Arctic Monkeys,505
+U0032,3,Bad Bunny,Tití Me Preguntó
+U0032,4,Harry Styles,As It Was
+U0032,5,Blackpink,How You Like That
+U0033,1,"Tyler, The Creator",EARFQUAKE
+U0033,2,Drake,One Dance
+U0033,3,BTS,Dynamite
+U0033,4,Doja Cat,Say So
+U0033,5,Olivia Rodrigo,vampire
+U0034,1,NewJeans,Super Shy
+U0034,2,Arctic Monkeys,505
+U0034,3,Billie Eilish,Happier Than Ever
+U0034,4,Blackpink,How You Like That
+U0034,5,The Weeknd,Blinding Lights
+U0035,1,Olivia Rodrigo,vampire
+U0035,2,Billie Eilish,Happier Than Ever
+U0035,3,"Tyler, The Creator",EARFQUAKE
+U0035,4,Phoebe Bridgers,Motion Sickness
+U0035,5,Harry Styles,As It Was
+U0036,1,Frank Ocean,Ivy
+U0036,2,Billie Eilish,Happier Than Ever
+U0036,3,BTS,Dynamite
+U0036,4,"Tyler, The Creator",EARFQUAKE
+U0036,5,Taylor Swift,Cruel Summer
+U0037,1,The Weeknd,Blinding Lights
+U0037,2,Lana Del Rey,Summertime Sadness
+U0037,3,Arctic Monkeys,505
+U0037,4,Harry Styles,As It Was
+U0037,5,NewJeans,Super Shy
+U0038,1,Ariana Grande,"thank u, next"
+U0038,2,Harry Styles,As It Was
+U0038,3,Phoebe Bridgers,Motion Sickness
+U0038,4,Lana Del Rey,Summertime Sadness
+U0038,5,Travis Scott,SICKO MODE
+U0039,1,Olivia Rodrigo,vampire
+U0039,2,Harry Styles,As It Was
+U0039,3,Taylor Swift,Cruel Summer
+U0039,4,SZA,Kill Bill
+U0039,5,NewJeans,Super Shy
+U0040,1,Blackpink,How You Like That
+U0040,2,The Weeknd,Blinding Lights
+U0040,3,SZA,Kill Bill
+U0040,4,Harry Styles,As It Was
+U0040,5,BTS,Dynamite
+U0041,1,Doja Cat,Say So
+U0041,2,Frank Ocean,Ivy
+U0041,3,Ariana Grande,"thank u, next"
+U0041,4,Harry Styles,As It Was
+U0041,5,Taylor Swift,Cruel Summer
+U0042,1,Olivia Rodrigo,vampire
+U0042,2,Travis Scott,SICKO MODE
+U0042,3,Harry Styles,As It Was
+U0042,4,Arctic Monkeys,505
+U0042,5,Bad Bunny,Tití Me Preguntó
+U0043,1,Blackpink,How You Like That
+U0043,2,Frank Ocean,Ivy
+U0043,3,Travis Scott,SICKO MODE
+U0043,4,Arctic Monkeys,505
+U0043,5,NewJeans,Super Shy
+U0044,1,Frank Ocean,Ivy
+U0044,2,Billie Eilish,Happier Than Ever
+U0044,3,Doja Cat,Say So
+U0044,4,BTS,Dynamite
+U0044,5,Ariana Grande,"thank u, next"
+U0045,1,Travis Scott,SICKO MODE
+U0045,2,"Tyler, The Creator",EARFQUAKE
+U0045,3,Harry Styles,As It Was
+U0045,4,Olivia Rodrigo,vampire
+U0045,5,Blackpink,How You Like That
+U0046,1,"Tyler, The Creator",EARFQUAKE
+U0046,2,BTS,Dynamite
+U0046,3,Billie Eilish,Happier Than Ever
+U0046,4,Doja Cat,Say So
+U0046,5,Travis Scott,SICKO MODE
+U0047,1,Kendrick Lamar,HUMBLE.
+U0047,2,Blackpink,How You Like That
+U0047,3,SZA,Kill Bill
+U0047,4,Travis Scott,SICKO MODE
+U0047,5,Taylor Swift,Cruel Summer
+U0048,1,NewJeans,Super Shy
+U0048,2,Phoebe Bridgers,Motion Sickness
+U0048,3,Ariana Grande,"thank u, next"
+U0048,4,Billie Eilish,Happier Than Ever
+U0048,5,Doja Cat,Say So
+U0049,1,Lana Del Rey,Summertime Sadness
+U0049,2,The Weeknd,Blinding Lights
+U0049,3,NewJeans,Super Shy
+U0049,4,Frank Ocean,Ivy
+U0049,5,Arctic Monkeys,505
+U0050,1,Blackpink,How You Like That
+U0050,2,Lana Del Rey,Summertime Sadness
+U0050,3,Ariana Grande,"thank u, next"
+U0050,4,Kendrick Lamar,HUMBLE.
+U0050,5,Billie Eilish,Happier Than Ever
+U0051,1,BTS,Dynamite
+U0051,2,Drake,One Dance
+U0051,3,Ariana Grande,"thank u, next"
+U0051,4,Billie Eilish,Happier Than Ever
+U0051,5,Travis Scott,SICKO MODE
+U0052,1,Harry Styles,As It Was
+U0052,2,Doja Cat,Say So
+U0052,3,Frank Ocean,Ivy
+U0052,4,Arctic Monkeys,505
+U0052,5,Kendrick Lamar,HUMBLE.
+U0053,1,Drake,One Dance
+U0053,2,"Tyler, The Creator",EARFQUAKE
+U0053,3,Lana Del Rey,Summertime Sadness
+U0053,4,Phoebe Bridgers,Motion Sickness
+U0053,5,Kendrick Lamar,HUMBLE.
+U0054,1,Harry Styles,As It Was
+U0054,2,Blackpink,How You Like That
+U0054,3,Billie Eilish,Happier Than Ever
+U0054,4,Frank Ocean,Ivy
+U0054,5,NewJeans,Super Shy
+U0055,1,Blackpink,How You Like That
+U0055,2,Arctic Monkeys,505
+U0055,3,Phoebe Bridgers,Motion Sickness
+U0055,4,BTS,Dynamite
+U0055,5,Olivia Rodrigo,vampire
+U0056,1,Taylor Swift,Cruel Summer
+U0056,2,Billie Eilish,Happier Than Ever
+U0056,3,Travis Scott,SICKO MODE
+U0056,4,"Tyler, The Creator",EARFQUAKE
+U0056,5,NewJeans,Super Shy
+U0057,1,Billie Eilish,Happier Than Ever
+U0057,2,Travis Scott,SICKO MODE
+U0057,3,Arctic Monkeys,505
+U0057,4,NewJeans,Super Shy
+U0057,5,Bad Bunny,Tití Me Preguntó
+U0058,1,Harry Styles,As It Was
+U0058,2,Ariana Grande,"thank u, next"
+U0058,3,Bad Bunny,Tití Me Preguntó
+U0058,4,Lana Del Rey,Summertime Sadness
+U0058,5,BTS,Dynamite
+U0059,1,Kendrick Lamar,HUMBLE.
+U0059,2,Billie Eilish,Happier Than Ever
+U0059,3,Frank Ocean,Ivy
+U0059,4,Arctic Monkeys,505
+U0059,5,Travis Scott,SICKO MODE
+U0060,1,Harry Styles,As It Was
+U0060,2,Travis Scott,SICKO MODE
+U0060,3,Arctic Monkeys,505
+U0060,4,Olivia Rodrigo,vampire
+U0060,5,BTS,Dynamite
+U0061,1,NewJeans,Super Shy
+U0061,2,Travis Scott,SICKO MODE
+U0061,3,Harry Styles,As It Was
+U0061,4,Blackpink,How You Like That
+U0061,5,Olivia Rodrigo,vampire
+U0062,1,Billie Eilish,Happier Than Ever
+U0062,2,Phoebe Bridgers,Motion Sickness
+U0062,3,Bad Bunny,Tití Me Preguntó
+U0062,4,Travis Scott,SICKO MODE
+U0062,5,BTS,Dynamite
+U0063,1,Olivia Rodrigo,vampire
+U0063,2,Frank Ocean,Ivy
+U0063,3,NewJeans,Super Shy
+U0063,4,Arctic Monkeys,505
+U0063,5,Blackpink,How You Like That
+U0064,1,Bad Bunny,Tití Me Preguntó
+U0064,2,Arctic Monkeys,505
+U0064,3,Travis Scott,SICKO MODE
+U0064,4,Ariana Grande,"thank u, next"
+U0064,5,NewJeans,Super Shy
+U0065,1,Harry Styles,As It Was
+U0065,2,"Tyler, The Creator",EARFQUAKE
+U0065,3,The Weeknd,Blinding Lights
+U0065,4,Olivia Rodrigo,vampire
+U0065,5,NewJeans,Super Shy
+U0066,1,The Weeknd,Blinding Lights
+U0066,2,Drake,One Dance
+U0066,3,Blackpink,How You Like That
+U0066,4,Lana Del Rey,Summertime Sadness
+U0066,5,Taylor Swift,Cruel Summer
+U0067,1,Ariana Grande,"thank u, next"
+U0067,2,Travis Scott,SICKO MODE
+U0067,3,The Weeknd,Blinding Lights
+U0067,4,Harry Styles,As It Was
+U0067,5,Drake,One Dance
+U0068,1,Arctic Monkeys,505
+U0068,2,Travis Scott,SICKO MODE
+U0068,3,NewJeans,Super Shy
+U0068,4,Phoebe Bridgers,Motion Sickness
+U0068,5,Bad Bunny,Tití Me Preguntó
+U0069,1,Doja Cat,Say So
+U0069,2,Arctic Monkeys,505
+U0069,3,Lana Del Rey,Summertime Sadness
+U0069,4,Bad Bunny,Tití Me Preguntó
+U0069,5,BTS,Dynamite
+U0070,1,Taylor Swift,Cruel Summer
+U0070,2,Olivia Rodrigo,vampire
+U0070,3,"Tyler, The Creator",EARFQUAKE
+U0070,4,Lana Del Rey,Summertime Sadness
+U0070,5,Billie Eilish,Happier Than Ever
+U0071,1,Phoebe Bridgers,Motion Sickness
+U0071,2,The Weeknd,Blinding Lights
+U0071,3,BTS,Dynamite
+U0071,4,Drake,One Dance
+U0071,5,NewJeans,Super Shy
+U0072,1,Doja Cat,Say So
+U0072,2,Bad Bunny,Tití Me Preguntó
+U0072,3,Kendrick Lamar,HUMBLE.
+U0072,4,Drake,One Dance
+U0072,5,Harry Styles,As It Was
+U0073,1,Phoebe Bridgers,Motion Sickness
+U0073,2,Kendrick Lamar,HUMBLE.
+U0073,3,Harry Styles,As It Was
+U0073,4,Billie Eilish,Happier Than Ever
+U0073,5,Blackpink,How You Like That
+U0074,1,"Tyler, The Creator",EARFQUAKE
+U0074,2,The Weeknd,Blinding Lights
+U0074,3,Olivia Rodrigo,vampire
+U0074,4,Harry Styles,As It Was
+U0074,5,Travis Scott,SICKO MODE
+U0075,1,Drake,One Dance
+U0075,2,"Tyler, The Creator",EARFQUAKE
+U0075,3,Blackpink,How You Like That
+U0075,4,Lana Del Rey,Summertime Sadness
+U0075,5,NewJeans,Super Shy
+U0076,1,Arctic Monkeys,505
+U0076,2,Lana Del Rey,Summertime Sadness
+U0076,3,Blackpink,How You Like That
+U0076,4,Travis Scott,SICKO MODE
+U0076,5,Olivia Rodrigo,vampire
+U0077,1,Ariana Grande,"thank u, next"
+U0077,2,Kendrick Lamar,HUMBLE.
+U0077,3,Blackpink,How You Like That
+U0077,4,Arctic Monkeys,505
+U0077,5,"Tyler, The Creator",EARFQUAKE
+U0078,1,Travis Scott,SICKO MODE
+U0078,2,Bad Bunny,Tití Me Preguntó
+U0078,3,Drake,One Dance
+U0078,4,Phoebe Bridgers,Motion Sickness
+U0078,5,"Tyler, The Creator",EARFQUAKE
+U0079,1,Billie Eilish,Happier Than Ever
+U0079,2,SZA,Kill Bill
+U0079,3,The Weeknd,Blinding Lights
+U0079,4,Doja Cat,Say So
+U0079,5,"Tyler, The Creator",EARFQUAKE
+U0080,1,Kendrick Lamar,HUMBLE.
+U0080,2,Travis Scott,SICKO MODE
+U0080,3,Bad Bunny,Tití Me Preguntó
+U0080,4,Harry Styles,As It Was
+U0080,5,Drake,One Dance
+U0081,1,Kendrick Lamar,HUMBLE.
+U0081,2,Drake,One Dance
+U0081,3,Travis Scott,SICKO MODE
+U0081,4,Frank Ocean,Ivy
+U0081,5,Phoebe Bridgers,Motion Sickness
+U0082,1,BTS,Dynamite
+U0082,2,SZA,Kill Bill
+U0082,3,Kendrick Lamar,HUMBLE.
+U0082,4,Billie Eilish,Happier Than Ever
+U0082,5,Taylor Swift,Cruel Summer
+U0083,1,Bad Bunny,Tití Me Preguntó
+U0083,2,Ariana Grande,"thank u, next"
+U0083,3,Harry Styles,As It Was
+U0083,4,Lana Del Rey,Summertime Sadness
+U0083,5,Taylor Swift,Cruel Summer
+U0084,1,Kendrick Lamar,HUMBLE.
+U0084,2,Billie Eilish,Happier Than Ever
+U0084,3,"Tyler, The Creator",EARFQUAKE
+U0084,4,NewJeans,Super Shy
+U0084,5,Taylor Swift,Cruel Summer
+U0085,1,Drake,One Dance
+U0085,2,Kendrick Lamar,HUMBLE.
+U0085,3,Phoebe Bridgers,Motion Sickness
+U0085,4,BTS,Dynamite
+U0085,5,The Weeknd,Blinding Lights
+U0086,1,BTS,Dynamite
+U0086,2,Doja Cat,Say So
+U0086,3,Olivia Rodrigo,vampire
+U0086,4,Drake,One Dance
+U0086,5,Frank Ocean,Ivy
+U0087,1,Harry Styles,As It Was
+U0087,2,SZA,Kill Bill
+U0087,3,Taylor Swift,Cruel Summer
+U0087,4,Drake,One Dance
+U0087,5,Arctic Monkeys,505
+U0088,1,Ariana Grande,"thank u, next"
+U0088,2,Harry Styles,As It Was
+U0088,3,Olivia Rodrigo,vampire
+U0088,4,"Tyler, The Creator",EARFQUAKE
+U0088,5,BTS,Dynamite
+U0089,1,BTS,Dynamite
+U0089,2,Billie Eilish,Happier Than Ever
+U0089,3,Lana Del Rey,Summertime Sadness
+U0089,4,Ariana Grande,"thank u, next"
+U0089,5,SZA,Kill Bill
+U0090,1,Taylor Swift,Cruel Summer
+U0090,2,Blackpink,How You Like That
+U0090,3,SZA,Kill Bill
+U0090,4,Bad Bunny,Tití Me Preguntó
+U0090,5,The Weeknd,Blinding Lights
+U0091,1,BTS,Dynamite
+U0091,2,Drake,One Dance
+U0091,3,Billie Eilish,Happier Than Ever
+U0091,4,Doja Cat,Say So
+U0091,5,Blackpink,How You Like That
+U0092,1,Travis Scott,SICKO MODE
+U0092,2,Phoebe Bridgers,Motion Sickness
+U0092,3,Taylor Swift,Cruel Summer
+U0092,4,SZA,Kill Bill
+U0092,5,Billie Eilish,Happier Than Ever
+U0093,1,Blackpink,How You Like That
+U0093,2,Harry Styles,As It Was
+U0093,3,Phoebe Bridgers,Motion Sickness
+U0093,4,Taylor Swift,Cruel Summer
+U0093,5,Doja Cat,Say So
+U0094,1,Harry Styles,As It Was
+U0094,2,The Weeknd,Blinding Lights
+U0094,3,Ariana Grande,"thank u, next"
+U0094,4,NewJeans,Super Shy
+U0094,5,"Tyler, The Creator",EARFQUAKE
+U0095,1,Blackpink,How You Like That
+U0095,2,The Weeknd,Blinding Lights
+U0095,3,Ariana Grande,"thank u, next"
+U0095,4,Kendrick Lamar,HUMBLE.
+U0095,5,Frank Ocean,Ivy
+U0096,1,Kendrick Lamar,HUMBLE.
+U0096,2,Bad Bunny,Tití Me Preguntó
+U0096,3,Phoebe Bridgers,Motion Sickness
+U0096,4,Olivia Rodrigo,vampire
+U0096,5,"Tyler, The Creator",EARFQUAKE
+U0097,1,Drake,One Dance
+U0097,2,Kendrick Lamar,HUMBLE.
+U0097,3,Blackpink,How You Like That
+U0097,4,NewJeans,Super Shy
+U0097,5,Olivia Rodrigo,vampire
+U0098,1,NewJeans,Super Shy
+U0098,2,Harry Styles,As It Was
+U0098,3,Bad Bunny,Tití Me Preguntó
+U0098,4,SZA,Kill Bill
+U0098,5,BTS,Dynamite
+U0099,1,Olivia Rodrigo,vampire
+U0099,2,Bad Bunny,Tití Me Preguntó
+U0099,3,Phoebe Bridgers,Motion Sickness
+U0099,4,The Weeknd,Blinding Lights
+U0099,5,Billie Eilish,Happier Than Ever
+U0100,1,Kendrick Lamar,HUMBLE.
+U0100,2,Phoebe Bridgers,Motion Sickness
+U0100,3,SZA,Kill Bill
+U0100,4,Harry Styles,As It Was
+U0100,5,Travis Scott,SICKO MODE
+U0101,1,NewJeans,Super Shy
+U0101,2,Olivia Rodrigo,vampire
+U0101,3,"Tyler, The Creator",EARFQUAKE
+U0101,4,Bad Bunny,Tití Me Preguntó
+U0101,5,Blackpink,How You Like That
+U0102,1,Olivia Rodrigo,vampire
+U0102,2,Billie Eilish,Happier Than Ever
+U0102,3,Bad Bunny,Tití Me Preguntó
+U0102,4,Drake,One Dance
+U0102,5,Travis Scott,SICKO MODE
+U0103,1,Blackpink,How You Like That
+U0103,2,"Tyler, The Creator",EARFQUAKE
+U0103,3,Lana Del Rey,Summertime Sadness
+U0103,4,Doja Cat,Say So
+U0103,5,Drake,One Dance
+U0104,1,Taylor Swift,Cruel Summer
+U0104,2,Phoebe Bridgers,Motion Sickness
+U0104,3,BTS,Dynamite
+U0104,4,NewJeans,Super Shy
+U0104,5,"Tyler, The Creator",EARFQUAKE
+U0105,1,SZA,Kill Bill
+U0105,2,Kendrick Lamar,HUMBLE.
+U0105,3,"Tyler, The Creator",EARFQUAKE
+U0105,4,Harry Styles,As It Was
+U0105,5,The Weeknd,Blinding Lights
+U0106,1,Doja Cat,Say So
+U0106,2,Kendrick Lamar,HUMBLE.
+U0106,3,The Weeknd,Blinding Lights
+U0106,4,BTS,Dynamite
+U0106,5,Frank Ocean,Ivy
+U0107,1,SZA,Kill Bill
+U0107,2,Billie Eilish,Happier Than Ever
+U0107,3,"Tyler, The Creator",EARFQUAKE
+U0107,4,BTS,Dynamite
+U0107,5,Frank Ocean,Ivy
+U0108,1,Billie Eilish,Happier Than Ever
+U0108,2,Lana Del Rey,Summertime Sadness
+U0108,3,Frank Ocean,Ivy
+U0108,4,SZA,Kill Bill
+U0108,5,Arctic Monkeys,505
+U0109,1,Harry Styles,As It Was
+U0109,2,Drake,One Dance
+U0109,3,Blackpink,How You Like That
+U0109,4,Bad Bunny,Tití Me Preguntó
+U0109,5,Olivia Rodrigo,vampire
+U0110,1,Bad Bunny,Tití Me Preguntó
+U0110,2,Travis Scott,SICKO MODE
+U0110,3,Phoebe Bridgers,Motion Sickness
+U0110,4,Blackpink,How You Like That
+U0110,5,Harry Styles,As It Was
+U0111,1,Drake,One Dance
+U0111,2,Kendrick Lamar,HUMBLE.
+U0111,3,Taylor Swift,Cruel Summer
+U0111,4,Doja Cat,Say So
+U0111,5,Frank Ocean,Ivy
+U0112,1,Arctic Monkeys,505
+U0112,2,Bad Bunny,Tití Me Preguntó
+U0112,3,Drake,One Dance
+U0112,4,Taylor Swift,Cruel Summer
+U0112,5,Ariana Grande,"thank u, next"
+U0113,1,Blackpink,How You Like That
+U0113,2,Frank Ocean,Ivy
+U0113,3,Taylor Swift,Cruel Summer
+U0113,4,Drake,One Dance
+U0113,5,BTS,Dynamite
+U0114,1,Olivia Rodrigo,vampire
+U0114,2,Lana Del Rey,Summertime Sadness
+U0114,3,Ariana Grande,"thank u, next"
+U0114,4,Drake,One Dance
+U0114,5,Blackpink,How You Like That
+U0115,1,Doja Cat,Say So
+U0115,2,Taylor Swift,Cruel Summer
+U0115,3,BTS,Dynamite
+U0115,4,The Weeknd,Blinding Lights
+U0115,5,"Tyler, The Creator",EARFQUAKE
+U0116,1,SZA,Kill Bill
+U0116,2,Arctic Monkeys,505
+U0116,3,BTS,Dynamite
+U0116,4,Harry Styles,As It Was
+U0116,5,Phoebe Bridgers,Motion Sickness
+U0117,1,"Tyler, The Creator",EARFQUAKE
+U0117,2,BTS,Dynamite
+U0117,3,Taylor Swift,Cruel Summer
+U0117,4,Doja Cat,Say So
+U0117,5,Frank Ocean,Ivy
+U0118,1,Olivia Rodrigo,vampire
+U0118,2,Lana Del Rey,Summertime Sadness
+U0118,3,Ariana Grande,"thank u, next"
+U0118,4,Billie Eilish,Happier Than Ever
+U0118,5,Blackpink,How You Like That
+U0119,1,Olivia Rodrigo,vampire
+U0119,2,"Tyler, The Creator",EARFQUAKE
+U0119,3,Phoebe Bridgers,Motion Sickness
+U0119,4,Arctic Monkeys,505
+U0119,5,Frank Ocean,Ivy
+U0120,1,Olivia Rodrigo,vampire
+U0120,2,Lana Del Rey,Summertime Sadness
+U0120,3,The Weeknd,Blinding Lights
+U0120,4,Arctic Monkeys,505
+U0120,5,Kendrick Lamar,HUMBLE.
+U0121,1,Doja Cat,Say So
+U0121,2,Frank Ocean,Ivy
+U0121,3,Bad Bunny,Tití Me Preguntó
+U0121,4,Blackpink,How You Like That
+U0121,5,Olivia Rodrigo,vampire
+U0122,1,Kendrick Lamar,HUMBLE.
+U0122,2,Blackpink,How You Like That
+U0122,3,SZA,Kill Bill
+U0122,4,Bad Bunny,Tití Me Preguntó
+U0122,5,Drake,One Dance
+U0123,1,Frank Ocean,Ivy
+U0123,2,Billie Eilish,Happier Than Ever
+U0123,3,"Tyler, The Creator",EARFQUAKE
+U0123,4,BTS,Dynamite
+U0123,5,Arctic Monkeys,505
+U0124,1,BTS,Dynamite
+U0124,2,Harry Styles,As It Was
+U0124,3,Olivia Rodrigo,vampire
+U0124,4,Billie Eilish,Happier Than Ever
+U0124,5,Arctic Monkeys,505
+U0125,1,"Tyler, The Creator",EARFQUAKE
+U0125,2,Doja Cat,Say So
+U0125,3,NewJeans,Super Shy
+U0125,4,Arctic Monkeys,505
+U0125,5,Blackpink,How You Like That
+U0126,1,Bad Bunny,Tití Me Preguntó
+U0126,2,The Weeknd,Blinding Lights
+U0126,3,Drake,One Dance
+U0126,4,NewJeans,Super Shy
+U0126,5,Billie Eilish,Happier Than Ever
+U0127,1,Olivia Rodrigo,vampire
+U0127,2,Doja Cat,Say So
+U0127,3,Frank Ocean,Ivy
+U0127,4,Billie Eilish,Happier Than Ever
+U0127,5,NewJeans,Super Shy
+U0128,1,Travis Scott,SICKO MODE
+U0128,2,Frank Ocean,Ivy
+U0128,3,Kendrick Lamar,HUMBLE.
+U0128,4,Arctic Monkeys,505
+U0128,5,Taylor Swift,Cruel Summer
+U0129,1,Taylor Swift,Cruel Summer
+U0129,2,Travis Scott,SICKO MODE
+U0129,3,Phoebe Bridgers,Motion Sickness
+U0129,4,Billie Eilish,Happier Than Ever
+U0129,5,Harry Styles,As It Was
+U0130,1,Kendrick Lamar,HUMBLE.
+U0130,2,Drake,One Dance
+U0130,3,Bad Bunny,Tití Me Preguntó
+U0130,4,The Weeknd,Blinding Lights
+U0130,5,Doja Cat,Say So
+U0131,1,The Weeknd,Blinding Lights
+U0131,2,Billie Eilish,Happier Than Ever
+U0131,3,Arctic Monkeys,505
+U0131,4,"Tyler, The Creator",EARFQUAKE
+U0131,5,BTS,Dynamite
+U0132,1,Bad Bunny,Tití Me Preguntó
+U0132,2,The Weeknd,Blinding Lights
+U0132,3,Travis Scott,SICKO MODE
+U0132,4,Frank Ocean,Ivy
+U0132,5,Taylor Swift,Cruel Summer
+U0133,1,Lana Del Rey,Summertime Sadness
+U0133,2,Harry Styles,As It Was
+U0133,3,BTS,Dynamite
+U0133,4,Frank Ocean,Ivy
+U0133,5,SZA,Kill Bill
+U0134,1,Travis Scott,SICKO MODE
+U0134,2,Ariana Grande,"thank u, next"
+U0134,3,Blackpink,How You Like That
+U0134,4,Bad Bunny,Tití Me Preguntó
+U0134,5,Harry Styles,As It Was
+U0135,1,The Weeknd,Blinding Lights
+U0135,2,Olivia Rodrigo,vampire
+U0135,3,Blackpink,How You Like That
+U0135,4,Taylor Swift,Cruel Summer
+U0135,5,Phoebe Bridgers,Motion Sickness
+U0136,1,Billie Eilish,Happier Than Ever
+U0136,2,Drake,One Dance
+U0136,3,Bad Bunny,Tití Me Preguntó
+U0136,4,Travis Scott,SICKO MODE
+U0136,5,NewJeans,Super Shy
+U0137,1,Lana Del Rey,Summertime Sadness
+U0137,2,Bad Bunny,Tití Me Preguntó
+U0137,3,Phoebe Bridgers,Motion Sickness
+U0137,4,Harry Styles,As It Was
+U0137,5,Kendrick Lamar,HUMBLE.
+U0138,1,Lana Del Rey,Summertime Sadness
+U0138,2,Bad Bunny,Tití Me Preguntó
+U0138,3,"Tyler, The Creator",EARFQUAKE
+U0138,4,Harry Styles,As It Was
+U0138,5,Billie Eilish,Happier Than Ever
+U0139,1,NewJeans,Super Shy
+U0139,2,Lana Del Rey,Summertime Sadness
+U0139,3,Billie Eilish,Happier Than Ever
+U0139,4,Blackpink,How You Like That
+U0139,5,Bad Bunny,Tití Me Preguntó
+U0140,1,Olivia Rodrigo,vampire
+U0140,2,Travis Scott,SICKO MODE
+U0140,3,Taylor Swift,Cruel Summer
+U0140,4,NewJeans,Super Shy
+U0140,5,The Weeknd,Blinding Lights
+U0141,1,Drake,One Dance
+U0141,2,Phoebe Bridgers,Motion Sickness
+U0141,3,"Tyler, The Creator",EARFQUAKE
+U0141,4,SZA,Kill Bill
+U0141,5,Travis Scott,SICKO MODE
+U0142,1,"Tyler, The Creator",EARFQUAKE
+U0142,2,Harry Styles,As It Was
+U0142,3,The Weeknd,Blinding Lights
+U0142,4,SZA,Kill Bill
+U0142,5,Travis Scott,SICKO MODE
+U0143,1,The Weeknd,Blinding Lights
+U0143,2,Billie Eilish,Happier Than Ever
+U0143,3,Blackpink,How You Like That
+U0143,4,Kendrick Lamar,HUMBLE.
+U0143,5,Taylor Swift,Cruel Summer
+U0144,1,Ariana Grande,"thank u, next"
+U0144,2,Phoebe Bridgers,Motion Sickness
+U0144,3,The Weeknd,Blinding Lights
+U0144,4,NewJeans,Super Shy
+U0144,5,Olivia Rodrigo,vampire
+U0145,1,Bad Bunny,Tití Me Preguntó
+U0145,2,NewJeans,Super Shy
+U0145,3,Travis Scott,SICKO MODE
+U0145,4,Ariana Grande,"thank u, next"
+U0145,5,Lana Del Rey,Summertime Sadness
+U0146,1,NewJeans,Super Shy
+U0146,2,SZA,Kill Bill
+U0146,3,Drake,One Dance
+U0146,4,Ariana Grande,"thank u, next"
+U0146,5,BTS,Dynamite
+U0147,1,Lana Del Rey,Summertime Sadness
+U0147,2,Harry Styles,As It Was
+U0147,3,Phoebe Bridgers,Motion Sickness
+U0147,4,NewJeans,Super Shy
+U0147,5,The Weeknd,Blinding Lights
+U0148,1,Arctic Monkeys,505
+U0148,2,Bad Bunny,Tití Me Preguntó
+U0148,3,Billie Eilish,Happier Than Ever
+U0148,4,Blackpink,How You Like That
+U0148,5,Drake,One Dance
+U0149,1,BTS,Dynamite
+U0149,2,Lana Del Rey,Summertime Sadness
+U0149,3,Arctic Monkeys,505
+U0149,4,Frank Ocean,Ivy
+U0149,5,NewJeans,Super Shy
+U0150,1,The Weeknd,Blinding Lights
+U0150,2,Blackpink,How You Like That
+U0150,3,Ariana Grande,"thank u, next"
+U0150,4,Olivia Rodrigo,vampire
+U0150,5,NewJeans,Super Shy
+U0151,1,Frank Ocean,Ivy
+U0151,2,Olivia Rodrigo,vampire
+U0151,3,Taylor Swift,Cruel Summer
+U0151,4,Travis Scott,SICKO MODE
+U0151,5,SZA,Kill Bill
+U0152,1,Blackpink,How You Like That
+U0152,2,Ariana Grande,"thank u, next"
+U0152,3,Billie Eilish,Happier Than Ever
+U0152,4,SZA,Kill Bill
+U0152,5,Kendrick Lamar,HUMBLE.
+U0153,1,Bad Bunny,Tití Me Preguntó
+U0153,2,BTS,Dynamite
+U0153,3,Olivia Rodrigo,vampire
+U0153,4,Harry Styles,As It Was
+U0153,5,Billie Eilish,Happier Than Ever
+U0154,1,Olivia Rodrigo,vampire
+U0154,2,BTS,Dynamite
+U0154,3,Taylor Swift,Cruel Summer
+U0154,4,Kendrick Lamar,HUMBLE.
+U0154,5,Blackpink,How You Like That
+U0155,1,The Weeknd,Blinding Lights
+U0155,2,Taylor Swift,Cruel Summer
+U0155,3,Bad Bunny,Tití Me Preguntó
+U0155,4,Ariana Grande,"thank u, next"
+U0155,5,Frank Ocean,Ivy
+U0156,1,Olivia Rodrigo,vampire
+U0156,2,Lana Del Rey,Summertime Sadness
+U0156,3,BTS,Dynamite
+U0156,4,"Tyler, The Creator",EARFQUAKE
+U0156,5,NewJeans,Super Shy
+U0157,1,Phoebe Bridgers,Motion Sickness
+U0157,2,Blackpink,How You Like That
+U0157,3,Lana Del Rey,Summertime Sadness
+U0157,4,Kendrick Lamar,HUMBLE.
+U0157,5,Drake,One Dance
+U0158,1,Lana Del Rey,Summertime Sadness
+U0158,2,Billie Eilish,Happier Than Ever
+U0158,3,"Tyler, The Creator",EARFQUAKE
+U0158,4,Blackpink,How You Like That
+U0158,5,Taylor Swift,Cruel Summer
+U0159,1,Bad Bunny,Tití Me Preguntó
+U0159,2,Blackpink,How You Like That
+U0159,3,Phoebe Bridgers,Motion Sickness
+U0159,4,Ariana Grande,"thank u, next"
+U0159,5,Harry Styles,As It Was
+U0160,1,Phoebe Bridgers,Motion Sickness
+U0160,2,Olivia Rodrigo,vampire
+U0160,3,Harry Styles,As It Was
+U0160,4,SZA,Kill Bill
+U0160,5,Billie Eilish,Happier Than Ever
+U0161,1,Frank Ocean,Ivy
+U0161,2,Travis Scott,SICKO MODE
+U0161,3,NewJeans,Super Shy
+U0161,4,"Tyler, The Creator",EARFQUAKE
+U0161,5,Olivia Rodrigo,vampire
+U0162,1,BTS,Dynamite
+U0162,2,Frank Ocean,Ivy
+U0162,3,Drake,One Dance
+U0162,4,Billie Eilish,Happier Than Ever
+U0162,5,Ariana Grande,"thank u, next"
+U0163,1,Travis Scott,SICKO MODE
+U0163,2,Olivia Rodrigo,vampire
+U0163,3,Taylor Swift,Cruel Summer
+U0163,4,The Weeknd,Blinding Lights
+U0163,5,BTS,Dynamite
+U0164,1,SZA,Kill Bill
+U0164,2,Kendrick Lamar,HUMBLE.
+U0164,3,Billie Eilish,Happier Than Ever
+U0164,4,Arctic Monkeys,505
+U0164,5,Frank Ocean,Ivy
+U0165,1,Frank Ocean,Ivy
+U0165,2,Drake,One Dance
+U0165,3,NewJeans,Super Shy
+U0165,4,Ariana Grande,"thank u, next"
+U0165,5,Arctic Monkeys,505
+U0166,1,Drake,One Dance
+U0166,2,Blackpink,How You Like That
+U0166,3,"Tyler, The Creator",EARFQUAKE
+U0166,4,Kendrick Lamar,HUMBLE.
+U0166,5,Ariana Grande,"thank u, next"
+U0167,1,Bad Bunny,Tití Me Preguntó
+U0167,2,Taylor Swift,Cruel Summer
+U0167,3,Billie Eilish,Happier Than Ever
+U0167,4,NewJeans,Super Shy
+U0167,5,Ariana Grande,"thank u, next"
+U0168,1,"Tyler, The Creator",EARFQUAKE
+U0168,2,BTS,Dynamite
+U0168,3,Ariana Grande,"thank u, next"
+U0168,4,Kendrick Lamar,HUMBLE.
+U0168,5,Harry Styles,As It Was
+U0169,1,Doja Cat,Say So
+U0169,2,Arctic Monkeys,505
+U0169,3,Bad Bunny,Tití Me Preguntó
+U0169,4,Phoebe Bridgers,Motion Sickness
+U0169,5,Blackpink,How You Like That
+U0170,1,NewJeans,Super Shy
+U0170,2,SZA,Kill Bill
+U0170,3,Doja Cat,Say So
+U0170,4,Travis Scott,SICKO MODE
+U0170,5,Harry Styles,As It Was
+U0171,1,Kendrick Lamar,HUMBLE.
+U0171,2,The Weeknd,Blinding Lights
+U0171,3,Taylor Swift,Cruel Summer
+U0171,4,"Tyler, The Creator",EARFQUAKE
+U0171,5,BTS,Dynamite
+U0172,1,Olivia Rodrigo,vampire
+U0172,2,Travis Scott,SICKO MODE
+U0172,3,Frank Ocean,Ivy
+U0172,4,Billie Eilish,Happier Than Ever
+U0172,5,Doja Cat,Say So
+U0173,1,Phoebe Bridgers,Motion Sickness
+U0173,2,Bad Bunny,Tití Me Preguntó
+U0173,3,NewJeans,Super Shy
+U0173,4,"Tyler, The Creator",EARFQUAKE
+U0173,5,Blackpink,How You Like That
+U0174,1,Arctic Monkeys,505
+U0174,2,Phoebe Bridgers,Motion Sickness
+U0174,3,SZA,Kill Bill
+U0174,4,Drake,One Dance
+U0174,5,Bad Bunny,Tití Me Preguntó
+U0175,1,Taylor Swift,Cruel Summer
+U0175,2,"Tyler, The Creator",EARFQUAKE
+U0175,3,Drake,One Dance
+U0175,4,Doja Cat,Say So
+U0175,5,SZA,Kill Bill
+U0176,1,SZA,Kill Bill
+U0176,2,Ariana Grande,"thank u, next"
+U0176,3,"Tyler, The Creator",EARFQUAKE
+U0176,4,The Weeknd,Blinding Lights
+U0176,5,NewJeans,Super Shy
+U0177,1,Ariana Grande,"thank u, next"
+U0177,2,"Tyler, The Creator",EARFQUAKE
+U0177,3,Travis Scott,SICKO MODE
+U0177,4,Doja Cat,Say So
+U0177,5,SZA,Kill Bill
+U0178,1,Doja Cat,Say So
+U0178,2,Travis Scott,SICKO MODE
+U0178,3,Ariana Grande,"thank u, next"
+U0178,4,Frank Ocean,Ivy
+U0178,5,BTS,Dynamite
+U0179,1,Ariana Grande,"thank u, next"
+U0179,2,Drake,One Dance
+U0179,3,Arctic Monkeys,505
+U0179,4,Harry Styles,As It Was
+U0179,5,BTS,Dynamite
+U0180,1,Billie Eilish,Happier Than Ever
+U0180,2,Doja Cat,Say So
+U0180,3,Harry Styles,As It Was
+U0180,4,Olivia Rodrigo,vampire
+U0180,5,Travis Scott,SICKO MODE
+U0181,1,Olivia Rodrigo,vampire
+U0181,2,Harry Styles,As It Was
+U0181,3,Phoebe Bridgers,Motion Sickness
+U0181,4,Lana Del Rey,Summertime Sadness
+U0181,5,Drake,One Dance
+U0182,1,Harry Styles,As It Was
+U0182,2,Taylor Swift,Cruel Summer
+U0182,3,Travis Scott,SICKO MODE
+U0182,4,Phoebe Bridgers,Motion Sickness
+U0182,5,"Tyler, The Creator",EARFQUAKE
+U0183,1,Lana Del Rey,Summertime Sadness
+U0183,2,Olivia Rodrigo,vampire
+U0183,3,Harry Styles,As It Was
+U0183,4,Travis Scott,SICKO MODE
+U0183,5,Doja Cat,Say So
+U0184,1,Lana Del Rey,Summertime Sadness
+U0184,2,Phoebe Bridgers,Motion Sickness
+U0184,3,Olivia Rodrigo,vampire
+U0184,4,"Tyler, The Creator",EARFQUAKE
+U0184,5,Bad Bunny,Tití Me Preguntó
+U0185,1,Taylor Swift,Cruel Summer
+U0185,2,Harry Styles,As It Was
+U0185,3,Bad Bunny,Tití Me Preguntó
+U0185,4,Phoebe Bridgers,Motion Sickness
+U0185,5,BTS,Dynamite
+U0186,1,Taylor Swift,Cruel Summer
+U0186,2,"Tyler, The Creator",EARFQUAKE
+U0186,3,Ariana Grande,"thank u, next"
+U0186,4,Harry Styles,As It Was
+U0186,5,SZA,Kill Bill
+U0187,1,Bad Bunny,Tití Me Preguntó
+U0187,2,Taylor Swift,Cruel Summer
+U0187,3,"Tyler, The Creator",EARFQUAKE
+U0187,4,Frank Ocean,Ivy
+U0187,5,SZA,Kill Bill
+U0188,1,Olivia Rodrigo,vampire
+U0188,2,Drake,One Dance
+U0188,3,Blackpink,How You Like That
+U0188,4,NewJeans,Super Shy
+U0188,5,Frank Ocean,Ivy
+U0189,1,Taylor Swift,Cruel Summer
+U0189,2,Travis Scott,SICKO MODE
+U0189,3,Ariana Grande,"thank u, next"
+U0189,4,Olivia Rodrigo,vampire
+U0189,5,Drake,One Dance
+U0190,1,Ariana Grande,"thank u, next"
+U0190,2,SZA,Kill Bill
+U0190,3,Phoebe Bridgers,Motion Sickness
+U0190,4,Harry Styles,As It Was
+U0190,5,Billie Eilish,Happier Than Ever
+U0191,1,BTS,Dynamite
+U0191,2,Olivia Rodrigo,vampire
+U0191,3,Phoebe Bridgers,Motion Sickness
+U0191,4,Billie Eilish,Happier Than Ever
+U0191,5,Bad Bunny,Tití Me Preguntó
+U0192,1,Doja Cat,Say So
+U0192,2,Frank Ocean,Ivy
+U0192,3,Travis Scott,SICKO MODE
+U0192,4,SZA,Kill Bill
+U0192,5,Ariana Grande,"thank u, next"
+U0193,1,Taylor Swift,Cruel Summer
+U0193,2,Billie Eilish,Happier Than Ever
+U0193,3,Travis Scott,SICKO MODE
+U0193,4,Frank Ocean,Ivy
+U0193,5,Lana Del Rey,Summertime Sadness
+U0194,1,Phoebe Bridgers,Motion Sickness
+U0194,2,BTS,Dynamite
+U0194,3,Doja Cat,Say So
+U0194,4,Blackpink,How You Like That
+U0194,5,Arctic Monkeys,505
+U0195,1,Doja Cat,Say So
+U0195,2,Bad Bunny,Tití Me Preguntó
+U0195,3,"Tyler, The Creator",EARFQUAKE
+U0195,4,Kendrick Lamar,HUMBLE.
+U0195,5,The Weeknd,Blinding Lights
+U0196,1,The Weeknd,Blinding Lights
+U0196,2,Lana Del Rey,Summertime Sadness
+U0196,3,Blackpink,How You Like That
+U0196,4,Ariana Grande,"thank u, next"
+U0196,5,Kendrick Lamar,HUMBLE.
+U0197,1,Lana Del Rey,Summertime Sadness
+U0197,2,The Weeknd,Blinding Lights
+U0197,3,Olivia Rodrigo,vampire
+U0197,4,Ariana Grande,"thank u, next"
+U0197,5,Bad Bunny,Tití Me Preguntó
+U0198,1,NewJeans,Super Shy
+U0198,2,Blackpink,How You Like That
+U0198,3,Olivia Rodrigo,vampire
+U0198,4,Doja Cat,Say So
+U0198,5,Taylor Swift,Cruel Summer
+U0199,1,Drake,One Dance
+U0199,2,Phoebe Bridgers,Motion Sickness
+U0199,3,BTS,Dynamite
+U0199,4,The Weeknd,Blinding Lights
+U0199,5,Travis Scott,SICKO MODE
+U0200,1,Doja Cat,Say So
+U0200,2,Arctic Monkeys,505
+U0200,3,Blackpink,How You Like That
+U0200,4,Phoebe Bridgers,Motion Sickness
+U0200,5,Olivia Rodrigo,vampire

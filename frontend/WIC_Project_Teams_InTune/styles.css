@@ -1,0 +1,44 @@
+:root{
+  --bg1:#20212f;
+  --bg2:#2e3044;
+  --card:#343554CC;
+  --primary:#AEC477; /* warm green */
+  --secondary:#D42362; /* pink */
+  --muted:#9CA3AF;
+  --text:#FFFFFF;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.container{width:100%;max-width:420px;padding:24px}
+.card{background:rgba(255,255,255,0.02);border-radius:12px;padding:28px;box-shadow:0 8px 30px rgba(2,6,23,0.6);}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.logo-img{width:48px;height:48px;object-fit:contain}
+.brand h1{margin:0;font-size:20px}
+.pitch{margin:8px 0 18px;color:var(--muted);font-size:14px}
+.form label{display:block;margin-top:8px;font-size:13px;color:var(--muted)}
+.form input[name="username"],.form input[type="password"]{width:100%;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit;margin-top:6px}
+.passwordRow{display:flex;gap:8px}
+.iconBtn{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);padding:8px 10px;border-radius:8px;cursor:pointer}
+.row{display:flex;align-items:center;margin-top:10px}
+.between{justify-content:space-between}
+.remember{color:var(--muted);font-size:13px}
+.link{color:var(--muted);text-decoration:none;font-size:13px}
+.primary{width:100%;margin-top:16px;padding:12px;border-radius:10px;border:0;background:var(--primary);color:#052;font-weight:700;cursor:pointer;transition:opacity 0.2s}
+.primary:hover{opacity:0.9}
+.divider{display:flex;align-items:center;gap:8px;color:var(--muted);margin:12px 0;text-align:center}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:rgba(255,255,255,0.03)}
+.spotify{width:100%;padding:10px;border-radius:10px;border:1px solid var(--secondary);background:transparent;color:var(--secondary);font-weight:700;cursor:pointer;transition:all 0.2s}
+.spotify:hover{background:rgba(212,35,98,0.1);border-color:var(--secondary)}
+.signup{color:var(--muted);font-size:13px;margin-top:12px}
+.footer{display:block;text-align:center;margin-top:12px;color:rgba(255,255,255,0.35)}
+
+@media (max-width:420px){.container{padding:12px}.card{padding:18px}}
