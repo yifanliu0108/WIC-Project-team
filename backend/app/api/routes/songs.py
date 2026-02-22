@@ -9,6 +9,7 @@ from app.models.song import Song
 from app.models.user import User
 from app.schemas.song import SongCreate, SongResponse, SongUpdate
 from app.api.routes.auth import get_current_user
+from app.services.user_preferences import add_genre_to_user, add_artist_to_user
 
 router = APIRouter()
 
@@ -19,7 +20,7 @@ async def add_song(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    """Add a song to user's collection"""
+    """Add a song to user's collection and auto-update genres/artists"""
     db_song = Song(
         user_id=current_user.id,
         **song_data.model_dump()
@@ -27,6 +28,13 @@ async def add_song(
     db.add(db_song)
     db.commit()
     db.refresh(db_song)
+    
+    # Auto-update user's genres and artists
+    if song_data.genre:
+        add_genre_to_user(current_user, song_data.genre, db)
+    if song_data.artist:
+        add_artist_to_user(current_user, song_data.artist, db)
+    
     return db_song
 
 
@@ -96,7 +104,7 @@ async def update_song(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    """Update a song"""
+    """Update a song and auto-update genres/artists if changed"""
     song = db.query(Song).filter(
         Song.id == song_id,
         Song.user_id == current_user.id
@@ -109,11 +117,23 @@ async def update_song(
         )
     
     update_data = song_update.model_dump(exclude_unset=True)
+    
+    # Track if genre or artist changed
+    genre_changed = "genre" in update_data
+    artist_changed = "artist" in update_data
+    
     for field, value in update_data.items():
         setattr(song, field, value)
     
     db.commit()
     db.refresh(song)
+    
+    # Auto-update user preferences if genre/artist changed
+    if genre_changed and song.genre:
+        add_genre_to_user(current_user, song.genre, db)
+    if artist_changed and song.artist:
+        add_artist_to_user(current_user, song.artist, db)
+    
     return song
 
 

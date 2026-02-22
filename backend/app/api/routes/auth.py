@@ -62,16 +62,14 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
             detail="Email already registered"
         )
     
-    # Create new user
+    # Create new user (MVP: only username, email, password)
     hashed_password = get_password_hash(user_data.password)
     db_user = User(
         username=user_data.username,
         email=user_data.email,
         hashed_password=hashed_password,
-        instagram_handle=user_data.instagram_handle,
-        twitter_handle=user_data.twitter_handle,
-        spotify_handle=user_data.spotify_handle,
-        bio=user_data.bio
+        top_genres=[],  # Initialize as empty list
+        favorite_artists=[]  # Initialize as empty list
     )
     
     db.add(db_user)

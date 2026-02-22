@@ -21,8 +21,150 @@
   margin-top: 15px;
 }
 
+.notification-item {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  background: #f9f9f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-content strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.notification-content p {
+  margin: 5px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.recommendation-message {
+  font-style: italic;
+  color: #555;
+  margin-top: 8px;
+}
+
+.notification-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-accept {
+  padding: 8px 16px;
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.btn-accept:hover {
+  background: #229954;
+}
+
+.btn-reject {
+  padding: 8px 16px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.btn-reject:hover {
+  background: #c0392b;
+}
+
+.feed-item {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  background: white;
+}
+
+.feed-item-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.feed-time {
+  color: #999;
+  font-size: 12px;
+}
+
+.feed-items h3 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.recommended-users {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.recommended-user-card {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #f9f9f9;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.recommended-user-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.recommended-user-card h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.user-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
 @media (max-width: 768px) {
   .feed-content {
     grid-template-columns: 1fr;
+  }
+  
+  .notification-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .notification-actions {
+    width: 100%;
+    justify-content: flex-end;
   }
 }

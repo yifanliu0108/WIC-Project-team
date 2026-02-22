@@ -8,7 +8,7 @@ function Sidebar() {
 
   const handleLogout = () => {
     localStorage.removeItem('token')
-    window.location.href = '/login'
+    navigate('/login', { replace: true })
   }
 
   const isActive = (path) => {

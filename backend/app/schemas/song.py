@@ -7,11 +7,11 @@ from datetime import datetime
 
 
 class SongBase(BaseModel):
+    """MVP: Only require title, artist, genre"""
     title: str
     artist: str
-    album: Optional[str] = None
     genre: Optional[str] = None
-    spotify_id: Optional[str] = None
+    album: Optional[str] = None
 
 
 class SongCreate(SongBase):

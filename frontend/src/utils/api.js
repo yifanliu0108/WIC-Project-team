@@ -36,33 +36,57 @@ api.interceptors.response.use(
 
 export default api
 
-// Example API functions (to be implemented):
-// export const authAPI = {
-//   login: (username, password) => api.post('/api/auth/login', { username, password }),
-//   register: (userData) => api.post('/api/auth/register', userData),
-//   getCurrentUser: () => api.get('/api/auth/me'),
-// }
-//
-// export const usersAPI = {
-//   getProfile: (userId) => api.get(`/api/users/profile/${userId}`),
-//   updateProfile: (data) => api.put('/api/users/me', data),
-//   searchUsers: (query) => api.get('/api/users/search', { params: { q: query } }),
-// }
-//
-// export const songsAPI = {
-//   addSong: (songData) => api.post('/api/songs/', songData),
-//   getMySongs: () => api.get('/api/songs/me'),
-//   getTopSongs: (userId) => api.get('/api/songs/top', { params: { user_id: userId } }),
-// }
-//
-// export const connectionsAPI = {
-//   createConnection: (data) => api.post('/api/connections/', data),
-//   getMyConnections: () => api.get('/api/connections/me'),
-//   updateConnection: (connectionId, data) => api.put(`/api/connections/${connectionId}`, data),
-//   getStats: () => api.get('/api/connections/stats'),
-// }
-//
-// export const feedAPI = {
-//   getFeed: () => api.get('/api/feed/'),
-//   getRecommendations: () => api.get('/api/feed/recommendations'),
-// }
+// Authentication API
+export const authAPI = {
+  login: (username, password) => {
+    const formData = new URLSearchParams()
+    formData.append('username', username)
+    formData.append('password', password)
+    return api.post('/api/auth/login', formData, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    })
+  },
+  register: (userData) => api.post('/api/auth/register', userData),
+  getCurrentUser: () => api.get('/api/auth/me'),
+}
+
+// Users API
+export const usersAPI = {
+  getProfile: (userId) => api.get(`/api/users/profile/${userId}`),
+  getMyProfile: () => api.get('/api/users/me'),
+  updateProfile: (data) => api.put('/api/users/me', data),
+  searchUsers: (query) => api.get('/api/users/search', { params: { q: query } }),
+}
+
+// Songs API
+export const songsAPI = {
+  addSong: (songData) => api.post('/api/songs/', songData),
+  getMySongs: (favoriteOnly = false) => api.get('/api/songs/me', { params: { favorite_only: favoriteOnly } }),
+  getUserSongs: (userId) => api.get(`/api/songs/user/${userId}`),
+  getTopSongs: (userId = null) => api.get('/api/songs/top', { params: { user_id: userId } }),
+  updateSong: (songId, data) => api.put(`/api/songs/${songId}`, data),
+  deleteSong: (songId) => api.delete(`/api/songs/${songId}`),
+}
+
+// Connections API
+export const connectionsAPI = {
+  createConnection: (data) => api.post('/api/connections/', data),
+  getMyConnections: () => api.get('/api/connections/me'),
+  getReceivedConnections: () => api.get('/api/connections/received'),
+  updateConnection: (connectionId, data) => api.put(`/api/connections/${connectionId}`, data),
+  getStats: () => api.get('/api/connections/stats'),
+}
+
+// Feed API
+export const feedAPI = {
+  getFeed: () => api.get('/api/feed/'),
+  getRecommendations: () => api.get('/api/feed/recommendations'),
+}
+
+// MusicBrainz API
+export const musicbrainzAPI = {
+  searchArtist: (name) => api.get('/api/musicbrainz/search/artist', { params: { name } }),
+  searchSong: (title, artist = null) => api.get('/api/musicbrainz/search/song', { params: { title, artist } }),
+  getSongDetails: (mbid) => api.get(`/api/musicbrainz/song/${mbid}`),
+  lookupSong: (title, artist = null) => api.get('/api/musicbrainz/lookup', { params: { title, artist } }),
+}

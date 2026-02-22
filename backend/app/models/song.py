@@ -18,7 +18,7 @@ class Song(Base):
     artist = Column(String(200), nullable=False)
     album = Column(String(200), nullable=True)
     genre = Column(String(100), nullable=True)
-    spotify_id = Column(String(100), unique=True, nullable=True)
+    spotify_id = Column(String(100), nullable=True)  # Removed unique constraint for MVP
     
     # User's relationship with the song
     user_rating = Column(Float, nullable=True)  # User's rating 1-5

@@ -27,7 +27,8 @@ function App() {
   // Layout component with sidebar for authenticated pages
   const LayoutWithSidebar = () => {
     if (!isAuthenticated) {
-      return <Navigate to="/login" replace />
+      // Save the current location to redirect back after login
+      return <Navigate to="/login" state={{ from: { pathname: window.location.pathname } }} replace />
     }
     return (
       <div className="app">

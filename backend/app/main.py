@@ -4,7 +4,7 @@ Main FastAPI application entry point
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.api.routes import auth, users, songs, connections, feed
+from app.api.routes import auth, users, songs, connections, feed, musicbrainz
 
 app = FastAPI(
     title="In Tune API",
@@ -27,6 +27,7 @@ app.include_router(users.router, prefix="/api/users", tags=["users"])
 app.include_router(songs.router, prefix="/api/songs", tags=["songs"])
 app.include_router(connections.router, prefix="/api/connections", tags=["connections"])
 app.include_router(feed.router, prefix="/api/feed", tags=["feed"])
+app.include_router(musicbrainz.router, prefix="/api/musicbrainz", tags=["musicbrainz"])
 
 
 @app.get("/")

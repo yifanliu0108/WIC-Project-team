@@ -15,7 +15,10 @@ class UserBase(BaseModel):
     bio: Optional[str] = None
 
 
-class UserCreate(UserBase):
+class UserCreate(BaseModel):
+    """Registration - MVP: only requires username, email, password"""
+    username: str
+    email: EmailStr  # Email validation included
     password: str
 
 
