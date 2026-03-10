@@ -3,11 +3,11 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #20212F;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .login-card {
-  background: linear-gradient(135deg, #4e517f 0%, #20212F 100%);
+  background: white;
   padding: 40px;
   border-radius: 10px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
@@ -17,14 +17,14 @@
 
 .login-card h1 {
   text-align: center;
-  color: #ffffff;
+  color: #667eea;
   margin-bottom: 10px;
 }
 
 .login-card h2 {
   text-align: center;
   margin-bottom: 30px;
-  color: #ffffff;
+  color: #333;
 }
 
 .form-group {
@@ -34,7 +34,7 @@
 .form-group label {
   display: block;
   margin-bottom: 5px;
-  color: #ffffff;
+  color: #333;
   font-weight: 500;
 }
 
