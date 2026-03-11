@@ -3,12 +3,13 @@ Feed routes (activity feed, recommendations, etc.)
 """
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 from app.core.database import get_db
 from app.models.connection import Connection, ConnectionStatus
 from app.models.user import User
 from app.models.song import Song
 from app.api.routes.auth import get_current_user
+from app.services.recommendation import get_user_recommendations, get_song_recommendations
 
 router = APIRouter()
 
@@ -56,49 +57,51 @@ async def get_feed(
 @router.get("/recommendations", response_model=List[dict])
 async def get_recommendations(
     limit: int = Query(10, ge=1, le=20),
+    min_similarity: float = Query(0.1, ge=0.0, le=1.0),
+    exclude_connected: bool = Query(True),
+    diversity_factor: float = Query(0.2, ge=0.0, le=1.0),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    """Get user recommendations based on music taste similarity"""
-    # Get all other users
-    all_users = db.query(User).filter(User.id != current_user.id).all()
+    """
+    Get user recommendations using advanced recommendation algorithm
     
-    recommendations = []
-    for user in all_users:
-        # Calculate similarity (simplified - you can enhance this)
-        common_genres = set(current_user.top_genres or []) & set(user.top_genres or [])
-        common_artists = set(current_user.favorite_artists or []) & set(user.favorite_artists or [])
-        
-        similarity = (len(common_genres) + len(common_artists)) / max(
-            len(current_user.top_genres or []) + len(current_user.favorite_artists or []), 1
-        )
-        
-        # Check if connection already exists
-        existing = db.query(Connection).filter(
-            ((Connection.user_id == current_user.id) & (Connection.connected_user_id == user.id)) |
-            ((Connection.user_id == user.id) & (Connection.connected_user_id == current_user.id))
-        ).first()
-        
-        if not existing and similarity > 0:
-            recommendations.append({
-                "user_id": user.id,
-                "username": user.username,
-                "similarity_score": similarity,
-                "common_genres": list(common_genres),
-                "common_artists": list(common_artists),
-                "top_songs": [
-                    {
-                        "id": song.id,
-                        "title": song.title,
-                        "artist": song.artist
-                    }
-                    for song in db.query(Song).filter(
-                        Song.user_id == user.id,
-                        Song.is_favorite == True
-                    ).limit(3).all()
-                ]
-            })
+    Parameters:
+    - limit: Maximum number of recommendations (1-20)
+    - min_similarity: Minimum similarity score threshold (0.0-1.0)
+    - exclude_connected: Whether to exclude users with existing connections
+    - diversity_factor: How much to prioritize diversity vs similarity (0.0-1.0)
+    """
+    recommendations = get_user_recommendations(
+        current_user=current_user,
+        db=db,
+        limit=limit,
+        min_similarity=min_similarity,
+        exclude_connected=exclude_connected,
+        diversity_factor=diversity_factor
+    )
     
-    # Sort by similarity and return top results
-    recommendations.sort(key=lambda x: x["similarity_score"], reverse=True)
-    return recommendations[:limit]
+    return recommendations
+
+
+@router.get("/song-recommendations", response_model=List[dict])
+async def get_song_recommendations_endpoint(
+    limit: int = Query(10, ge=1, le=20),
+    from_connections: bool = Query(True),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get song recommendations based on:
+    - Songs liked by connected users
+    - Songs from users with similar taste
+    - Popular songs in user's favorite genres
+    """
+    recommendations = get_song_recommendations(
+        current_user=current_user,
+        db=db,
+        limit=limit,
+        from_connections=from_connections
+    )
+    
+    return recommendations
