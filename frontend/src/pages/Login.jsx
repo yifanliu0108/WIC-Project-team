@@ -158,7 +158,7 @@ function Login({ setIsAuthenticated, onLoginSuccess }) {
         
         <form onSubmit={handleSubmit} noValidate>
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username" className="field-label">Username</label>
             <input
               ref={usernameInputRef}
               id="username"
@@ -167,8 +167,9 @@ function Login({ setIsAuthenticated, onLoginSuccess }) {
               value={formData.username}
               onChange={handleChange}
               disabled={loading}
-              className={validationErrors.username ? 'input-error' : ''}
+              className={`field-input ${validationErrors.username ? 'input-error' : ''}`}
               autoComplete="username"
+              placeholder="Enter your username"
             />
             {validationErrors.username && (
               <span className="field-error">{validationErrors.username}</span>
@@ -177,7 +178,7 @@ function Login({ setIsAuthenticated, onLoginSuccess }) {
           
           {!isLogin && (
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email" className="field-label">Email</label>
               <input
                 id="email"
                 type="email"
@@ -185,8 +186,9 @@ function Login({ setIsAuthenticated, onLoginSuccess }) {
                 value={formData.email}
                 onChange={handleChange}
                 disabled={loading}
-                className={validationErrors.email ? 'input-error' : ''}
+                className={`field-input ${validationErrors.email ? 'input-error' : ''}`}
                 autoComplete="email"
+                placeholder="Enter your email"
               />
               {validationErrors.email && (
                 <span className="field-error">{validationErrors.email}</span>
@@ -195,7 +197,7 @@ function Login({ setIsAuthenticated, onLoginSuccess }) {
           )}
           
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password" className="field-label">Password</label>
             <div className="password-input-wrapper">
               <input
                 id="password"
@@ -204,8 +206,9 @@ function Login({ setIsAuthenticated, onLoginSuccess }) {
                 value={formData.password}
                 onChange={handleChange}
                 disabled={loading}
-                className={validationErrors.password ? 'input-error' : ''}
+                className={`field-input ${validationErrors.password ? 'input-error' : ''}`}
                 autoComplete={isLogin ? 'current-password' : 'new-password'}
+                placeholder="Enter your password"
               />
               <button
                 type="button"
@@ -233,7 +236,7 @@ function Login({ setIsAuthenticated, onLoginSuccess }) {
           
           <button 
             type="submit" 
-            className="submit-btn" 
+            className="sign-in-btn submit-btn" 
             disabled={loading}
           >
             {loading ? (
@@ -242,7 +245,7 @@ function Login({ setIsAuthenticated, onLoginSuccess }) {
                 {isLogin ? 'Logging in...' : 'Registering...'}
               </>
             ) : (
-              isLogin ? 'Login' : 'Register'
+              isLogin ? 'Sign In' : 'Register'
             )}
           </button>
         </form>
