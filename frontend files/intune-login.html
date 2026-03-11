@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InTune — Log In</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117; --nav-bg: #0f1623; --card-bg: #131c2e; --card2: #1a2540;
+    --green-node: #b8d96e; --blue-node: #5fc4b8; --you-color: #c93b6a;
+    --text: #e8eaf0; --muted: #7a8599; --border: rgba(255,255,255,0.07);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:radial-gradient(ellipse at 60% 100%, rgba(95,196,184,0.14) 0%, rgba(13,17,23,0) 60%), var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; height:100vh; overflow:hidden; display:flex; flex-direction:column; position:relative; }
+
+  nav {
+    background:var(--nav-bg); border-bottom:1.5px solid #1b3258;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 24px; height:56px; flex-shrink:0; position:relative; z-index:10;
+  }
+  .nav-logo { display:flex; align-items:center; gap:10px; }
+  .nav-logo span { font-family:'Syne',sans-serif; font-weight:700; font-size:20px; font-style:italic; color:#AEC477; }
+  .nav-icon {
+    width:38px; height:38px; border-radius:50%; background:var(--card2);
+    border:1px solid var(--border); display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:background 0.2s;
+  }
+  .nav-icon:hover { background:rgba(184,217,110,0.1); }
+  .nav-icon svg { width:17px; height:17px; fill:none; stroke:var(--muted); stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+
+  /* Canvas background */
+  #bgCanvas { position:absolute; inset:0; pointer-events:none; z-index:1; }
+
+  /* Login card */
+  .login-wrap {
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    z-index:10;
+  }
+  .login-card {
+    background:#1a2235; border-radius:18px; padding:36px 40px 32px;
+    width:420px; border:none;
+    box-shadow:0 24px 80px rgba(0,0,0,0.7), 0 0 60px rgba(95,196,184,0.08);
+    animation: cardIn 0.4s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  @keyframes cardIn {
+    from { opacity:0; transform:translateY(20px) scale(0.97); }
+    to   { opacity:1; transform:translateY(0) scale(1); }
+  }
+  .login-title {
+    display:flex; align-items:center; gap:12px;
+    font-family:'Syne',sans-serif; font-weight:700; font-size:28px;
+    margin-bottom:28px;
+  }
+  .back-icon {
+    width:36px; height:36px; border-radius:50%;
+    border:2px solid rgba(255,255,255,0.25);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:border-color 0.2s;
+    text-decoration:none;
+  }
+  .back-icon:hover { border-color:var(--green-node); }
+  .back-icon svg { width:16px; height:16px; fill:none; stroke:var(--text); stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+  .field-group { margin-bottom:18px; }
+  .field-label { font-size:13px; color:var(--muted); margin-bottom:7px; display:block; }
+  .field-input {
+    width:100%; padding:12px 14px; border-radius:10px;
+    background:#232d42; border:1px solid rgba(255,255,255,0.08);
+    color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px;
+    outline:none; transition:border-color 0.2s;
+  }
+  .field-input::placeholder { color:var(--muted); }
+  .field-input:focus { border-color:rgba(184,217,110,0.4); background:#253050; }
+
+  .sign-in-btn {
+    width:100%; padding:13px; border-radius:10px; border:none;
+    background:linear-gradient(135deg, #c93b6a, #a02d54);
+    color:#fff; font-family:'Syne',sans-serif; font-weight:700; font-size:15px;
+    cursor:pointer; margin:20px 0 16px; transition:opacity 0.2s, transform 0.15s;
+    box-shadow:0 4px 20px rgba(201,59,106,0.4);
+  }
+  .sign-in-btn:hover { opacity:0.88; transform:translateY(-1px); }
+  .sign-in-btn:active { transform:translateY(1px); }
+
+  .login-footer { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .forgot { font-size:12px; color:var(--muted); text-decoration:underline; cursor:pointer; }
+  .forgot:hover { color:var(--text); }
+  .first-time { font-size:13px; color:var(--muted); }
+  .first-time a { color:var(--you-color); text-decoration:none; font-weight:500; }
+  .first-time a:hover { text-decoration:underline; }
+
+  .terms-row { display:flex; align-items:flex-start; gap:10px; margin-top:4px; }
+  .terms-check {
+    width:16px; height:16px; border-radius:4px; border:1.5px solid var(--muted);
+    appearance:none; cursor:pointer; flex-shrink:0; margin-top:2px;
+    transition:all 0.15s; position:relative;
+  }
+  .terms-check:checked { background:var(--green-node); border-color:var(--green-node); }
+  .terms-check:checked::after {
+    content:''; position:absolute; top:2px; left:5px;
+    width:4px; height:7px; border:2px solid #0d1117;
+    border-top:none; border-left:none; transform:rotate(45deg);
+  }
+  .terms-label { font-size:12px; color:var(--muted); line-height:1.5; }
+  .terms-label a { color:var(--you-color); text-decoration:none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a href="intune-dashboard.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <svg width="26" height="34" viewBox="0 0 39 50" fill="none"><path d="M34.7139 23.8545L33.4558 30.9898C32.9261 33.994 31.0272 36.5839 28.3089 38.0097C24.2637 40.1315 19.2708 39.2512 16.1953 35.8737C14.1286 33.6042 13.23 30.5211 13.7598 27.5168L15.0179 20.3816M21.8056 39.4742L20.8084 45.1296M4.00067 25.2761L5.2586 18.1408C5.78824 15.1366 7.687 12.5467 10.4052 11.1208C14.4504 8.99878 19.4433 9.87902 22.519 13.2564C24.5857 15.5259 25.4844 18.609 24.9547 21.6132L23.6968 28.7485M16.9086 9.65607L17.9056 4.00067" stroke="#AEC477" stroke-width="8" stroke-linecap="round"/></svg>
+      <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:20px;font-style:italic;color:#AEC477;">InTune</span>
+    </a>
+  </div>
+  <a href="#" class="nav-icon" title="Settings">
+    <svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:none;stroke:var(--muted);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+  </a>
+</nav>
+
+<!-- Background face characters on canvas -->
+<canvas id="bgCanvas" style="position:absolute;inset:0;pointer-events:none;z-index:1;"></canvas>
+
+<!-- Login card -->
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="login-title">
+      <a href="intune-dashboard.html" class="back-icon">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      </a>
+      Log In
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Username</label>
+      <input class="field-input" type="text" placeholder="Enter Username">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Password</label>
+      <input class="field-input" type="password" placeholder="Enter Password">
+    </div>
+
+    <button class="sign-in-btn" onclick="window.location.href='intune-dashboard.html'">Sign In</button>
+
+    <div class="login-footer">
+      <span class="forgot">Forget password?</span>
+      <span class="first-time">First time? <a href="#">Create an Account</a></span>
+    </div>
+
+    <div class="terms-row">
+      <input type="checkbox" class="terms-check" id="terms">
+      <label for="terms" class="terms-label">I have reviewed and agreed to InTune's <a href="#">Terms and Conditions</a></label>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── LOGIN BACKGROUND FACE CHARACTERS ─────────────────────────────────────
+// Replicates green node appearance: rotating gradient polygon inside,
+// radial green overlay, white pause-bar eyes, blinking, mouse tracking
+// ─────────────────────────────────────────────────────────────────────────
+const bgCanvas = document.getElementById('bgCanvas');
+const ctx = bgCanvas.getContext('2d');
+let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+
+function resize() {
+  bgCanvas.width  = window.innerWidth;
+  bgCanvas.height = window.innerHeight - 56; // below nav
+  bgCanvas.style.top = '56px';
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Face definitions: fractional positions, radius
+// Placed like the Figma: big left, big right partially off, small bottom center
+const FACES = [
+  { fx:0.08, fy:0.82, r:190 },
+  { fx:0.91, fy:0.86, r:155 },
+  { fx:0.30, fy:0.96, r:115 },  // shifted left, raised so eyes are visible
+];
+
+// Per-face polygon state
+const COL_GREEN = '#b8d96e';
+const POLY_SIDES = [6, 7, 5];
+
+function randomIrregularPoly(cx, cy, r, sides, seed) {
+  // deterministic-ish using seed so it doesn't change every frame
+  const pts = [];
+  for (let i = 0; i < sides; i++) {
+    const angle = (i / sides) * Math.PI * 2 - Math.PI / 2;
+    const jitter = 0.55 + ((seed * (i+1) * 17) % 100) / 200;
+    pts.push([cx + Math.cos(angle) * r * jitter, cy + Math.sin(angle) * r * jitter]);
+  }
+  return pts;
+}
+
+// Per-face animation state
+const faceState = FACES.map((f, i) => ({
+  angle:     Math.random() * 360,
+  rotSpeed:  (0.25 + Math.random() * 0.35) * (Math.random() > 0.5 ? 1 : -1),
+  bobAngle:  Math.random() * Math.PI * 2,
+  bobSpeed:  0.012 + Math.random() * 0.01,
+  bobAmp:    3 + Math.random() * 3,
+  gradAngle: Math.random() * 360,
+  polySeed:  Math.random() * 1000,
+  blinkT:    0,
+  blinkDelay: 1.5 + Math.random() * 4,
+}));
+
+function drawFace(f, st, blink) {
+  const W = bgCanvas.width, H = bgCanvas.height;
+  const cx = f.fx * W;
+  const cy = (f.fy - 0) * H;  // fy is relative to canvas height
+  const R  = f.r;
+
+  ctx.save();
+
+  // ── Layer 0: outer glow ──
+  const glow = ctx.createRadialGradient(cx, cy, R * 0.4, cx, cy, R * 1.6);
+  glow.addColorStop(0, 'rgba(184,217,110,0.10)');
+  glow.addColorStop(1, 'rgba(184,217,110,0)');
+  ctx.beginPath(); ctx.arc(cx, cy, R * 1.6, 0, Math.PI * 2);
+  ctx.fillStyle = glow; ctx.fill();
+
+  // ── Layer 1a: draw blurred polygon onto offscreen canvas, then stamp it ──
+  // Using CSS filter on an offscreen canvas is the only reliable way to blur
+  // in canvas (shadowBlur gets clipped; filter works on the whole canvas draw)
+  const pad = R * 0.6; // padding so blur isn't clipped at edges
+  const ow = R * 2 + pad * 2, oh = R * 2 + pad * 2;
+  const off = new OffscreenCanvas(ow, oh);
+  const octx = off.getContext('2d');
+  const ox = pad + R, oy = pad + R; // center of offscreen canvas
+
+  const rad = (st.angle * Math.PI) / 180;
+  const polyR = R * 0.88; // bigger — nearly fills the circle
+  const bobOx = Math.cos(st.bobAngle * 0.7) * st.bobAmp * 0.5;
+  const bobOy = Math.sin(st.bobAngle) * st.bobAmp;
+
+  const gx1 = ox + bobOx - polyR * Math.cos(st.gradAngle * Math.PI/180);
+  const gy1 = oy + bobOy - polyR * Math.sin(st.gradAngle * Math.PI/180);
+  const gx2 = ox + bobOx + polyR * Math.cos(st.gradAngle * Math.PI/180);
+  const gy2 = oy + bobOy + polyR * Math.sin(st.gradAngle * Math.PI/180);
+  const polyGrad = octx.createLinearGradient(gx1, gy1, gx2, gy2);
+  polyGrad.addColorStop(0, '#5fc4b8');
+  polyGrad.addColorStop(1, '#c93b6a');
+
+  const sides = POLY_SIDES[FACES.indexOf(f)];
+  octx.beginPath();
+  for (let i = 0; i < sides; i++) {
+    const a = rad + (i / sides) * Math.PI * 2 - Math.PI / 2;
+    const jitter = 0.72 + ((st.polySeed * (i+1) * 17) % 100) / 250;
+    const px = ox + bobOx + Math.cos(a) * polyR * jitter;
+    const py = oy + bobOy + Math.sin(a) * polyR * jitter;
+    i === 0 ? octx.moveTo(px, py) : octx.lineTo(px, py);
+  }
+  octx.closePath();
+  octx.fillStyle = polyGrad;
+  octx.globalAlpha = 1.0; // fully opaque polygon
+  octx.fill();
+
+  // Soft blur — just enough to soften edges, not obliterate the shape
+  ctx.save();
+  ctx.filter = `blur(${Math.round(R * 0.09)}px)`;
+  ctx.globalAlpha = 1.0;
+  ctx.drawImage(off, cx - ox, cy - oy);
+  ctx.filter = 'none';
+  ctx.globalAlpha = 1;
+  ctx.restore();
+
+  // ── Layer 1b: clip circle + radial green overlay offset to top-right ──
+  // Offset focal point toward top-right so it reads as a light source / 3D sphere
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.clip();
+  const shiftX = cx + R * 0.28;  // top-right offset
+  const shiftY = cy - R * 0.28;
+  const radGrad = ctx.createRadialGradient(shiftX, shiftY, 0, cx, cy, R);
+  radGrad.addColorStop(0,    'rgba(184,217,110,0.00)');
+  radGrad.addColorStop(0.30, 'rgba(184,217,110,0.10)');
+  radGrad.addColorStop(0.65, 'rgba(184,217,110,0.38)');
+  radGrad.addColorStop(1.0,  'rgba(184,217,110,0.70)');
+  ctx.globalAlpha = 1;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2);
+  ctx.fillStyle = radGrad; ctx.fill();
+
+  // Small specular highlight top-right to sell the 3D feel
+  const specGrad = ctx.createRadialGradient(shiftX, shiftY, 0, shiftX, shiftY, R * 0.38);
+  specGrad.addColorStop(0,   'rgba(255,255,255,0.18)');
+  specGrad.addColorStop(1,   'rgba(255,255,255,0.00)');
+  ctx.fillStyle = specGrad;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.restore(); // undo clip
+
+  // ── Layer 2: pause-bar eyes — ONE bar per eye, tighter spacing ──
+  const dx = mouseX - cx, dy = mouseY - (cy + 56);
+  const dist = Math.sqrt(dx*dx + dy*dy) || 1;
+  const maxOff = R * 0.12;
+  const offX = (dx / dist) * maxOff;
+  const offY = (dy / dist) * maxOff;
+
+  const bw = R * 0.15;
+  const bh = R * 0.36 * (1 - blink * 0.88);
+  const eyeGap = R * 0.16; // tight — matches SVG green node spacing
+  const barTop = cy - bh / 2 + R * blink * 0.36 * 0.4;
+  const radius = bw / 2;
+
+  if (bh >= 0.5) {
+    ctx.fillStyle = 'rgba(255,255,255,0.92)';
+    ctx.beginPath();
+    ctx.roundRect(cx - eyeGap - bw / 2 + offX, barTop + offY, bw, bh, radius);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.roundRect(cx + eyeGap - bw / 2 + offX, barTop + offY, bw, bh, radius);
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+// Blink state update — returns 0..1 close amount
+function updateBlink(st, dt) {
+  st.blinkDelay -= dt;
+  if (st.blinkDelay > 0) return 0;
+  st.blinkT += dt;
+  const DUR = 0.28, prog = Math.min(st.blinkT / DUR, 1);
+  let v;
+  if      (prog < 0.35) v = prog / 0.35;
+  else if (prog < 0.55) v = 1;
+  else                  v = 1 - (prog - 0.55) / 0.45;
+  if (prog >= 1) { st.blinkT = 0; st.blinkDelay = 2.5 + Math.random() * 4; }
+  return v;
+}
+
+let lastT = 0;
+function loop(ts) {
+  const dt = Math.min((ts - lastT) / 1000, 0.05); lastT = ts;
+  ctx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+
+  faceState.forEach((st, i) => {
+    st.angle    += st.rotSpeed;
+    st.bobAngle += st.bobSpeed;
+    const blink = updateBlink(st, dt);
+    drawFace(FACES[i], st, blink);
+  });
+
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
