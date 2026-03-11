@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard'
 import Feed from './pages/Feed'
 import Profile from './pages/Profile'
 import Login from './pages/Login'
+import { UserProvider, useUser } from './contexts/UserContext'
 import './App.css'
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
     // Check if user is authenticated (has token)
     return !!localStorage.getItem('token')
   })
+  const { loadUser } = useUser()
 
   // Update auth state when token changes
   React.useEffect(() => {
@@ -40,8 +42,9 @@ function App() {
   }
 
   return (
-    <Router>
-      <Routes>
+    <UserProvider>
+      <Router>
+        <Routes>
         <Route 
           path="/login" 
           element={
@@ -50,7 +53,10 @@ function App() {
             ) : (
               <Login 
                 setIsAuthenticated={setIsAuthenticated}
-                onLoginSuccess={() => setIsAuthenticated(true)}
+                onLoginSuccess={() => {
+                  setIsAuthenticated(true)
+                  loadUser()
+                }}
               />
             )
           } 
@@ -62,7 +68,8 @@ function App() {
           <Route path="/profile/:userId" element={<Profile />} />
         </Route>
       </Routes>
-    </Router>
+      </Router>
+    </UserProvider>
   )
 }
 

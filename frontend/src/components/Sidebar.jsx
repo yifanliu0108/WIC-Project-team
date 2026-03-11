@@ -1,10 +1,12 @@
 import React from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { useUser } from '../contexts/UserContext'
 import './Sidebar.css'
 
 function Sidebar() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { user } = useUser()
 
   const handleLogout = () => {
     localStorage.removeItem('token')
@@ -22,6 +24,7 @@ function Sidebar() {
     <aside className="sidebar">
       <div className="sidebar-header">
         <h2>In Tune</h2>
+        {user && <p className="sidebar-username">@{user.username}</p>}
         <p className="sidebar-subtitle">Music-Based Connections</p>
       </div>
       <nav className="sidebar-nav">

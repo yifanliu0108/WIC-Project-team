@@ -16,24 +16,27 @@ function Login({ setIsAuthenticated, onLoginSuccess }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    // TODO: Implement API call to backend
-    // For now, just set authenticated and navigate
-    if (isLogin) {
-      // Login logic - store token when API is implemented
-      // const response = await api.post('/api/auth/login', { username: formData.username, password: formData.password })
-      // localStorage.setItem('token', response.data.access_token)
-      localStorage.setItem('token', 'demo-token') // Temporary for framework
-    } else {
-      // Register logic - store token when API is implemented
-      // const response = await api.post('/api/auth/register', formData)
-      // localStorage.setItem('token', response.data.access_token)
-      localStorage.setItem('token', 'demo-token') // Temporary for framework
+
+    try {
+      if (isLogin) {
+        const response = await authAPI.login(formData.username, formData.password)
+        const token = response.data.access_token
+        localStorage.setItem('token', token)
+      } else {
+        // register then log in automatically
+        await authAPI.register(formData)
+        const loginResp = await authAPI.login(formData.username, formData.password)
+        localStorage.setItem('token', loginResp.data.access_token)
+      }
+      setIsAuthenticated(true)
+      if (onLoginSuccess) {
+        onLoginSuccess()
+      }
+      navigate('/')
+    } catch (err) {
+      console.error(err)
+      alert(err.response?.data?.detail || 'Authentication failed')
     }
-    setIsAuthenticated(true)
-    if (onLoginSuccess) {
-      onLoginSuccess()
-    }
-    navigate('/')
   }
 
   const handleChange = (e) => {
