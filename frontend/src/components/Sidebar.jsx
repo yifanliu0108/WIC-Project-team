@@ -1,13 +1,49 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { usersAPI, songsAPI } from '../utils/api'
 import './Sidebar.css'
 
-function Sidebar() {
+function Sidebar({ setIsAuthenticated }) {
   const navigate = useNavigate()
   const location = useLocation()
+  const [user, setUser] = useState(null)
+  const [topSongs, setTopSongs] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchUserData()
+  }, [])
+
+  const fetchUserData = async () => {
+    try {
+      const [userData, songsData] = await Promise.all([
+        usersAPI.getMyProfile(),
+        songsAPI.getMySongs()
+      ])
+      setUser(userData.data)
+      // Get top 5 songs (favorites first, then by rating)
+      const sorted = songsData.data
+        .sort((a, b) => {
+          if (a.is_favorite && !b.is_favorite) return -1
+          if (!a.is_favorite && b.is_favorite) return 1
+          return (b.user_rating || 0) - (a.user_rating || 0)
+        })
+        .slice(0, 5)
+      setTopSongs(sorted)
+    } catch (err) {
+      console.error('Sidebar error:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleLogout = () => {
     localStorage.removeItem('token')
+    if (setIsAuthenticated) {
+      setIsAuthenticated(false)
+    }
+    // Trigger storage event for other components listening
+    window.dispatchEvent(new Event('storage'))
     navigate('/login', { replace: true })
   }
 
@@ -18,40 +54,94 @@ function Sidebar() {
     return location.pathname.startsWith(path)
   }
 
+  if (loading) {
+    return (
+      <aside className="sidebar">
+        <div className="sb-scroll">
+          <div className="profile-header">
+            <div className="profile-name">Loading...</div>
+          </div>
+        </div>
+      </aside>
+    )
+  }
+
   return (
     <aside className="sidebar">
-      <div className="sidebar-header">
-        <h2>In Tune</h2>
-        <p className="sidebar-subtitle">Music-Based Connections</p>
-      </div>
-      <nav className="sidebar-nav">
-        <Link 
-          to="/" 
-          className={`nav-item ${isActive('/') && location.pathname === '/' ? 'active' : ''}`}
-        >
-          <span className="nav-icon">🏠</span>
-          <span>Dashboard</span>
-        </Link>
-        <Link 
-          to="/feed" 
-          className={`nav-item ${isActive('/feed') ? 'active' : ''}`}
-        >
-          <span className="nav-icon">📰</span>
-          <span>Feed</span>
-        </Link>
-        <Link 
-          to="/profile" 
-          className={`nav-item ${isActive('/profile') ? 'active' : ''}`}
-        >
-          <span className="nav-icon">👤</span>
-          <span>Profile</span>
-        </Link>
-        <div className="nav-divider"></div>
-        <div className="nav-item logout-item" onClick={handleLogout}>
-          <span className="nav-icon">🚪</span>
-          <span>Logout</span>
+      <div className="sb-scroll">
+        <div className="profile-header">
+          <div className="profile-name">{user?.username || 'User'}</div>
+          <button className="share-btn" title="Share profile">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+              <polyline points="16 6 12 2 8 6" />
+              <line x1="12" y1="2" x2="12" y2="15" />
+            </svg>
+          </button>
         </div>
-      </nav>
+
+        <div className="album-wrap">
+          <div className="album-art">
+            <div className="album-emoji">🕰️</div>
+            <div className="album-overlay"></div>
+            <div className="album-label">A Matter of Time</div>
+          </div>
+        </div>
+
+        <div className="sec-title">Top 5 Songs</div>
+        <div className="list">
+          {topSongs.length > 0 ? (
+            topSongs.map((song, idx) => (
+              <div key={song.id} className="li">
+                <span className="rank">{idx + 1}</span>
+                <div className="thumb">🎵</div>
+                <div className="ii">
+                  <div className="it">{song.title}</div>
+                  <div className="is">{song.artist}</div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="li">
+              <div className="ii">
+                <div className="it" style={{ color: 'var(--muted)' }}>No songs yet</div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="sep"></div>
+
+        <div className="sec-title">Top 5 Artists</div>
+        <div className="list">
+          {user?.favorite_artists && user.favorite_artists.length > 0 ? (
+            user.favorite_artists.slice(0, 5).map((artist, idx) => (
+              <div key={idx} className="li">
+                <span className="rank">{idx + 1}</span>
+                <div className="thumb">🎤</div>
+                <div className="ii">
+                  <div className="it">{artist}</div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="li">
+              <div className="ii">
+                <div className="it" style={{ color: 'var(--muted)' }}>No artists yet</div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="sep"></div>
+
+        <div className="list" style={{ marginTop: 'auto', paddingBottom: '12px' }}>
+          <button className="nav-item logout-item" onClick={handleLogout}>
+            <span className="nav-icon">🚪</span>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
     </aside>
   )
 }

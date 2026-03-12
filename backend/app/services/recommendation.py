@@ -107,7 +107,30 @@ def get_user_recommendations(
             Song.is_favorite == True
         ).order_by(
             Song.user_rating.desc().nulls_last()
-        ).limit(3).all()
+        ).limit(5).all()
+        
+        # Get common songs (songs both users have)
+        current_user_song_titles = {
+            (s.title.lower(), s.artist.lower()) 
+            for s in current_user_songs
+        }
+        user_song_titles = {
+            (s.title.lower(), s.artist.lower()) 
+            for s in user_songs
+        }
+        common_song_keys = current_user_song_titles & user_song_titles
+        
+        # Map common songs to full song objects
+        common_songs = [
+            {
+                "id": song.id,
+                "title": song.title,
+                "artist": song.artist,
+                "genre": song.genre
+            }
+            for song in user_songs
+            if (song.title.lower(), song.artist.lower()) in common_song_keys
+        ]
         
         recommendations.append({
             "user_id": user.id,
@@ -116,6 +139,7 @@ def get_user_recommendations(
             "final_score": round(final_score, 3),
             "common_genres": list(common_genres),
             "common_artists": list(common_artists),
+            "common_songs": common_songs,
             "user_song_count": user_song_count,
             "rating_similarity": round(rating_similarity, 3),
             "top_songs": [

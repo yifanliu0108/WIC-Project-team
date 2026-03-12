@@ -80,7 +80,8 @@ export const connectionsAPI = {
 // Feed API
 export const feedAPI = {
   getFeed: () => api.get('/api/feed/'),
-  getRecommendations: () => api.get('/api/feed/recommendations'),
+  getRecommendations: (params = {}) => api.get('/api/feed/recommendations', { params }),
+  getSongRecommendations: (params = {}) => api.get('/api/feed/song-recommendations', { params }),
 }
 
 // MusicBrainz API

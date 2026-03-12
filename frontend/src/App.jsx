@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom'
 import Sidebar from './components/Sidebar'
+import TopNav from './components/TopNav'
 import Dashboard from './pages/Dashboard'
 import Feed from './pages/Feed'
 import Profile from './pages/Profile'
@@ -32,10 +33,13 @@ function App() {
     }
     return (
       <div className="app">
-        <Sidebar />
-        <main className="main-content">
-          <Outlet />
-        </main>
+        <TopNav />
+        <div className="main-layout">
+          <Sidebar setIsAuthenticated={setIsAuthenticated} />
+          <main className="main-content">
+            <Outlet />
+          </main>
+        </div>
       </div>
     )
   }
