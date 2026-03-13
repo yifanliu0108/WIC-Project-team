@@ -13,11 +13,7 @@ def get_user_recommendations(
     current_user: User,
     db: Session,
     limit: int = 10,
-<<<<<<< HEAD
     min_similarity: float = 0.0,  # Changed default to 0.0 to include all users
-=======
-    min_similarity: float = 0.1,
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
     exclude_connected: bool = True,
     diversity_factor: float = 0.2
 ) -> List[Dict]:
@@ -31,7 +27,6 @@ def get_user_recommendations(
     4. Diversity (ensures variety in recommendations)
     5. Excludes existing connections
     
-<<<<<<< HEAD
     Always returns up to 'limit' recommendations, even if similarity scores are low.
     This ensures users always have someone to connect with.
     
@@ -40,27 +35,16 @@ def get_user_recommendations(
         db: Database session
         limit: Maximum number of recommendations (default: 10, max: 10)
         min_similarity: Minimum similarity score threshold (default: 0.0 to include all)
-=======
-    Args:
-        current_user: The user to get recommendations for
-        db: Database session
-        limit: Maximum number of recommendations
-        min_similarity: Minimum similarity score threshold
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
         exclude_connected: Whether to exclude users with existing connections
         diversity_factor: How much to prioritize diversity (0-1)
     
     Returns:
         List of recommendation dictionaries with user info and similarity details
-<<<<<<< HEAD
         (always up to 'limit' users, sorted by final_score descending)
     """
     # Ensure limit doesn't exceed 10
     limit = min(limit, 10)
     
-=======
-    """
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
     # Get all other users
     query = db.query(User).filter(User.id != current_user.id)
     
@@ -79,33 +63,21 @@ def get_user_recommendations(
     
     all_users = query.all()
     
-<<<<<<< HEAD
     # If no users available, return empty list
     if not all_users:
         return []
     
-=======
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
     # Get current user's songs for analysis
     current_user_songs = db.query(Song).filter(Song.user_id == current_user.id).all()
     current_user_song_count = len(current_user_songs)
     
     recommendations = []
-<<<<<<< HEAD
     all_candidates = []  # Store all users with scores, even low ones
-=======
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
     
     for user in all_users:
         # Calculate base similarity score
         similarity_score = calculate_similarity_score(current_user, user, db)
         
-<<<<<<< HEAD
-=======
-        if similarity_score < min_similarity:
-            continue
-        
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
         # Get user's songs for additional analysis
         user_songs = db.query(Song).filter(Song.user_id == user.id).all()
         user_song_count = len(user_songs)
@@ -126,12 +98,8 @@ def get_user_recommendations(
             user.top_genres or []
         )
         
-<<<<<<< HEAD
         # Combine scores - even if similarity is 0, we still calculate a score
         # This ensures we always have recommendations
-=======
-        # Combine scores
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
         final_score = (
             similarity_score * (1 - diversity_factor) +
             rating_similarity * 0.15 +
@@ -139,22 +107,15 @@ def get_user_recommendations(
             diversity_score * diversity_factor
         )
         
-<<<<<<< HEAD
         # Minimum score boost for users with any activity (ensures they're included)
         if user_song_count > 0:
             final_score = max(final_score, 0.01)  # At least 0.01 for active users
         
-=======
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
         # Get common items for display
         common_genres = set(current_user.top_genres or []) & set(user.top_genres or [])
         common_artists = set(current_user.favorite_artists or []) & set(user.favorite_artists or [])
         
-<<<<<<< HEAD
         # Get user's top songs (fallback to all songs if no favorites)
-=======
-        # Get user's top songs
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
         top_songs = db.query(Song).filter(
             Song.user_id == user.id,
             Song.is_favorite == True
@@ -162,7 +123,6 @@ def get_user_recommendations(
             Song.user_rating.desc().nulls_last()
         ).limit(5).all()
         
-<<<<<<< HEAD
         # If no favorites, get top rated songs
         if not top_songs:
             top_songs = db.query(Song).filter(
@@ -172,8 +132,6 @@ def get_user_recommendations(
                 Song.created_at.desc()
             ).limit(5).all()
         
-=======
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
         # Get common songs (songs both users have)
         current_user_song_titles = {
             (s.title.lower(), s.artist.lower()) 
@@ -197,11 +155,7 @@ def get_user_recommendations(
             if (song.title.lower(), song.artist.lower()) in common_song_keys
         ]
         
-<<<<<<< HEAD
         recommendation_data = {
-=======
-        recommendations.append({
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
             "user_id": user.id,
             "username": user.username,
             "similarity_score": round(similarity_score, 3),
@@ -221,7 +175,6 @@ def get_user_recommendations(
                 }
                 for song in top_songs
             ]
-<<<<<<< HEAD
         }
         
         # Only apply min_similarity filter if we have enough high-scoring users
@@ -231,14 +184,10 @@ def get_user_recommendations(
         else:
             # Store low-scoring users as fallback
             all_candidates.append(recommendation_data)
-=======
-        })
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
     
     # Sort by final score (descending)
     recommendations.sort(key=lambda x: x["final_score"], reverse=True)
     
-<<<<<<< HEAD
     # If we don't have enough recommendations, add from fallback candidates
     if len(recommendations) < limit:
         # Sort fallback candidates by final_score
@@ -250,8 +199,6 @@ def get_user_recommendations(
         recommendations.sort(key=lambda x: x["final_score"], reverse=True)
     
     # Ensure we return exactly up to 'limit' recommendations
-=======
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
     return recommendations[:limit]
 
 
