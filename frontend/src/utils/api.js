@@ -112,4 +112,66 @@ export const itunesAPI = {
         limit,
       },
     }),
+  // Get artwork for a specific song
+  getSongArtwork: async (title, artist) => {
+    try {
+      const term = artist ? `${title} ${artist}` : title
+      const response = await axios.get('https://itunes.apple.com/search', {
+        params: {
+          term,
+          entity: 'song',
+          media: 'music',
+          limit: 1,
+        },
+      })
+      const result = response.data?.results?.[0]
+      if (result) {
+        return {
+          artworkUrl30: result.artworkUrl30,
+          artworkUrl60: result.artworkUrl60,
+          artworkUrl100: result.artworkUrl100,
+          collectionName: result.collectionName,
+        }
+      }
+      return null
+    } catch (error) {
+      console.error('Error fetching song artwork:', error)
+      return null
+    }
+  },
+  // Get artwork for a specific artist
+  getArtistArtwork: async (artistName) => {
+    try {
+      const response = await axios.get('https://itunes.apple.com/search', {
+        params: {
+          term: artistName,
+          entity: 'musicArtist',
+          media: 'music',
+          limit: 1,
+        },
+      })
+      const result = response.data?.results?.[0]
+      if (result) {
+        // For artists, we need to search for their albums to get artwork
+        const albumResponse = await axios.get('https://itunes.apple.com/search', {
+          params: {
+            term: artistName,
+            entity: 'album',
+            media: 'music',
+            limit: 1,
+          },
+        })
+        const albumResult = albumResponse.data?.results?.[0]
+        return {
+          artworkUrl30: albumResult?.artworkUrl30,
+          artworkUrl60: albumResult?.artworkUrl60,
+          artworkUrl100: albumResult?.artworkUrl100,
+        }
+      }
+      return null
+    } catch (error) {
+      console.error('Error fetching artist artwork:', error)
+      return null
+    }
+  },
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { usersAPI, songsAPI } from '../utils/api'
 import { MUSIC_PROFILE_EVENT, getMusicProfile } from '../utils/musicProfile'
+import ArtworkImage from './ArtworkImage'
 import './Sidebar.css'
 
 function Sidebar({ setIsAuthenticated }) {
@@ -119,9 +120,22 @@ function Sidebar({ setIsAuthenticated }) {
 
         <div className="album-wrap">
           <div className="album-art">
-            <div className="album-emoji">🕰️</div>
+            {topSongs.length > 0 ? (
+              <ArtworkImage
+                type="song"
+                title={topSongs[0].title}
+                artist={topSongs[0].artist}
+                size="100"
+                fallbackEmoji="🕰️"
+                className="absolute"
+              />
+            ) : (
+              <div className="album-emoji">🕰️</div>
+            )}
             <div className="album-overlay"></div>
-            <div className="album-label">A Matter of Time</div>
+            <div className="album-label">
+              {topSongs.length > 0 ? `${topSongs[0].title} — ${topSongs[0].artist}` : 'A Matter of Time'}
+            </div>
           </div>
         </div>
 
@@ -131,7 +145,16 @@ function Sidebar({ setIsAuthenticated }) {
             topSongs.map((song, idx) => (
               <div key={song.id} className="li">
                 <span className="rank">{idx + 1}</span>
-                <div className="thumb">🎵</div>
+                <div className="thumb">
+                  <ArtworkImage
+                    type="song"
+                    title={song.title}
+                    artist={song.artist}
+                    size="60"
+                    fallbackEmoji="🎵"
+                    className="thumb-artwork"
+                  />
+                </div>
                 <div className="ii">
                   <div className="it">{song.title}</div>
                   <div className="is">{song.artist}</div>
@@ -155,7 +178,15 @@ function Sidebar({ setIsAuthenticated }) {
             topArtists.map((artist, idx) => (
               <div key={idx} className="li">
                 <span className="rank">{idx + 1}</span>
-                <div className="thumb">🎤</div>
+                <div className="thumb">
+                  <ArtworkImage
+                    type="artist"
+                    title={artist}
+                    size="60"
+                    fallbackEmoji="🎤"
+                    className="thumb-artwork"
+                  />
+                </div>
                 <div className="ii">
                   <div className="it">{artist}</div>
                 </div>

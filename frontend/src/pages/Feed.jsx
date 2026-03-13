@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { feedAPI, connectionsAPI } from '../utils/api'
+import ArtworkImage from '../components/ArtworkImage'
 import './Feed.css'
 
 function Feed() {
@@ -94,7 +95,20 @@ function Feed() {
                   <strong>{pct}% compatible</strong> · {sharedSongs.slice(0, 2).map(s => s.title).join(', ') || 'No shared songs yet'}
                 </div>
                 <div className="pt-album-row">
-                  <div className="pt-album-thumb">🎵</div>
+                  <div className="pt-album-thumb">
+                    {rec.top_songs && rec.top_songs.length > 0 ? (
+                      <ArtworkImage
+                        type="song"
+                        title={rec.top_songs[0].title}
+                        artist={rec.top_songs[0].artist}
+                        size="100"
+                        fallbackEmoji="🎵"
+                        className="absolute"
+                      />
+                    ) : (
+                      <span>🎵</span>
+                    )}
+                  </div>
                   <div className="pt-genres">
                     {rec.common_genres?.slice(0, 3).map((genre, idx) => (
                       <span key={idx} className="pt-genre">{genre}</span>
@@ -130,7 +144,16 @@ function Feed() {
                         return (
                           <div key={song.id || idx} className="li">
                             <span className="rank">{idx + 1}</span>
-                            <div className={`thumb ${isShared ? 'shared' : ''}`}>🎵</div>
+                            <div className={`thumb ${isShared ? 'shared' : ''}`}>
+                              <ArtworkImage
+                                type="song"
+                                title={song.title}
+                                artist={song.artist}
+                                size="60"
+                                fallbackEmoji="🎵"
+                                className="thumb-artwork"
+                              />
+                            </div>
                             <div className="ii">
                               <div className="it">{song.title}</div>
                               {isShared && <div className="is">✓ shared</div>}
@@ -152,7 +175,15 @@ function Feed() {
                     {rec.common_artists?.slice(0, 5).map((artist, idx) => (
                       <div key={idx} className="li">
                         <span className="rank">{idx + 1}</span>
-                        <div className="thumb">🎤</div>
+                        <div className="thumb">
+                          <ArtworkImage
+                            type="artist"
+                            title={artist}
+                            size="60"
+                            fallbackEmoji="🎤"
+                            className="thumb-artwork"
+                          />
+                        </div>
                         <div className="ii">
                           <div className="it">{artist}</div>
                         </div>

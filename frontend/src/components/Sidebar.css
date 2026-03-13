@@ -82,6 +82,14 @@
   justify-content: center;
 }
 
+.album-art .artwork-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .album-emoji {
   font-size: 80px;
   position: relative;
@@ -234,6 +242,20 @@
   justify-content: center;
   font-size: 16px;
   flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.thumb .artwork-image,
+.thumb-artwork {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.thumb .artwork-placeholder {
+  border-radius: 6px;
 }
 
 .ii {
