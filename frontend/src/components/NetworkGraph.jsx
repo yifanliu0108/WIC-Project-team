@@ -1,4 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
+import * as d3 from 'd3'
+import { useNavigate } from 'react-router-dom'
+import './NetworkGraph.css'
+
+function NetworkGraph({ recommendations = [], connections = [] }) {
+  const svgRef = useRef(null)
+  const containerRef = useRef(null)
+  const [selectedNode, setSelectedNode] = useState(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!svgRef.current || !containerRef.current) return
@@ -24,6 +33,35 @@ import { useEffect, useRef, useState } from 'react'
       .attr('r', dotRadius)
       .attr('fill', 'rgba(255,255,255,0.09)')
 
+    // Build nodes and links from recommendations and connections
+    const connectedUserIds = new Set(
+      connections.map(conn => 
+        conn.connected_user_id || conn.user_id
+      )
+    )
+
+    const nodes = [
+      { id: 'you', label: 'You', type: 'you', x: width / 2, y: height / 2 }
+    ]
+
+    recommendations.forEach(rec => {
+      nodes.push({
+        id: `user-${rec.user_id}`,
+        label: rec.username,
+        type: connectedUserIds.has(rec.user_id) ? 'green' : 'blue',
+        connected: connectedUserIds.has(rec.user_id),
+        userData: rec,
+        x: Math.random() * width,
+        y: Math.random() * height
+      })
+    })
+
+    const links = recommendations
+      .filter(rec => connectedUserIds.has(rec.user_id))
+      .map(rec => ({
+        source: 'you',
+        target: `user-${rec.user_id}`
+      }))
 
     // Force simulation
     const simulation = d3.forceSimulation(nodes)
@@ -49,7 +87,14 @@ import { useEffect, useRef, useState } from 'react'
       .data(links)
       .enter().append('line')
       .attr('stroke', d => {
+        const source = typeof d.source === 'object' ? d.source : nodes.find(n => n.id === d.source)
+        const target = typeof d.target === 'object' ? d.target : nodes.find(n => n.id === d.target)
+        if (source?.type === 'you' || target?.type === 'you') {
+          return 'rgba(184, 217, 110, 0.4)'
+        }
+        return 'rgba(95, 196, 184, 0.3)'
       })
+      .attr('stroke-width', 2)
       .attr('stroke-linecap', 'round')
 
     // Draw nodes
@@ -229,6 +274,7 @@ import { useEffect, useRef, useState } from 'react'
       window.removeEventListener('resize', handleResize)
       simulation.stop()
     }
+  }, [recommendations, connections])
 
   return (
     <div className="graph-wrap" ref={containerRef}>
@@ -272,8 +318,23 @@ import { useEffect, useRef, useState } from 'react'
               </div>
             </>
           )}
+          {selectedNode.userData?.user_id && (
+            <div className="pc-actions">
+              <button 
+                className="pc-view-profile"
+                onClick={() => {
+                  navigate(`/profile/${selectedNode.userData.user_id}`)
+                  setSelectedNode(null)
+                }}
+              >
+                View Profile
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
   )
 }
+
+export default NetworkGraph
