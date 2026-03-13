@@ -35,6 +35,10 @@ function ArtworkImage({
         const url = type === 'song' 
           ? await getSongArtwork(title, artist, size)
           : await getArtistArtwork(title, size)
+        setArtworkUrl(url)
+      } catch (error) {
+        console.error('Error fetching artwork:', error)
+        setArtworkUrl(null)
       } finally {
         setLoading(false)
       }
@@ -53,6 +57,13 @@ function ArtworkImage({
 
   if (artworkUrl) {
     return (
+      <img 
+        src={artworkUrl} 
+        alt={type === 'song' ? `${title} by ${artist}` : title}
+        className={`artwork-image ${className}`}
+        onError={() => setArtworkUrl(null)}
+        {...props}
+      />
     )
   }
 
