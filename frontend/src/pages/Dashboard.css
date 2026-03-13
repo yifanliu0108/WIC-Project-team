@@ -18,13 +18,12 @@
 
 .find-panel {
   flex: 1;
-  background: linear-gradient(to bottom, var(--card-bg), #1a2840);
+  background: linear-gradient(to bottom, var(--card-bg) 0%, #1a2840 100%);
   border-radius: 14px;
   box-shadow: 0 8px 40px rgba(0,0,0,0.45);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: 0;
 }
 
 

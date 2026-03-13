@@ -121,9 +121,15 @@ function NetworkGraph({ recommendations = [], connections = [] }) {
         })
       )
       .on('click', (event, d) => {
-        if (d.type !== 'you') {
+        event.stopPropagation()
+        if (d.type !== 'you' && d.userData) {
           setSelectedNode(d)
-          event.stopPropagation()
+        }
+      })
+      .on('dblclick', (event, d) => {
+        event.stopPropagation()
+        if (d.type !== 'you' && d.userData?.user_id) {
+          navigate(`/profile/${d.userData.user_id}`)
         }
       })
 

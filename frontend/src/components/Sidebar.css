@@ -4,20 +4,16 @@
   flex-shrink: 0;
   background: linear-gradient(to bottom, var(--card-bg) 0%, #1a2840 100%);
   border-radius: 14px;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.45);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.45), 0 0 0 0 transparent;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  height: 100%;
-  max-height: calc(100vh - 32px);
 }
 
 .sb-scroll {
   overflow-y: auto;
-  overflow-x: hidden;
   flex: 1;
   padding-bottom: 12px;
-  min-height: 0;
 }
 
 .sb-scroll::-webkit-scrollbar {
@@ -208,9 +204,6 @@
   font-weight: 700;
   font-size: 13px;
   padding: 2px 16px 8px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 .list {
@@ -257,16 +250,28 @@
   position: relative;
 }
 
-.thumb .artwork-image,
-.thumb-artwork {
+.thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 6px;
 }
 
-.thumb .artwork-placeholder {
+.thumb .artwork-image,
+.thumb .artwork-placeholder,
+.thumb-artwork {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 6px;
+  position: absolute;
+  inset: 0;
+}
+
+.thumb .artwork-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ii {

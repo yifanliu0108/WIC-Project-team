@@ -135,11 +135,11 @@ export const itunesAPI = {
         const artworkUrl = result.artworkUrl100 || result.artworkUrl60 || result.artworkUrl30
         if (artworkUrl) {
           // Replace size in URL if needed (e.g., 100x100bb.jpg -> 600x600bb.jpg for better quality)
-          const highResUrl = artworkUrl.replace(/100x100|60x60|30x30/, '600x600')
+          // Return all available sizes
           return {
-            artworkUrl30: result.artworkUrl30,
-            artworkUrl60: result.artworkUrl60,
-            artworkUrl100: highResUrl || result.artworkUrl100,
+            artworkUrl30: result.artworkUrl30 || artworkUrl.replace(/100x100|60x60|30x30/, '30x30'),
+            artworkUrl60: result.artworkUrl60 || artworkUrl.replace(/100x100|60x60|30x30/, '60x60'),
+            artworkUrl100: result.artworkUrl100 || artworkUrl,
             collectionName: result.collectionName,
           }
         }

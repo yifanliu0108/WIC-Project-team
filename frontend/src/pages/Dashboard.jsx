@@ -55,7 +55,7 @@ function Dashboard() {
   return (
     <div className="dashboard">
       <div className="dashboard-content">
-        {/* Find Me Panel with Network Graph */}
+        {/* Find Me Panel with Network Graph - Shows Recommendations */}
         <div className="find-panel">
           <div className="find-header">
             <button className="find-me-btn">Find Me</button>
@@ -71,6 +71,11 @@ function Dashboard() {
             </div>
           </div>
           <NetworkGraph recommendations={recommendations} connections={connections} />
+          {recommendations.length === 0 && (
+            <div style={{ padding: '40px', textAlign: 'center', color: 'var(--muted)' }}>
+              <p>No recommendations yet. Add more songs to your profile to find matches!</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

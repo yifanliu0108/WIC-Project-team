@@ -2,7 +2,7 @@
 Connection routes (make connections, view matches, etc.)
 """
 from fastapi import APIRouter, Depends, HTTPException, status, Query
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from typing import List, Optional
 from app.core.database import get_db
 from app.models.connection import Connection, ConnectionStatus
@@ -68,7 +68,10 @@ async def get_my_connections(
     current_user: User = Depends(get_current_user)
 ):
     """Get current user's connections"""
-    query = db.query(Connection).filter(
+    query = db.query(Connection).options(
+        joinedload(Connection.user),
+        joinedload(Connection.connected_user)
+    ).filter(
         Connection.user_id == current_user.id
     )
     
@@ -86,7 +89,10 @@ async def get_received_connections(
     current_user: User = Depends(get_current_user)
 ):
     """Get connections received by current user"""
-    query = db.query(Connection).filter(
+    query = db.query(Connection).options(
+        joinedload(Connection.user),
+        joinedload(Connection.connected_user)
+    ).filter(
         Connection.connected_user_id == current_user.id
     )
     

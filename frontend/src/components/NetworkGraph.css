@@ -33,6 +33,8 @@
   transform: scale(0.92) translateY(6px);
   transition: opacity 0.18s ease, transform 0.18s ease;
   pointer-events: none;
+  top: 20px;
+  right: 20px;
 }
 
 .profile-card.show {
