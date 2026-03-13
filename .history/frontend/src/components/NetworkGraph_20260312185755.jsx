@@ -2,10 +2,40 @@ import { useEffect, useRef, useState } from 'react'
 import * as d3 from 'd3'
 import './NetworkGraph.css'
 
-export default function NetworkGraph({ recommendations = [] }) {
+export default function NetworkGraph({ recommendations = [], currentView = 'force' }) {
   const svgRef = useRef(null)
   const containerRef = useRef(null)
   const [selectedNode, setSelectedNode] = useState(null)
+  const [cardPosition, setCardPosition] = useState({ left: 16, top: 16 })
+  const [tooltip, setTooltip] = useState({
+    show: false,
+    x: 0,
+    y: 0,
+    name: '',
+    sub: '',
+  })
+
+  const getGridPositions = (nodes, width, height) => {
+    const cols = Math.ceil(Math.sqrt(nodes.length * 1.3))
+    const rows = Math.ceil(nodes.length / cols)
+    const cellW = width / (cols + 1)
+    const cellH = height / (rows + 1)
+    const sorted = [...nodes].sort((a, b) => {
+      if (a.type === 'you') return -1
+      if (b.type === 'you') return 1
+      if (a.type === 'green' && b.type === 'blue') return -1
+      if (a.type === 'blue' && b.type === 'green') return 1
+      return 0
+    })
+    const positions = {}
+    sorted.forEach((node, i) => {
+      positions[node.id] = {
+        x: ((i % cols) + 1) * cellW,
+        y: (Math.floor(i / cols) + 1) * cellH,
+      }
+    })
+    return positions
+  }
 
   useEffect(() => {
     if (!svgRef.current || !containerRef.current) return
@@ -56,6 +86,27 @@ export default function NetworkGraph({ recommendations = [] }) {
       .force('charge', d3.forceManyBody().strength(-260))
       .force('center', d3.forceCenter(width / 2, height / 2))
       .force('collide', d3.forceCollide(42))
+
+    const applyViewMode = () => {
+      if (currentView === 'grid') {
+        const positions = getGridPositions(nodes, width, height)
+        simulation
+          .force('link', null)
+          .force('charge', d3.forceManyBody().strength(-30))
+          .force('x', d3.forceX((d) => (positions[d.id] || { x: width / 2 }).x).strength(0.8))
+          .force('y', d3.forceY((d) => (positions[d.id] || { y: height / 2 }).y).strength(0.8))
+          .alpha(0.4)
+          .restart()
+      } else {
+        simulation
+          .force('link', d3.forceLink(links).id(d => d.id).distance(120).strength(0.5))
+          .force('charge', d3.forceManyBody().strength(-260))
+          .force('x', d3.forceX(width / 2).strength(0.03))
+          .force('y', d3.forceY(height / 2).strength(0.03))
+          .alpha(0.5)
+          .restart()
+      }
+    }
 
     // Zoom behavior
     const zoom = d3.zoom()
@@ -108,9 +159,36 @@ export default function NetworkGraph({ recommendations = [] }) {
           d.fy = null
         })
       )
+      .on('mouseenter', (event, d) => {
+        if (d.type === 'you') return
+        const shared = d.userData?.shared_songs_count || 0
+        setTooltip({
+          show: true,
+          x: event.offsetX + 14,
+          y: event.offsetY - 8,
+          name: d.label,
+          sub: shared ? `${shared} shared songs` : 'No shared songs yet',
+        })
+      })
+      .on('mousemove', (event, d) => {
+        if (d.type === 'you') return
+        setTooltip((prev) => ({ ...prev, x: event.offsetX + 14, y: event.offsetY - 8 }))
+      })
+      .on('mouseleave', () => {
+        setTooltip((prev) => ({ ...prev, show: false }))
+      })
       .on('click', (event, d) => {
         if (d.type !== 'you') {
           setSelectedNode(d)
+          const rect = containerRef.current.getBoundingClientRect()
+          const cardW = 240
+          const cardH = 220
+          let left = event.clientX - rect.left + 14
+          let top = event.clientY - rect.top - 60
+          if (left + cardW > rect.width - 8) left = rect.width - cardW - 8
+          if (top < 8) top = 8
+          if (top + cardH > rect.height - 8) top = rect.height - cardH - 8
+          setCardPosition({ left, top })
           event.stopPropagation()
         }
       })
@@ -159,7 +237,7 @@ export default function NetworkGraph({ recommendations = [] }) {
       const g = d3.select(this)
       if (d.type === 'green') {
         // Green node with gradient polygon
-        g.append('circle').attr('r', otherR).attr('fill', '#b8d96e').attr('opacity', 0.5)
+        g.append('circle').attr('r', otherR).attr('fill', '#b8d96e').attr('opacity', 0.5).attr('class', 'pulse-green')
         g.append('circle').attr('r', otherR * 0.8).attr('fill', '#1a2e10').attr('opacity', 0.4)
         
         // Pause bars
@@ -167,8 +245,8 @@ export default function NetworkGraph({ recommendations = [] }) {
         const bh = otherR * 0.38
         const gap = otherR * 0.16
         const barY = -bh / 2
-        g.append('rect').attr('x', -(gap + bw)).attr('y', barY).attr('width', bw).attr('height', bh).attr('rx', bw / 2).attr('fill', 'rgba(255,255,255,0.9)')
-        g.append('rect').attr('x', gap).attr('y', barY).attr('width', bw).attr('height', bh).attr('rx', bw / 2).attr('fill', 'rgba(255,255,255,0.9)')
+        g.append('rect').attr('x', -(gap + bw)).attr('y', barY).attr('width', bw).attr('height', bh).attr('rx', bw / 2).attr('fill', 'rgba(255,255,255,0.9)').attr('class', 'eye-bar')
+        g.append('rect').attr('x', gap).attr('y', barY).attr('width', bw).attr('height', bh).attr('rx', bw / 2).attr('fill', 'rgba(255,255,255,0.9)').attr('class', 'eye-bar')
       } else {
         // Blue node
         g.append('circle').attr('r', otherR + 7).attr('fill', '#5fc4b8').attr('opacity', 0.14)
@@ -180,8 +258,8 @@ export default function NetworkGraph({ recommendations = [] }) {
         const bw = otherR * 0.13
         const bh = otherR * 0.38
         const gap = otherR * 0.16
-        g.append('rect').attr('x', -(gap + bw)).attr('y', -bh / 2).attr('width', bw).attr('height', bh).attr('rx', bw / 2).attr('fill', 'rgba(255,255,255,0.55)')
-        g.append('rect').attr('x', gap).attr('y', -bh / 2).attr('width', bw).attr('height', bh).attr('rx', bw / 2).attr('fill', 'rgba(255,255,255,0.55)')
+        g.append('rect').attr('x', -(gap + bw)).attr('y', -bh / 2).attr('width', bw).attr('height', bh).attr('rx', bw / 2).attr('fill', 'rgba(255,255,255,0.55)').attr('class', 'eye-bar')
+        g.append('rect').attr('x', gap).attr('y', -bh / 2).attr('width', bw).attr('height', bh).attr('rx', bw / 2).attr('fill', 'rgba(255,255,255,0.55)').attr('class', 'eye-bar')
       }
       
       // Label
@@ -246,6 +324,13 @@ export default function NetworkGraph({ recommendations = [] }) {
       node.attr('transform', d => `translate(${d.x},${d.y})`)
     })
 
+    svg.on('click', () => {
+      setSelectedNode(null)
+      setTooltip((prev) => ({ ...prev, show: false }))
+    })
+
+    applyViewMode()
+
     // Handle window resize
     const handleResize = () => {
       const newWidth = containerRef.current.offsetWidth
@@ -261,13 +346,20 @@ export default function NetworkGraph({ recommendations = [] }) {
       window.removeEventListener('resize', handleResize)
       simulation.stop()
     }
-  }, [recommendations])
+  }, [recommendations, currentView])
 
   return (
     <div className="graph-wrap" ref={containerRef}>
       <svg ref={svgRef} id="graph"></svg>
+      <div
+        className={`tip ${tooltip.show ? 'show' : ''}`}
+        style={{ left: tooltip.x, top: tooltip.y }}
+      >
+        <div className="tip-name">{tooltip.name}</div>
+        <div className="tip-sub">{tooltip.sub}</div>
+      </div>
       {selectedNode && (
-        <div className="profile-card show">
+        <div className="profile-card show" style={{ left: cardPosition.left, top: cardPosition.top }}>
           <button className="pc-close" onClick={() => setSelectedNode(null)}>×</button>
           <div className="pc-header">
             <div className="pc-avatar">{selectedNode.label[0]}</div>

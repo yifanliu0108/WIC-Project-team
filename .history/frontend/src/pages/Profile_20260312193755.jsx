@@ -18,6 +18,11 @@ function Profile() {
   const [searching, setSearching] = useState(false)
   const [setupProfile, setSetupProfile] = useState(() => getMusicProfile())
   const [genreTags, setGenreTags] = useState([])
+  const [albumSearchQuery, setAlbumSearchQuery] = useState('')
+  const [albumSearchResults, setAlbumSearchResults] = useState([])
+  const [albumSearching, setAlbumSearching] = useState(false)
+  const [showAlbumSearch, setShowAlbumSearch] = useState(false)
+  const [selectedAlbum, setSelectedAlbum] = useState(null)
   const [lyricSoundValue, setLyricSoundValue] = useState(30) // 0-100, 30 = more lyric
   const [calmHypeValue, setCalmHypeValue] = useState(60)
   const [acousticElectronicValue, setAcousticElectronicValue] = useState(55)
@@ -57,6 +62,30 @@ function Profile() {
       window.removeEventListener('storage', syncProfile)
     }
   }, [])
+
+  useEffect(() => {
+    if (!editMode || !isOwnProfile) return
+    const query = albumSearchQuery.trim()
+    if (query.length < 2) {
+      setAlbumSearchResults([])
+      setAlbumSearching(false)
+      return
+    }
+
+    const timer = setTimeout(async () => {
+      try {
+        setAlbumSearching(true)
+        const response = await itunesAPI.searchAlbum(query, 8)
+        setAlbumSearchResults(response.data?.results || [])
+      } catch (err) {
+        setAlbumSearchResults([])
+      } finally {
+        setAlbumSearching(false)
+      }
+    }, 280)
+
+    return () => clearTimeout(timer)
+  }, [albumSearchQuery, editMode, isOwnProfile])
 
   const fetchData = async () => {
     try {
@@ -216,6 +245,13 @@ function Profile() {
     setGenreTags((prev) => prev.filter((genre) => genre !== genreToRemove))
   }
 
+  const handleSelectAlbum = (album) => {
+    setSelectedAlbum(album)
+    setAlbumSearchQuery('')
+    setAlbumSearchResults([])
+    setShowAlbumSearch(false)
+  }
+
   const addPhase = () => {
     const next = [...phases]
     next.push({
@@ -330,8 +366,15 @@ function Profile() {
       <div className="hero">
         <div className="hero-left">
           <div className="hero-album-thumb" id="heroAlbumThumb">
-            <div className="album-emoji">🕰️</div>
-            <img id="albumImg" src="" alt="" style={{ display: 'none' }} />
+            {selectedAlbum?.artworkUrl100 ? (
+              <img
+                id="albumImg"
+                src={selectedAlbum.artworkUrl100.replace('100x100bb', '300x300bb')}
+                alt={selectedAlbum.collectionName || 'Album cover'}
+              />
+            ) : (
+              <div className="album-emoji">🕰️</div>
+            )}
           </div>
           <div className="hero-name-wrap">
             <h1 
@@ -383,11 +426,80 @@ function Profile() {
           {/* Left Column - Album Art & Genres */}
           <div>
             <div className="album-card" id="albumCard">
-              <div className="album-emoji" id="albumEmoji">🕰️</div>
-              <img id="albumImg2" src="" alt="" style={{ display: 'none' }} />
+              <button
+                type="button"
+                className="album-card-hit"
+                onClick={() => {
+                  if (editMode && isOwnProfile) {
+                    setShowAlbumSearch(true)
+                  }
+                }}
+                aria-label="Search favorite album"
+              />
+              {selectedAlbum?.artworkUrl100 ? (
+                <img
+                  id="albumImg2"
+                  src={selectedAlbum.artworkUrl100.replace('100x100bb', '600x600bb')}
+                  alt={selectedAlbum.collectionName || 'Album cover'}
+                />
+              ) : (
+                <div className="album-emoji" id="albumEmoji">🕰️</div>
+              )}
               <div className="album-overlay"></div>
-              <div className="album-label" id="albumLabel">A Matter of Time</div>
+              {editMode && isOwnProfile && (
+                <div className="album-edit-hint">
+                  Click to search your favorite album
+                </div>
+              )}
+              <div className="album-label" id="albumLabel">
+                {selectedAlbum
+                  ? `${selectedAlbum.collectionName || 'Unknown Album'} — ${selectedAlbum.artistName || 'Unknown Artist'}`
+                  : 'A Matter of Time'}
+              </div>
             </div>
+            {editMode && isOwnProfile && showAlbumSearch && (
+              <div id="albumSearch">
+                <div className="album-search-row">
+                  <input
+                    className="album-search-input"
+                    placeholder="Search iTunes albums..."
+                    value={albumSearchQuery}
+                    onChange={(e) => setAlbumSearchQuery(e.target.value)}
+                    autoFocus
+                  />
+                  <button
+                    type="button"
+                    className="album-search-close"
+                    onClick={() => setShowAlbumSearch(false)}
+                  >
+                    ✕
+                  </button>
+                </div>
+                <div className="album-results">
+                  {albumSearching ? (
+                    <div className="album-results-empty">Searching albums...</div>
+                  ) : albumSearchResults.length > 0 ? (
+                    albumSearchResults.map((album, idx) => (
+                      <button
+                        type="button"
+                        key={`${album.collectionId || album.collectionName}-${idx}`}
+                        className="album-result-item"
+                        onClick={() => handleSelectAlbum(album)}
+                      >
+                        <img src={album.artworkUrl100} alt={album.collectionName || 'Album'} />
+                        <span>
+                          <strong>{album.collectionName || 'Unknown Album'}</strong>
+                          <br />
+                          {album.artistName || 'Unknown Artist'}
+                        </span>
+                      </button>
+                    ))
+                  ) : (
+                    <div className="album-results-empty">Type to search albums</div>
+                  )}
+                </div>
+              </div>
+            )}
             
             <div className="genre-row">
               <div className="genre-label">Genres</div>

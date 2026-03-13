@@ -19,6 +19,38 @@
   height: 100%;
 }
 
+.tip {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(8,14,26,0.94);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 12px;
+  color: var(--text);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+  z-index: 100;
+}
+
+.tip.show {
+  opacity: 1;
+}
+
+.tip-name {
+  font-weight: 600;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+}
+
+.tip-sub {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
 .profile-card {
   position: absolute;
   z-index: 200;
@@ -146,4 +178,25 @@
 
 .pc-close:hover {
   color: var(--text);
+}
+
+.eye-bar {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: blinkBars 2.6s ease-in-out infinite;
+}
+
+.pulse-green {
+  animation: pulseGreen 2.4s ease-in-out infinite;
+}
+
+@keyframes blinkBars {
+  0%, 80%, 100% { transform: scaleY(1); }
+  86% { transform: scaleY(0.2); }
+  92% { transform: scaleY(1); }
+}
+
+@keyframes pulseGreen {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.62; }
 }

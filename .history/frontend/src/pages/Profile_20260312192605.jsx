@@ -237,6 +237,14 @@ function Profile() {
     )
   }
 
+  if (loading) {
+    return <div className="profile"><p>Loading...</p></div>
+  }
+
+  if (!user) {
+    return <div className="profile"><p>User not found</p></div>
+  }
+
   const parseSetupSong = (entry, index) => {
     const raw = String(entry || '').trim()
     const sep = raw.lastIndexOf(' - ')
@@ -250,9 +258,7 @@ function Profile() {
     return { id: `setup-song-${index}`, title: raw, artist: 'Unknown Artist' }
   }
 
-  const useSetupProfile = isOwnProfile && (setupProfile.songs.length || setupProfile.artists.length)
-
-  const topSongs = useSetupProfile && setupProfile.songs.length
+  const topSongs = setupProfile.songs.length
     ? setupProfile.songs.slice(0, 5).map(parseSetupSong)
     : [...songs]
         .sort((a, b) => {
@@ -262,21 +268,21 @@ function Profile() {
         })
         .slice(0, 5)
 
-  const topArtists = useSetupProfile && setupProfile.artists.length
+  const topArtists = setupProfile.artists.length
     ? setupProfile.artists.slice(0, 5)
-    : (user?.favorite_artists || []).slice(0, 5)
+    : (user.favorite_artists || []).slice(0, 5)
 
   useEffect(() => {
     let isCancelled = false
 
     const populateGenresFromItunes = async () => {
-      const sourceSongs = useSetupProfile && setupProfile.songs.length
+      const sourceSongs = setupProfile.songs.length
         ? setupProfile.songs.slice(0, 5).map(parseSetupSong)
         : topSongs
       const sourceArtists = topArtists
 
       if (!sourceSongs.length && !sourceArtists.length) {
-        setGenreTags((user?.top_genres || []).map((genre) => String(genre).toUpperCase()))
+        setGenreTags((user.top_genres || []).map((genre) => String(genre).toUpperCase()))
         return
       }
 
@@ -299,11 +305,11 @@ function Profile() {
         const uniqueGenres = [...new Set(allGenres.filter(Boolean).map((genre) => String(genre).toUpperCase()))]
 
         if (!isCancelled) {
-          setGenreTags(uniqueGenres.length ? uniqueGenres : (user?.top_genres || []).map((genre) => String(genre).toUpperCase()))
+          setGenreTags(uniqueGenres.length ? uniqueGenres : (user.top_genres || []).map((genre) => String(genre).toUpperCase()))
         }
       } catch (fetchErr) {
         if (!isCancelled) {
-          setGenreTags((user?.top_genres || []).map((genre) => String(genre).toUpperCase()))
+          setGenreTags((user.top_genres || []).map((genre) => String(genre).toUpperCase()))
         }
       }
     }
@@ -312,15 +318,7 @@ function Profile() {
     return () => {
       isCancelled = true
     }
-  }, [setupProfile, songs, user])
-
-  if (loading) {
-    return <div className="profile"><p>Loading...</p></div>
-  }
-
-  if (!user) {
-    return <div className="profile"><p>User not found</p></div>
-  }
+  }, [setupProfile, user?.top_genres, songs, user])
 
   return (
     <div className={`profile page ${editMode ? 'edit-mode' : ''}`}>
@@ -466,7 +464,7 @@ function Profile() {
                       <div className="song-name">{song.title}</div>
                       <div className="song-artist">{song.artist}</div>
                     </div>
-                    {editMode && isOwnProfile && typeof song.id === 'number' && (
+                    {editMode && isOwnProfile && (
                       <button className="song-remove" onClick={() => handleDeleteSong(song.id)}>×</button>
                     )}
                   </div>

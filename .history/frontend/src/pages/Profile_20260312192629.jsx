@@ -250,9 +250,7 @@ function Profile() {
     return { id: `setup-song-${index}`, title: raw, artist: 'Unknown Artist' }
   }
 
-  const useSetupProfile = isOwnProfile && (setupProfile.songs.length || setupProfile.artists.length)
-
-  const topSongs = useSetupProfile && setupProfile.songs.length
+  const topSongs = setupProfile.songs.length
     ? setupProfile.songs.slice(0, 5).map(parseSetupSong)
     : [...songs]
         .sort((a, b) => {
@@ -262,7 +260,7 @@ function Profile() {
         })
         .slice(0, 5)
 
-  const topArtists = useSetupProfile && setupProfile.artists.length
+  const topArtists = setupProfile.artists.length
     ? setupProfile.artists.slice(0, 5)
     : (user?.favorite_artists || []).slice(0, 5)
 
@@ -270,7 +268,7 @@ function Profile() {
     let isCancelled = false
 
     const populateGenresFromItunes = async () => {
-      const sourceSongs = useSetupProfile && setupProfile.songs.length
+      const sourceSongs = setupProfile.songs.length
         ? setupProfile.songs.slice(0, 5).map(parseSetupSong)
         : topSongs
       const sourceArtists = topArtists
