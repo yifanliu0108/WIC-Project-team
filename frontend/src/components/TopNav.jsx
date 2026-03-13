@@ -1,4 +1,5 @@
 import React from 'react'
+import { useLocation } from 'react-router-dom'
 import './TopNav.css'
 
 function TopNav() {
@@ -15,12 +16,12 @@ function TopNav() {
     <nav className="top-nav">
       <div className="nav-left">
         <a href="/" className="nav-logo">
+          <span className="logo-text">In Tune</span>
         </a>
         <div className="nav-divider"></div>
         <span className="nav-page">{getPageName()}</span>
       </div>
       <div className="nav-icons">
-        </a>
         <a href="/profile" className="nav-icon" title="Profile">
           <svg viewBox="0 0 24 24">
             <circle cx="12" cy="8" r="4" />
