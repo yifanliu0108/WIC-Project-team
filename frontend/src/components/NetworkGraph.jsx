@@ -124,6 +124,8 @@ import { useEffect, useRef, useState } from 'react'
 
     otherNodes.each(function(d) {
       const g = d3.select(this)
+      
+      if (d.type === 'green' || d.connected) {
         // Green node with gradient polygon
         g.append('circle').attr('r', otherR).attr('fill', '#b8d96e').attr('opacity', 0.5)
         g.append('circle').attr('r', otherR * 0.8).attr('fill', '#1a2e10').attr('opacity', 0.4)
