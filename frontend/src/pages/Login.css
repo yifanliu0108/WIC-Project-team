@@ -254,12 +254,13 @@
 
 .terms-check:checked::after {
   content: '';
+  display: block;
   position: absolute;
-  top: 2px;
-  left: 5px;
+  top: 0px;
+  left: 4px;
   width: 4px;
   height: 7px;
-  border: 2px solid #0d1117;
+  border: 1.5px solid #0d1117;
   border-top: none;
   border-left: none;
   transform: rotate(45deg);

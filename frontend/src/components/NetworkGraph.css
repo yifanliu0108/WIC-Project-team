@@ -3,9 +3,8 @@
   position: relative;
   overflow: hidden;
   margin: 0 12px 12px;
-  border-radius: 10px;
-  background: radial-gradient(ellipse at 50% 45%, #162038 0%, #0d1828 55%, #070e1b 100%),
-    linear-gradient(to bottom right, transparent 40%, rgba(95,196,184,0.10) 100%);
+  border-radius: 25px;
+  background: linear-gradient(180deg, #35365D 0%, #3F5D53 100%);
   cursor: grab;
   min-height: 400px;
 }
@@ -186,8 +185,8 @@
   animation: blinkBars 2.6s ease-in-out infinite;
 }
 
-.pulse-green {
-  animation: pulseGreen 2.4s ease-in-out infinite;
+.node-glow {
+  animation: nodeGlowPulse 2.4s ease-in-out infinite;
 }
 
 @keyframes blinkBars {
@@ -196,7 +195,7 @@
   92% { transform: scaleY(1); }
 }
 
-@keyframes pulseGreen {
-  0%, 100% { opacity: 0.45; }
-  50% { opacity: 0.62; }
+@keyframes nodeGlowPulse {
+  0%, 100% { opacity: 0.13; }
+  50% { opacity: 0.22; }
 }

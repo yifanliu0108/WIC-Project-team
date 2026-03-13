@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { usersAPI, songsAPI, musicbrainzAPI, feedAPI } from '../utils/api'
+import { usersAPI, songsAPI, musicbrainzAPI, feedAPI, connectionsAPI } from '../utils/api'
 import './Profile.css'
 
 function Profile() {
@@ -17,6 +17,7 @@ function Profile() {
   const [searching, setSearching] = useState(false)
   const [lyricSoundValue, setLyricSoundValue] = useState(30) // 0-100, 30 = more lyric
   const [editMode, setEditMode] = useState(false)
+  const [connectionsCount, setConnectionsCount] = useState(null)
   const isOwnProfile = !userId
 
   const [songForm, setSongForm] = useState({
@@ -56,6 +57,12 @@ function Profile() {
           setSongSuggestions(suggestions.data || [])
         } catch (err) {
           console.error('Failed to fetch song suggestions:', err)
+        }
+        try {
+          const stats = await connectionsAPI.getStats()
+          setConnectionsCount(stats.data?.accepted ?? stats.data?.total ?? null)
+        } catch (err) {
+          console.error('Failed to fetch connection stats:', err)
         }
       }
     } catch (err) {
@@ -228,14 +235,20 @@ function Profile() {
             <img id="albumImg" src="" alt="" style={{ display: 'none' }} />
           </div>
           <div className="hero-name-wrap">
-            <h1 
-              className="hero-name" 
+            <h1
+              className="hero-name"
               id="heroName"
               contentEditable={editMode && isOwnProfile}
               suppressContentEditableWarning
             >
               {user.username}
             </h1>
+            {isOwnProfile && connectionsCount !== null && (
+              <div className="hero-connections">
+                <span className="hero-connections-count">{connectionsCount}</span>
+                <span className="hero-connections-label">{connectionsCount === 1 ? 'connection' : 'connections'}</span>
+              </div>
+            )}
             <div className="hero-subtitle">
               {isOwnProfile ? (
                 <input 

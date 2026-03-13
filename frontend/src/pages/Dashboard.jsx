@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { feedAPI } from '../utils/api'
 import NetworkGraph from '../components/NetworkGraph'
 import './Dashboard.css'
@@ -7,6 +7,7 @@ function Dashboard() {
   const [recommendations, setRecommendations] = useState([])
   const [loading, setLoading] = useState(true)
   const [currentView, setCurrentView] = useState('force')
+  const findMeRef = useRef(null)
 
   useEffect(() => {
     fetchDashboardData()
@@ -34,7 +35,7 @@ function Dashboard() {
         {/* Find Me Panel with Network Graph */}
         <div className="find-panel">
           <div className="find-header">
-            <button className="find-me-btn">Find Me</button>
+            <button className="find-me-btn" onClick={() => findMeRef.current?.()}>Find Me</button>
             <div className="find-header-right">
               <div className="legend">
                 <div className="leg">
@@ -79,7 +80,7 @@ function Dashboard() {
               </div>
             </div>
           </div>
-          <NetworkGraph recommendations={recommendations} currentView={currentView} />
+          <NetworkGraph recommendations={recommendations} currentView={currentView} findMeRef={findMeRef} />
         </div>
       </div>
     </div>

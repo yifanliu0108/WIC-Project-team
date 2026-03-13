@@ -173,6 +173,10 @@ function Sidebar({ setIsAuthenticated }) {
         <div className="sep"></div>
 
         <div className="list" style={{ marginTop: 'auto', paddingBottom: '12px' }}>
+          <button className={`nav-item ${isActive('/settings') ? 'active' : ''}`} onClick={() => navigate('/settings')}>
+            <span className="nav-icon">⚙️</span>
+            <span>Settings</span>
+          </button>
           <button className="nav-item logout-item" onClick={handleLogout}>
             <span className="nav-icon">🚪</span>
             <span>Logout</span>

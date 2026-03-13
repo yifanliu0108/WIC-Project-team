@@ -2,9 +2,11 @@ import { useEffect, useRef, useState } from 'react'
 import * as d3 from 'd3'
 import './NetworkGraph.css'
 
-export default function NetworkGraph({ recommendations = [], currentView = 'force' }) {
+export default function NetworkGraph({ recommendations = [], currentView = 'force', findMeRef }) {
   const svgRef = useRef(null)
   const containerRef = useRef(null)
+  const zoomRef = useRef(null)
+  const youPosRef = useRef({ x: 0, y: 0 })
   const [selectedNode, setSelectedNode] = useState(null)
   const [cardPosition, setCardPosition] = useState({ left: 16, top: 16 })
   const [tooltip, setTooltip] = useState({
@@ -67,7 +69,7 @@ export default function NetworkGraph({ recommendations = [], currentView = 'forc
       ...recommendations.slice(0, 15).map((rec, i) => ({
         id: `node-${rec.user_id}`,
         label: rec.username,
-        type: rec.similarity_score > 0.5 ? 'green' : 'blue',
+        type: (rec.shared_songs_count > 0 || (rec.common_genres && rec.common_genres.length > 0)) ? 'green' : 'blue',
         userData: rec,
         x: width / 2 + (Math.random() - 0.5) * width * 0.6,
         y: height / 2 + (Math.random() - 0.5) * height * 0.6,
@@ -116,8 +118,30 @@ export default function NetworkGraph({ recommendations = [], currentView = 'forc
       })
 
     svg.call(zoom)
+    zoomRef.current = zoom
+
+    // Expose findMe: animate zoom to center on "you" node
+    if (findMeRef) {
+      findMeRef.current = () => {
+        const { x, y } = youPosRef.current
+        const w = containerRef.current?.offsetWidth || width
+        const h = containerRef.current?.offsetHeight || height
+        const scale = 1.6
+        const tx = w / 2 - x * scale
+        const ty = h / 2 - y * scale
+        d3.select(svgRef.current)
+          .transition().duration(650).ease(d3.easeCubicInOut)
+          .call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale))
+      }
+    }
 
     const g = svg.append('g')
+
+    // Default zoom: start 1.5x zoomed in on center (must be after g is defined)
+    const initScale = 1.5
+    const initTx = (width - width * initScale) / 2
+    const initTy = (height - height * initScale) / 2
+    svg.call(zoom.transform, d3.zoomIdentity.translate(initTx, initTy).scale(initScale))
 
     // Draw links
     const link = g.append('g')
@@ -201,13 +225,13 @@ export default function NetworkGraph({ recommendations = [], currentView = 'forc
     youNode.append('circle').attr('r', youR).attr('fill', '#c93b6a')
     youNode.append('circle').attr('r', youR * 0.58).attr('cy', -youR * 0.26).attr('fill', 'rgba(255,255,255,0.10)')
     
-    // Eyes
+    // Eyes — circles with blink animation
     const eyeR = youR * 0.08
     const eyeX = youR * 0.46
     const eyeY = youR * 0.02
-    youNode.append('ellipse').attr('cx', -eyeX).attr('cy', eyeY).attr('rx', eyeR).attr('ry', eyeR).attr('fill', '#ffffff')
-    youNode.append('ellipse').attr('cx', eyeX).attr('cy', eyeY).attr('rx', eyeR).attr('ry', eyeR).attr('fill', '#ffffff')
-    
+    youNode.append('ellipse').attr('cx', -eyeX).attr('cy', eyeY).attr('rx', eyeR).attr('ry', eyeR).attr('fill', '#ffffff').attr('class', 'eye-bar')
+    youNode.append('ellipse').attr('cx', eyeX).attr('cy', eyeY).attr('rx', eyeR).attr('ry', eyeR).attr('fill', '#ffffff').attr('class', 'eye-bar')
+
     // Smile
     const smX = eyeX * 0.60
     const smY0 = eyeY + youR * 0.16
@@ -235,38 +259,57 @@ export default function NetworkGraph({ recommendations = [], currentView = 'forc
 
     otherNodes.each(function(d) {
       const g = d3.select(this)
-      if (d.type === 'green') {
-        // Green node with gradient polygon
-        g.append('circle').attr('r', otherR).attr('fill', '#b8d96e').attr('opacity', 0.5).attr('class', 'pulse-green')
-        g.append('circle').attr('r', otherR * 0.8).attr('fill', '#1a2e10').attr('opacity', 0.4)
-        
-        // Pause bars
-        const bw = otherR * 0.18
-        const bh = otherR * 0.38
-        const gap = otherR * 0.16
-        const barY = -bh / 2
-        g.append('rect').attr('x', -(gap + bw)).attr('y', barY).attr('width', bw).attr('height', bh).attr('rx', bw / 2).attr('fill', 'rgba(255,255,255,0.9)').attr('class', 'eye-bar')
-        g.append('rect').attr('x', gap).attr('y', barY).attr('width', bw).attr('height', bh).attr('rx', bw / 2).attr('fill', 'rgba(255,255,255,0.9)').attr('class', 'eye-bar')
-      } else {
-        // Blue node
-        g.append('circle').attr('r', otherR + 7).attr('fill', '#5fc4b8').attr('opacity', 0.14)
-        g.append('circle').attr('r', otherR).attr('fill', '#0e3530').attr('opacity', 0.4).attr('cy', 2)
-        g.append('circle').attr('r', otherR).attr('fill', '#5fc4b8')
-        g.append('circle').attr('r', otherR * 0.62).attr('cy', -otherR * 0.28).attr('fill', 'rgba(255,255,255,0.08)')
-        
-        // Pause bars
-        const bw = otherR * 0.13
-        const bh = otherR * 0.38
-        const gap = otherR * 0.16
-        g.append('rect').attr('x', -(gap + bw)).attr('y', -bh / 2).attr('width', bw).attr('height', bh).attr('rx', bw / 2).attr('fill', 'rgba(255,255,255,0.55)').attr('class', 'eye-bar')
-        g.append('rect').attr('x', gap).attr('y', -bh / 2).attr('width', bw).attr('height', bh).attr('rx', bw / 2).attr('fill', 'rgba(255,255,255,0.55)').attr('class', 'eye-bar')
-      }
-      
+      const fillColor = d.type === 'green' ? '#AEC477' : '#6EA593'
+
+      // Outer glow circle
+      g.append('circle')
+        .attr('r', otherR + 10)
+        .attr('fill', fillColor)
+        .attr('class', 'node-glow')
+
+      // Shadow circle (depth)
+      g.append('circle')
+        .attr('r', otherR)
+        .attr('fill', 'rgba(0,0,0,0.25)')
+        .attr('cy', 2)
+
+      // Main circle
+      g.append('circle')
+        .attr('r', otherR)
+        .attr('fill', fillColor)
+        .attr('opacity', 0.82)
+
+      // Inner highlight (Figma radial gradient feel)
+      g.append('circle')
+        .attr('r', otherR * 0.62)
+        .attr('cy', -otherR * 0.22)
+        .attr('fill', 'rgba(255,255,255,0.10)')
+
+      // Eyes — centered, slightly above center
+      const bw = otherR * 0.12
+      const bh = otherR * 0.25
+      const eyeGap = otherR * 0.20        // half-distance between eye centers
+      const eyeCenterY = -otherR * 0.12   // slightly above center
+      const barY = eyeCenterY - bh / 2
+
+      g.append('rect')
+        .attr('x', -eyeGap - bw / 2).attr('y', barY)
+        .attr('width', bw).attr('height', bh)
+        .attr('rx', bw / 2)
+        .attr('fill', 'rgba(255,255,255,0.92)')
+        .attr('class', 'eye-bar')
+      g.append('rect')
+        .attr('x', eyeGap - bw / 2).attr('y', barY)
+        .attr('width', bw).attr('height', bh)
+        .attr('rx', bw / 2)
+        .attr('fill', 'rgba(255,255,255,0.92)')
+        .attr('class', 'eye-bar')
+
       // Label
       g.append('text')
         .attr('y', otherR + 13)
         .attr('text-anchor', 'middle')
-        .attr('fill', d.type === 'green' ? 'rgba(255,255,255,0.72)' : 'rgba(255,255,255,0.50)')
+        .attr('fill', 'rgba(255,255,255,0.72)')
         .attr('font-size', 10)
         .attr('font-family', 'DM Sans, sans-serif')
         .attr('font-weight', 500)
@@ -275,6 +318,10 @@ export default function NetworkGraph({ recommendations = [], currentView = 'forc
 
     // Update positions on simulation tick
     simulation.on('tick', () => {
+      // Track "you" node position for Find Me
+      const youNode = nodes.find(n => n.id === 'you')
+      if (youNode) youPosRef.current = { x: youNode.x, y: youNode.y }
+
       link
         .attr('x1', d => {
           const source = typeof d.source === 'object' ? d.source : nodes.find(n => n.id === d.source)

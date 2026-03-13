@@ -45,9 +45,9 @@ function Login({ setIsAuthenticated, onLoginSuccess }) {
 
     const navHeight = 56
     const faces = [
-      { fx: 0.08, fy: 0.82, r: 180 },
-      { fx: 0.9, fy: 0.85, r: 150 },
-      { fx: 0.3, fy: 0.95, r: 110 }
+      { fx: 0.08, fy: 0.82, r: 280 },
+      { fx: 0.9, fy: 0.85, r: 230 },
+      { fx: 0.3, fy: 0.95, r: 175 }
     ]
 
     const faceState = faces.map(() => ({
@@ -99,8 +99,6 @@ function Login({ setIsAuthenticated, onLoginSuccess }) {
       const cy = face.fy * height
       const r = face.r
 
-      const bobX = Math.cos(state.bobAngle) * 6
-      const bobY = Math.sin(state.bobAngle) * 6
       const pulse = 0.97 + 0.03 * Math.sin(state.angle)
       const rr = r * pulse
 
@@ -112,20 +110,57 @@ function Login({ setIsAuthenticated, onLoginSuccess }) {
       ctx.arc(cx, cy, rr * 1.6, 0, Math.PI * 2)
       ctx.fill()
 
-      const grad = ctx.createLinearGradient(cx - rr + bobX, cy - rr + bobY, cx + rr - bobX, cy + rr - bobY)
-      grad.addColorStop(0, '#5fc4b8')
-      grad.addColorStop(1, '#c93b6a')
-      ctx.fillStyle = grad
-      ctx.globalAlpha = 0.75
+      // Clip to circle, draw Figma blob inside
+      const s = rr / 50  // scale: maps Figma 100x100 coords (centered at 50,50) → canvas
+      ctx.save()
       ctx.beginPath()
-      ctx.arc(cx, cy, rr * 0.9, 0, Math.PI * 2)
-      ctx.fill()
-      ctx.globalAlpha = 1
+      ctx.arc(cx, cy, rr, 0, Math.PI * 2)
+      ctx.clip()
 
+      ctx.save()
+      // Continuous rotation + up-down hover with slight horizontal sway
+      const blobHoverX = Math.cos(state.bobAngle * 0.8) * rr * 0.04
+      const blobHoverY = Math.sin(state.bobAngle) * rr * 0.07
+      ctx.translate(cx + blobHoverX, cy + blobHoverY)
+      ctx.rotate(state.angle * 0.28)
+
+      // Blur matches Figma stdDeviation 7.5 in a 100px space
+      ctx.filter = `blur(${(7.5 * s).toFixed(1)}px)`
+
+      // Gradient: Figma linear from (61.31,31.27)→(38.96,67.13) in SVG space
+      // = (11.31,-18.73)→(-11.04,17.13) relative to center, scaled by s
+      const blobGrad = ctx.createLinearGradient(
+        11.31 * s, -18.73 * s,
+        -11.04 * s, 17.13 * s
+      )
+      blobGrad.addColorStop(0, '#D42362')
+      blobGrad.addColorStop(1, '#6EA593')
+      ctx.fillStyle = blobGrad
+
+      // Figma path — all coordinates relative to circle center, scaled by s
+      ctx.beginPath()
+      ctx.moveTo(-1.94 * s, -24.08 * s)
+      ctx.bezierCurveTo(-1.64 * s, -28.22 * s,  3.91 * s, -29.22 * s,  5.64 * s, -25.44 * s)
+      ctx.lineTo(18.46 * s, 2.57 * s)
+      ctx.bezierCurveTo(20.35 * s, 6.71 * s,  15.52 * s, 10.61 * s,  11.94 * s, 7.84 * s)
+      ctx.bezierCurveTo(8.82 * s, 5.43 * s,   4.42 * s,  8.10 * s,   5.08 * s, 12.01 * s)
+      ctx.lineTo(6.69 * s, 21.55 * s)
+      ctx.bezierCurveTo(8.03 * s, 29.50 * s, -1.58 * s, 34.36 * s,  -7.10 * s, 28.52 * s)
+      ctx.lineTo(-23.42 * s, 11.28 * s)
+      ctx.bezierCurveTo(-30.62 * s, 3.67 * s, -28.46 * s, -8.79 * s, -19.16 * s, -13.37 * s)
+      ctx.lineTo(-4.15 * s, -20.77 * s)
+      ctx.bezierCurveTo(-2.88 * s, -21.40 * s, -2.04 * s, -22.65 * s, -1.94 * s, -24.08 * s)
+      ctx.closePath()
+      ctx.fill()
+
+      ctx.restore() // remove rotate/translate
+      ctx.restore() // remove clip
+
+      // Green radial overlay: transparent center → #AEC477 at edges (the "green circle" look)
       const overlay = ctx.createRadialGradient(cx + rr * 0.26, cy - rr * 0.26, 0, cx, cy, rr)
-      overlay.addColorStop(0, 'rgba(184,217,110,0.02)')
-      overlay.addColorStop(0.35, 'rgba(184,217,110,0.13)')
-      overlay.addColorStop(1, 'rgba(184,217,110,0.62)')
+      overlay.addColorStop(0, 'rgba(174,196,119,0)')
+      overlay.addColorStop(0.45, 'rgba(174,196,119,0.10)')
+      overlay.addColorStop(1, 'rgba(174,196,119,0.52)')
       ctx.fillStyle = overlay
       ctx.beginPath()
       ctx.arc(cx, cy, rr, 0, Math.PI * 2)
@@ -139,13 +174,14 @@ function Login({ setIsAuthenticated, onLoginSuccess }) {
       const eyeW = rr * 0.15
       const eyeH = rr * 0.36 * (1 - blink * 0.88)
       const eyeGap = rr * 0.17
+      const eyeBaseY = cy - rr * 0.18  // raised from center
 
       if (eyeH > 0.5) {
         ctx.fillStyle = 'rgba(255,255,255,0.92)'
         ctx.beginPath()
         ctx.roundRect(
           cx - eyeGap - eyeW / 2 + eyeOffsetX,
-          cy - eyeH / 2 + eyeOffsetY,
+          eyeBaseY - eyeH / 2 + eyeOffsetY,
           eyeW,
           eyeH,
           eyeW / 2
@@ -154,7 +190,7 @@ function Login({ setIsAuthenticated, onLoginSuccess }) {
         ctx.beginPath()
         ctx.roundRect(
           cx + eyeGap - eyeW / 2 + eyeOffsetX,
-          cy - eyeH / 2 + eyeOffsetY,
+          eyeBaseY - eyeH / 2 + eyeOffsetY,
           eyeW,
           eyeH,
           eyeW / 2

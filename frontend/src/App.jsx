@@ -7,6 +7,7 @@ import Feed from './pages/Feed'
 import Profile from './pages/Profile'
 import Login from './pages/Login'
 import MusicSetup from './pages/MusicSetup'
+import Settings from './pages/Settings'
 import { MUSIC_PROFILE_EVENT, isMusicProfileComplete } from './utils/musicProfile'
 import './App.css'
 
@@ -94,6 +95,7 @@ function App() {
           <Route path="/feed" element={<Feed />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/:userId" element={<Profile />} />
+          <Route path="/settings" element={<Settings setIsAuthenticated={setIsAuthenticated} />} />
         </Route>
       </Routes>
     </Router>

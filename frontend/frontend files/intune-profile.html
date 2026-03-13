@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InTune — Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0d1117;--nav-bg:#0f1623;--card-bg:#131c2e;--card2:#1a2540;--green-node:#b8d96e;--blue-node:#5fc4b8;--you-color:#c93b6a;--text:#e8eaf0;--muted:#7a8599;--border:rgba(255,255,255,0.07); }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+  nav{background:var(--nav-bg);border-bottom:1.5px solid #1b3258;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;flex-shrink:0;}
+  .nav-left{display:flex;align-items:center;gap:14px;}
+  .nav-divider{width:1px;height:20px;background:var(--border);}
+  .nav-page{font-size:14px;color:var(--muted);}
+  .nav-icons{display:flex;gap:10px;}
+  .nav-icon{width:38px;height:38px;border-radius:50%;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:background 0.2s;text-decoration:none;}
+  .nav-icon:hover{background:rgba(184,217,110,0.1);}
+  .nav-icon svg{width:17px;height:17px;fill:none;stroke:var(--muted);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+  .badge{position:absolute;top:-2px;right:-2px;width:15px;height:15px;border-radius:50%;background:var(--you-color);font-size:8px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;border:1.5px solid var(--nav-bg);}
+
+  .page{flex:1;overflow-y:auto;}
+  .page::-webkit-scrollbar{width:4px;}
+  .page::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:4px;}
+
+  /* Hero album thumb (replaces photo) */
+  .hero-album-thumb{width:80px;height:80px;border-radius:14px;overflow:hidden;flex-shrink:0;background:linear-gradient(135deg,#1e3060,#110c24);display:flex;align-items:center;justify-content:center;font-size:34px;box-shadow:0 4px 20px rgba(0,0,0,0.5);border:2px solid rgba(201,59,106,0.25);}
+  .hero-album-thumb img{width:100%;height:100%;object-fit:cover;}
+  /* Hero */
+  .hero{padding:28px 32px 20px;position:relative;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;}
+  .hero-left{display:flex;align-items:flex-end;gap:20px;}
+
+
+
+  .hero-name-wrap{padding-bottom:4px;}
+  .hero-name{
+    font-family:'Syne',sans-serif;font-weight:800;font-size:60px;
+    line-height:1;color:#fff;letter-spacing:-2px;
+  }
+  .hero-name[contenteditable="true"]{
+    outline:none;border-bottom:2px solid var(--you-color);
+    padding-bottom:2px;cursor:text;
+  }
+  .hero-subtitle{font-size:13px;color:var(--muted);margin-top:4px;}
+  .hero-subtitle input{background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;width:240px;}
+  .hero-subtitle input:focus{border-bottom:1px solid var(--you-color);}
+
+  .hero-actions{display:flex;gap:8px;align-items:center;padding-bottom:6px;}
+  .edit-btn{
+    display:flex;align-items:center;gap:7px;padding:8px 18px;border-radius:9px;border:none;
+    font-family:'Syne',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:all 0.18s;
+    background:var(--card2);color:var(--text);border:1px solid var(--border);
+  }
+  .edit-btn:hover{background:rgba(184,217,110,0.12);color:var(--green-node);border-color:rgba(184,217,110,0.3);}
+  .edit-btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .save-btn{background:linear-gradient(135deg,#c93b6a,#a02d54);color:#fff;border:none;box-shadow:0 3px 14px rgba(201,59,106,0.35);}
+  .save-btn:hover{opacity:0.88;transform:translateY(-1px);}
+  .hero-line{height:1px;background:rgba(255,255,255,0.1);margin:0 32px;}
+
+  /* Content grid */
+  .content-wrap{background:linear-gradient(to bottom,rgba(19,28,46,0.7),rgba(26,40,64,0.9));border-radius:16px;margin:16px;box-shadow:0 8px 40px rgba(0,0,0,0.5);padding:20px 20px 0;}
+  .content{display:grid;grid-template-columns:200px 1fr 1fr;gap:20px;}
+
+  /* Album / cover art */
+  .album-card{border-radius:12px;overflow:hidden;aspect-ratio:1;position:relative;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1e3060,#110c24);cursor:pointer;}
+  .album-card img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+  .album-emoji{font-size:70px;position:relative;z-index:1;}
+  .album-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,0.7) 100%);}
+  .album-label{position:absolute;bottom:8px;left:10px;right:10px;z-index:3;font-size:10px;color:rgba(255,255,255,0.7);font-style:italic;font-family:'Syne',sans-serif;}
+  .album-edit-hint{position:absolute;inset:0;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;flex-direction:column;gap:6px;z-index:5;font-size:12px;color:#fff;font-weight:600;}
+  .album-edit-hint svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;}
+  .edit-mode .album-card:hover .album-edit-hint{display:flex;}
+  #albumSearch{display:none;margin-top:10px;}
+  .edit-mode #albumSearch{display:block;}
+  .album-search-input{width:100%;padding:8px 10px;border-radius:8px;background:#232d42;border:1px solid var(--border);color:var(--text);font-size:12px;font-family:'DM Sans',sans-serif;outline:none;}
+  .album-search-input:focus{border-color:rgba(184,217,110,0.4);}
+  .album-results{margin-top:6px;display:flex;flex-direction:column;gap:4px;max-height:140px;overflow-y:auto;}
+  .album-result-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;transition:background 0.15s;font-size:11px;}
+  .album-result-item:hover{background:var(--card2);}
+  .album-result-item img{width:30px;height:30px;border-radius:4px;object-fit:cover;flex-shrink:0;}
+  .album-result-item span{line-height:1.3;}
+
+  /* Genre tags */
+  .genre-row{margin-top:12px;}
+  .genre-label{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;margin-bottom:8px;}
+  .genre-tags{display:flex;flex-wrap:wrap;gap:6px;}
+  .genre-tag{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(184,217,110,0.15);color:var(--green-node);border:1px solid rgba(184,217,110,0.25);cursor:pointer;transition:all 0.15s;position:relative;}
+  .genre-tag:hover{background:rgba(184,217,110,0.25);}
+  .genre-tag .remove-tag{display:none;margin-left:5px;opacity:0.7;}
+  .edit-mode .genre-tag .remove-tag{display:inline;}
+  .add-genre{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(255,255,255,0.05);color:var(--muted);border:1px dashed var(--border);cursor:pointer;display:none;align-items:center;gap:4px;}
+  /* Genre edit panel — expands below genre tags in edit mode */
+  .genre-edit-panel{display:none;margin-top:14px;padding:14px;background:rgba(255,255,255,0.04);border-radius:12px;border:1px solid rgba(184,217,110,0.15);}
+  .edit-mode .genre-edit-panel{display:block;}
+  .genre-edit-input-row{display:flex;gap:8px;margin-bottom:12px;}
+  .genre-input{flex:1;padding:9px 12px;border-radius:8px;background:#1e2a3e;border:1px solid rgba(184,217,110,0.25);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;}
+  .genre-input:focus{border-color:rgba(184,217,110,0.55);}
+  .genre-add-btn{padding:9px 14px;border-radius:8px;background:rgba(184,217,110,0.15);border:1px solid rgba(184,217,110,0.3);color:var(--green-node);font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Syne',sans-serif;transition:background 0.15s;}
+  .genre-add-btn:hover{background:rgba(184,217,110,0.25);}
+  .genre-suggestions{display:flex;flex-wrap:wrap;gap:6px;}
+  .genre-sugg-label{font-size:10px;color:var(--muted);width:100%;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px;}
+  .genre-sugg{padding:4px 11px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--border);cursor:pointer;transition:all 0.15s;}
+  .genre-sugg:hover{background:rgba(184,217,110,0.1);color:var(--green-node);border-color:rgba(184,217,110,0.25);}
+  .edit-mode .add-genre{display:inline-flex;}
+
+  /* Lists */
+  .list-title{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+  .list-title .search-songs-btn{font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;display:none;padding:3px 8px;border-radius:6px;transition:all 0.15s;}
+  .edit-mode .list-title .search-songs-btn{display:block;color:var(--green-node);}
+  .edit-mode .list-title .search-songs-btn:hover{background:rgba(184,217,110,0.1);}
+  .song-list{display:flex;flex-direction:column;gap:4px;}
+  .song-row{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:9px;transition:background 0.15s;cursor:pointer;}
+  .song-row:hover{background:var(--card2);}
+  .song-rank{width:15px;font-size:11px;color:var(--muted);font-weight:600;flex-shrink:0;text-align:center;}
+  .song-thumb{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;background:linear-gradient(135deg,#1e2d4a,#2a1e3e);overflow:hidden;}
+  .song-thumb img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+  .song-info{flex:1;min-width:0;}
+  .song-name{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .song-artist{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .song-remove{width:20px;height:20px;border-radius:50%;background:rgba(201,59,106,0.15);border:none;color:var(--you-color);font-size:12px;cursor:pointer;display:none;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.15s;}
+  .song-remove:hover{background:rgba(201,59,106,0.3);}
+  .edit-mode .song-remove{display:flex;}
+
+  /* Song search modal */
+  .song-search-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:none;align-items:center;justify-content:center;}
+  .song-search-overlay.show{display:flex;}
+  .song-search-modal{background:#1a2235;border-radius:16px;padding:24px;width:480px;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,0.6);}
+  .ssm-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
+  .ssm-close{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:2px 6px;}
+  .ssm-input{width:100%;padding:11px 14px;border-radius:10px;background:#232d42;border:1px solid rgba(255,255,255,0.1);color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:12px;}
+  .ssm-input:focus{border-color:rgba(184,217,110,0.4);}
+  .ssm-results{overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:4px;}
+  .ssm-item{display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:9px;cursor:pointer;transition:background 0.15s;}
+  .ssm-item:hover{background:var(--card2);}
+  .ssm-item img{width:40px;height:40px;border-radius:6px;object-fit:cover;flex-shrink:0;}
+  .ssm-item-no-img{width:40px;height:40px;border-radius:6px;background:linear-gradient(135deg,#1e2d4a,#2a1e3e);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+  .ssm-info{flex:1;min-width:0;}
+  .ssm-name{font-size:13px;font-weight:500;}
+  .ssm-artist{font-size:11px;color:var(--muted);}
+  .ssm-loading{text-align:center;padding:20px;color:var(--muted);font-size:13px;}
+
+  /* Prefs */
+  .prefs-section{padding:0 20px 16px;}
+  .prefs-title{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px;}
+  .prefs-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 36px;}
+  .pref-row{display:flex;align-items:center;gap:10px;}
+  .pref-lbl{font-size:11px;color:var(--muted);width:54px;flex-shrink:0;}
+  .pref-lbl2{font-size:11px;color:var(--muted);width:54px;flex-shrink:0;text-align:right;}
+  /* Bottom strip */
+  .strip-card{background:linear-gradient(to bottom,var(--card-bg),#1a2840);border-radius:14px;padding:16px;box-shadow:0 4px 24px rgba(0,0,0,0.35);}
+  .strip-title{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;margin-bottom:14px;color:var(--text);}
+  /* Status Song */
+  .status-song-card{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.04);position:relative;overflow:hidden;margin-bottom:10px;}
+  .ss-art{width:42px;height:42px;border-radius:8px;background:linear-gradient(135deg,#1e2d4a,#2a1e3e);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;overflow:hidden;}
+  .ss-art img{width:100%;height:100%;object-fit:cover;border-radius:8px;}
+  .ss-info{flex:1;min-width:0;}
+  .ss-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .ss-artist{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;}
+  .ss-pulse{display:flex;align-items:flex-end;gap:2px;height:18px;flex-shrink:0;}
+  .ss-bar{width:3px;border-radius:2px;background:var(--you-color);animation:bar 0.9s ease-in-out infinite alternate;}
+  @keyframes bar{from{transform:scaleY(0.3);opacity:0.5;}to{transform:scaleY(1);opacity:1;}}
+  .ss-caption{width:100%;background:none;border:none;border-bottom:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-style:italic;padding:4px 2px;outline:none;transition:border-color 0.2s;}
+  .edit-mode .ss-caption{color:var(--text);border-color:rgba(184,217,110,0.3);}
+  .ss-caption::placeholder{color:rgba(122,133,153,0.5);}
+  .ss-change-btn{display:none;margin-top:10px;width:100%;padding:7px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--muted);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;gap:6px;align-items:center;justify-content:center;}
+  .ss-change-btn:hover{background:rgba(184,217,110,0.08);color:var(--green-node);border-color:rgba(184,217,110,0.25);}
+  .edit-mode .ss-change-btn{display:flex;}
+  /* Phases */
+  .phases-timeline{display:flex;flex-direction:column;gap:0;position:relative;}
+  .phases-timeline::before{content:'';position:absolute;left:7px;top:8px;bottom:8px;width:1.5px;background:linear-gradient(to bottom,var(--green-node),rgba(184,217,110,0.15));}
+  .phase-item{display:flex;align-items:flex-start;gap:14px;padding:6px 0;position:relative;}
+  .phase-dot{width:16px;height:16px;border-radius:50%;background:var(--card2);border:2px solid rgba(184,217,110,0.4);flex-shrink:0;margin-top:3px;z-index:1;}
+  .phase-dot--now{background:var(--green-node);border-color:var(--green-node);box-shadow:0 0 8px rgba(184,217,110,0.5);}
+  .phase-body{flex:1;min-width:0;}
+  .phase-year{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;}
+  .phase-label{font-size:13px;font-weight:600;outline:none;}
+  .edit-mode .phase-label[contenteditable="true"]{border-bottom:1px solid rgba(201,59,106,0.35);cursor:text;}
+  .phase-desc{font-size:11px;color:var(--muted);outline:none;line-height:1.5;margin-top:2px;}
+  .edit-mode .phase-desc[contenteditable="true"]{border-bottom:1px solid rgba(201,59,106,0.18);cursor:text;}
+  .phase-remove{display:none;background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:0 4px;opacity:0.5;transition:opacity 0.15s;flex-shrink:0;margin-top:2px;}
+  .phase-remove:hover{opacity:1;color:var(--you-color);}
+  .edit-mode .phase-remove{display:block;}
+  .add-phase-btn{font-size:11px;color:var(--green-node);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;padding:2px 6px;border-radius:6px;transition:background 0.15s;display:none;}
+  .add-phase-btn:hover{background:rgba(184,217,110,0.1);}
+  .edit-mode .add-phase-btn{display:block;}
+  .ls-slider{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:4px;background:rgba(255,255,255,0.12);outline:none;cursor:pointer;}
+  .ls-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--you-color);box-shadow:0 2px 8px rgba(201,59,106,0.5);cursor:pointer;}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-left">
+    <a href="intune-dashboard.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <svg width="26" height="34" viewBox="0 0 39 50" fill="none"><path d="M34.7139 23.8545L33.4558 30.9898C32.9261 33.994 31.0272 36.5839 28.3089 38.0097C24.2637 40.1315 19.2708 39.2512 16.1953 35.8737C14.1286 33.6042 13.23 30.5211 13.7598 27.5168L15.0179 20.3816M21.8056 39.4742L20.8084 45.1296M4.00067 25.2761L5.2586 18.1408C5.78824 15.1366 7.687 12.5467 10.4052 11.1208C14.4504 8.99878 19.4433 9.87902 22.519 13.2564C24.5857 15.5259 25.4844 18.609 24.9547 21.6132L23.6968 28.7485M16.9086 9.65607L17.9056 4.00067" stroke="#AEC477" stroke-width="8" stroke-linecap="round"/></svg>
+      <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:20px;font-style:italic;color:#AEC477;">InTune</span>
+    </a>
+    <div class="nav-divider"></div>
+    <span class="nav-page">Profile</span>
+  </div>
+  <div class="nav-icons">
+    <a href="intune-daily-triad.html" class="nav-icon" title="Daily Triad"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></a>
+    <a href="intune-profile.html" class="nav-icon" title="Profile"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></a>
+    <a href="intune-notifications.html" class="nav-icon" title="Messages" style="position:relative"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="badge">2</span></a>
+    <a href="#" class="nav-icon" title="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></a>
+  </div>
+</nav>
+
+<div class="page" id="profilePage">
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-left">
+      <!-- Album cover used as profile avatar -->
+      <div class="hero-album-thumb" id="heroAlbumThumb">
+        <div class="hat-emoji" id="heroAlbumEmoji">🕰️</div>
+      </div>
+      <div class="hero-name-wrap">
+        <div class="hero-name" id="heroName" contenteditable="false" spellcheck="false">Jazzie</div>
+        <div class="hero-subtitle">
+          <input type="text" id="heroSubtitle" value="Music lover · San Diego, CA" disabled>
+        </div>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <button class="edit-btn" id="editBtn" onclick="toggleEdit()">
+        <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Edit Profile
+      </button>
+      <button class="edit-btn save-btn" id="saveBtn" onclick="saveProfile()" style="display:none;">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        Save Changes
+      </button>
+    </div>
+  </div>
+  <div class="hero-line"></div>
+
+  <div class="content-wrap">
+    <div class="content">
+      <!-- Col 1 -->
+      <div>
+        <div class="album-card" id="albumCard">
+          <img id="albumImg" src="" alt="" style="display:none;">
+          <div class="album-emoji" id="albumEmoji">🕰️</div>
+          <div class="album-overlay"></div>
+          <div class="album-label" id="albumLabel">A Matter of Time</div>
+          <div class="album-edit-hint">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Search Album
+          </div>
+        </div>
+        <div id="albumSearch">
+          <input class="album-search-input" id="albumSearchInput" placeholder="Search MusicBrainz..." oninput="searchAlbum(this.value)">
+          <div class="album-results" id="albumResults"></div>
+        </div>
+        <div class="genre-row">
+          <div class="genre-label">Genres</div>
+          <div class="genre-tags" id="genreTags">
+            <span class="genre-tag">POP <span class="remove-tag" onclick="removeGenre(this)">×</span></span>
+            <span class="genre-tag">INDIE <span class="remove-tag" onclick="removeGenre(this)">×</span></span>
+            <span class="genre-tag">R&B <span class="remove-tag" onclick="removeGenre(this)">×</span></span>
+            <span class="genre-tag">CLASSICAL <span class="remove-tag" onclick="removeGenre(this)">×</span></span>
+          </div>
+        </div>
+        <!-- Genre edit panel (visible in edit mode) -->
+        <div class="genre-edit-panel">
+          <div class="genre-edit-input-row">
+            <input class="genre-input" id="genreInput" placeholder="Type a genre…" onkeydown="if(event.key==='Enter')addGenreFromInput()">
+            <button class="genre-add-btn" onclick="addGenreFromInput()">Add</button>
+          </div>
+          <div class="genre-suggestions">
+            <div class="genre-sugg-label">Suggestions</div>
+            <span class="genre-sugg" onclick="addGenreTag(this.textContent)">JAZZ</span>
+            <span class="genre-sugg" onclick="addGenreTag(this.textContent)">FOLK</span>
+            <span class="genre-sugg" onclick="addGenreTag(this.textContent)">HIP-HOP</span>
+            <span class="genre-sugg" onclick="addGenreTag(this.textContent)">METAL</span>
+            <span class="genre-sugg" onclick="addGenreTag(this.textContent)">AMBIENT</span>
+            <span class="genre-sugg" onclick="addGenreTag(this.textContent)">EDM</span>
+            <span class="genre-sugg" onclick="addGenreTag(this.textContent)">COUNTRY</span>
+            <span class="genre-sugg" onclick="addGenreTag(this.textContent)">SOUL</span>
+            <span class="genre-sugg" onclick="addGenreTag(this.textContent)">LO-FI</span>
+            <span class="genre-sugg" onclick="addGenreTag(this.textContent)">PUNK</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Col 2: Top Songs -->
+      <div class="list-section">
+        <div class="list-title">
+          Top 5 Songs
+          <button class="search-songs-btn" onclick="openSongSearch('songs')">+ Search MusicBrainz</button>
+        </div>
+        <div class="song-list" id="songList">
+          <div class="song-row" data-id="1"><span class="song-rank">1</span><div class="song-thumb">❄️</div><div class="song-info"><div class="song-name">Sweater Weather</div><div class="song-artist">The Neighbourhood</div></div><button class="song-remove" onclick="removeSong(this)">×</button></div>
+          <div class="song-row" data-id="2"><span class="song-rank">2</span><div class="song-thumb">🌀</div><div class="song-info"><div class="song-name">As It Was</div><div class="song-artist">Harry Styles</div></div><button class="song-remove" onclick="removeSong(this)">×</button></div>
+          <div class="song-row" data-id="3"><span class="song-rank">3</span><div class="song-thumb">⚡</div><div class="song-info"><div class="song-name">Blinding Lights</div><div class="song-artist">The Weeknd</div></div><button class="song-remove" onclick="removeSong(this)">×</button></div>
+          <div class="song-row" data-id="4"><span class="song-rank">4</span><div class="song-thumb">✂️</div><div class="song-info"><div class="song-name">Shape of You</div><div class="song-artist">Ed Sheeran</div></div><button class="song-remove" onclick="removeSong(this)">×</button></div>
+          <div class="song-row" data-id="5"><span class="song-rank">5</span><div class="song-thumb">⭐</div><div class="song-info"><div class="song-name">Starboy</div><div class="song-artist">The Weeknd</div></div><button class="song-remove" onclick="removeSong(this)">×</button></div>
+        </div>
+      </div>
+
+      <!-- Col 3: Top Artists -->
+      <div class="list-section">
+        <div class="list-title">
+          Top 5 Artists
+          <button class="search-songs-btn" onclick="openSongSearch('artists')">+ Search MusicBrainz</button>
+        </div>
+        <div class="song-list" id="artistList">
+          <div class="song-row"><span class="song-rank">1</span><div class="song-thumb">🌙</div><div class="song-info"><div class="song-name">The Weeknd</div><div class="song-artist">R&B / Pop</div></div><button class="song-remove" onclick="removeSong(this)">×</button></div>
+          <div class="song-row"><span class="song-rank">2</span><div class="song-thumb">🌿</div><div class="song-info"><div class="song-name">Harry Styles</div><div class="song-artist">Pop / Rock</div></div><button class="song-remove" onclick="removeSong(this)">×</button></div>
+          <div class="song-row"><span class="song-rank">3</span><div class="song-thumb">🔥</div><div class="song-info"><div class="song-name">Ed Sheeran</div><div class="song-artist">Pop / Folk</div></div><button class="song-remove" onclick="removeSong(this)">×</button></div>
+          <div class="song-row"><span class="song-rank">4</span><div class="song-thumb">🎸</div><div class="song-info"><div class="song-name">The Neighbourhood</div><div class="song-artist">Indie Rock</div></div><button class="song-remove" onclick="removeSong(this)">×</button></div>
+          <div class="song-row"><span class="song-rank">5</span><div class="song-thumb">💫</div><div class="song-info"><div class="song-name">Taylor Swift</div><div class="song-artist">Pop / Country</div></div><button class="song-remove" onclick="removeSong(this)">×</button></div>
+        </div>
+      </div>
+    </div>
+  </div><!-- end content-wrap -->
+
+  <!-- Bottom row: prefs + status song + phases -->
+  <div class="bottom-strip" style="display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:14px;margin:0 16px 20px;">
+
+    <!-- Prefs sliders (trimmed to 3) -->
+    <div class="strip-card">
+      <div class="strip-title">Listening Preferences</div>
+      <div style="display:flex;flex-direction:column;gap:13px;">
+        <div class="pref-row"><span class="pref-lbl">Lyric</span><input type="range" class="ls-slider" min="0" max="100" value="35"><span class="pref-lbl2">Sound</span></div>
+        <div class="pref-row"><span class="pref-lbl">Calm</span><input type="range" class="ls-slider" min="0" max="100" value="60"><span class="pref-lbl2">Hype</span></div>
+        <div class="pref-row"><span class="pref-lbl">Acoustic</span><input type="range" class="ls-slider" min="0" max="100" value="55"><span class="pref-lbl2">Electronic</span></div>
+      </div>
+    </div>
+
+    <!-- Status Song -->
+    <div class="strip-card">
+      <div class="strip-title">Status Song</div>
+      <div class="status-song-wrap" id="statusSongWrap">
+        <div class="status-song-card" id="statusSongCard">
+          <div class="ss-art" id="ssArt">🎵</div>
+          <div class="ss-info">
+            <div class="ss-name" id="ssName">Set a status song…</div>
+            <div class="ss-artist" id="ssArtist">What are you feeling right now?</div>
+          </div>
+          <div class="ss-pulse" id="ssPulse"></div>
+        </div>
+        <div class="ss-caption-wrap">
+          <input class="ss-caption" id="ssCaption" placeholder='Add a caption, e.g. "this one hits different lately"' disabled>
+        </div>
+        <button class="ss-change-btn edit-mode-only" id="ssChangeBtn" onclick="openSongSearch('status')">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Change song
+        </button>
+      </div>
+    </div>
+
+    <!-- Music Phases Timeline -->
+    <div class="strip-card">
+      <div class="strip-title" style="display:flex;align-items:center;justify-content:space-between;">
+        My Music Phases
+        <button class="add-phase-btn edit-mode-only" onclick="addPhase()">+ Add phase</button>
+      </div>
+      <div class="phases-timeline" id="phasesTimeline">
+        <div class="phase-item" data-id="1">
+          <div class="phase-dot"></div>
+          <div class="phase-body">
+            <div class="phase-year">2019</div>
+            <div class="phase-label" contenteditable="false">sad indie era 🌧️</div>
+            <div class="phase-desc" contenteditable="false">The Neighbourhood, Cigarettes After Sex, lana on repeat</div>
+          </div>
+          <button class="phase-remove edit-mode-only" onclick="removePhase(this)">×</button>
+        </div>
+        <div class="phase-item" data-id="2">
+          <div class="phase-dot"></div>
+          <div class="phase-body">
+            <div class="phase-year">2021</div>
+            <div class="phase-label" contenteditable="false">hyperpop summer ⚡</div>
+            <div class="phase-desc" contenteditable="false">100 gecs, Charli XCX, everything fast and weird</div>
+          </div>
+          <button class="phase-remove edit-mode-only" onclick="removePhase(this)">×</button>
+        </div>
+        <div class="phase-item" data-id="3">
+          <div class="phase-dot phase-dot--now"></div>
+          <div class="phase-body">
+            <div class="phase-year" style="color:var(--green-node);">now</div>
+            <div class="phase-label" contenteditable="false">pop crossover 🌸</div>
+            <div class="phase-desc" contenteditable="false">Harry Styles, The Weeknd, anything with a good hook</div>
+          </div>
+          <button class="phase-remove edit-mode-only" onclick="removePhase(this)">×</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Song search modal -->
+<div class="song-search-overlay" id="songSearchOverlay" onclick="closeSongSearch(event)">
+  <div class="song-search-modal" onclick="event.stopPropagation()">
+    <div class="ssm-title">
+      <span id="ssmTitle">Search MusicBrainz</span>
+      <button class="ssm-close" onclick="closeSongSearchModal()">✕</button>
+    </div>
+    <input class="ssm-input" id="ssmInput" placeholder="Type a song or artist name..." oninput="searchMusicBrainz(this.value)">
+    <div class="ssm-results" id="ssmResults"></div>
+  </div>
+</div>
+
+<script>
+let editMode = false;
+let searchTarget = 'songs'; // 'songs' or 'artists'
+let albumSearchTimer = null;
+let ssmTimer = null;
+
+// ── EDIT MODE ─────────────────────────────────
+function toggleEdit() {
+  editMode = true;
+  document.getElementById('profilePage').classList.add('edit-mode');
+  document.getElementById('heroName').contentEditable = 'true';
+  document.getElementById('heroName').focus();
+  document.getElementById('heroSubtitle').disabled = false;
+  document.getElementById('ssCaption').disabled = false;
+  document.getElementById('editBtn').style.display = 'none';
+  document.getElementById('saveBtn').style.display = 'flex';
+  // Enable phase editing
+  document.querySelectorAll('.phase-label, .phase-desc').forEach(el => {
+    el.contentEditable = 'true';
+  });
+}
+
+function saveProfile() {
+  editMode = false;
+  document.getElementById('profilePage').classList.remove('edit-mode');
+  document.getElementById('heroName').contentEditable = 'false';
+  document.getElementById('heroSubtitle').disabled = true;
+  document.getElementById('ssCaption').disabled = true;
+  document.getElementById('editBtn').style.display = 'flex';
+  document.getElementById('saveBtn').style.display = 'none';
+  document.querySelectorAll('.phase-label, .phase-desc').forEach(el => {
+    el.contentEditable = 'false';
+  });
+  showToast('Profile saved!');
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#b8d96e;color:#0d1117;padding:10px 22px;border-radius:24px;font-family:Syne,sans-serif;font-weight:700;font-size:13px;z-index:999;animation:fadeInUp 0.3s both';
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+
+
+// ── GENRES ────────────────────────────────────
+function removeGenre(btn) {
+  if (!editMode) return;
+  btn.parentElement.remove();
+}
+function addGenreFromInput() {
+  const input = document.getElementById('genreInput');
+  const val = input.value.trim();
+  if (!val) return;
+  addGenreTag(val);
+  input.value = '';
+}
+function addGenreTag(name) {
+  const tags = document.getElementById('genreTags');
+  // Don't add dupes
+  const existing = [...tags.querySelectorAll('.genre-tag')].map(t=>t.textContent.replace('×','').trim());
+  if (existing.includes(name.toUpperCase())) return;
+  const tag = document.createElement('span');
+  tag.className = 'genre-tag';
+  tag.innerHTML = `${name.toUpperCase()} <span class="remove-tag" onclick="removeGenre(this)">×</span>`;
+  tags.appendChild(tag);
+}
+
+// ── SONG REMOVE ───────────────────────────────
+function removeSong(btn) {
+  if (!editMode) return;
+  btn.closest('.song-row').remove();
+  // Re-number
+  document.querySelectorAll('#songList .song-rank, #artistList .song-rank').forEach((r, i) => {
+    // only renumber within same list
+  });
+}
+
+// ── SONG SEARCH MODAL ─────────────────────────
+function openSongSearch(target) {
+  searchTarget = target;
+  const titles = { songs: 'Search Songs (MusicBrainz)', artists: 'Search Artists (MusicBrainz)', status: 'Set Your Status Song' };
+  document.getElementById('ssmTitle').textContent = titles[target] || 'Search MusicBrainz';
+  document.getElementById('ssmInput').value = '';
+  document.getElementById('ssmResults').innerHTML = '';
+  document.getElementById('songSearchOverlay').classList.add('show');
+  setTimeout(() => document.getElementById('ssmInput').focus(), 50);
+}
+function closeSongSearch(e) {
+  if (e.target === document.getElementById('songSearchOverlay')) closeSongSearchModal();
+}
+function closeSongSearchModal() {
+  document.getElementById('songSearchOverlay').classList.remove('show');
+}
+
+// ── MUSICBRAINZ SEARCH ────────────────────────
+// MusicBrainz is free and open — no API key needed
+// Cover art from Cover Art Archive (linked to MusicBrainz release IDs)
+async function searchMusicBrainz(query) {
+  clearTimeout(ssmTimer);
+  if (query.length < 2) { document.getElementById('ssmResults').innerHTML = ''; return; }
+  document.getElementById('ssmResults').innerHTML = '<div class="ssm-loading">Searching MusicBrainz…</div>';
+  ssmTimer = setTimeout(async () => {
+    try {
+      const type = searchTarget === 'songs' ? 'recording' : 'artist';
+      const url = `https://musicbrainz.org/ws/2/${type}/?query=${encodeURIComponent(query)}&limit=10&fmt=json`;
+      const res = await fetch(url, { headers: { 'User-Agent': 'InTune/1.0 (demo)' } });
+      const data = await res.json();
+      renderMBResults(data, type);
+    } catch(e) {
+      document.getElementById('ssmResults').innerHTML = '<div class="ssm-loading" style="color:#c93b6a">Could not reach MusicBrainz. Check your network.</div>';
+    }
+  }, 400);
+}
+
+function renderMBResults(data, type) {
+  const el = document.getElementById('ssmResults');
+  const items = type === 'recording' ? (data.recordings || []) : (data.artists || []);
+  if (!items.length) { el.innerHTML = '<div class="ssm-loading">No results found.</div>'; return; }
+  el.innerHTML = '';
+  items.slice(0, 8).forEach(item => {
+    const name = item.title || item.name || '';
+    const artist = item['artist-credit']?.[0]?.name || item.tags?.[0]?.name || '';
+    const releaseId = item.releases?.[0]?.id || null;
+    const div = document.createElement('div');
+    div.className = 'ssm-item';
+    div.innerHTML = `
+      ${releaseId
+        ? `<img src="https://coverartarchive.org/release/${releaseId}/front-250" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy"><div class="ssm-item-no-img" style="display:none">🎵</div>`
+        : `<div class="ssm-item-no-img">🎵</div>`}
+      <div class="ssm-info">
+        <div class="ssm-name">${name}</div>
+        <div class="ssm-artist">${artist}</div>
+      </div>`;
+    div.onclick = () => addItemFromSearch(name, artist, releaseId);
+    el.appendChild(div);
+  });
+}
+
+function addItemFromSearch(name, artist, releaseId) {
+  if (searchTarget === 'status') {
+    // Set status song
+    const art = document.getElementById('ssArt');
+    if (releaseId) {
+      art.innerHTML = `<img src="https://coverartarchive.org/release/${releaseId}/front-250" alt="" onerror="this.outerHTML='🎵'" loading="lazy">`;
+    } else {
+      art.textContent = '🎵';
+    }
+    document.getElementById('ssName').textContent = name;
+    document.getElementById('ssArtist').textContent = artist;
+    closeSongSearchModal();
+    return;
+  }
+  const listId = searchTarget === 'songs' ? 'songList' : 'artistList';
+  const list = document.getElementById(listId);
+  const rows = list.querySelectorAll('.song-row');
+  if (rows.length >= 5) rows[rows.length-1].remove();
+  const imgHtml = releaseId
+    ? `<img src="https://coverartarchive.org/release/${releaseId}/front-250" alt="" onerror="this.style.display='none'" loading="lazy">`
+    : '🎵';
+  const rank = list.querySelectorAll('.song-row').length + 1;
+  const div = document.createElement('div');
+  div.className = 'song-row';
+  div.innerHTML = `<span class="song-rank">${rank}</span><div class="song-thumb">${imgHtml}</div><div class="song-info"><div class="song-name">${name}</div><div class="song-artist">${artist}</div></div><button class="song-remove" onclick="removeSong(this)">×</button>`;
+  list.appendChild(div);
+  closeSongSearchModal();
+}
+
+// ── PHASES ────────────────────────────────────
+let phaseIdCounter = 10;
+function addPhase() {
+  const timeline = document.getElementById('phasesTimeline');
+  // Move the "now" dot off the last item
+  timeline.querySelectorAll('.phase-dot--now').forEach(d => d.classList.remove('phase-dot--now'));
+  phaseIdCounter++;
+  const div = document.createElement('div');
+  div.className = 'phase-item';
+  div.dataset.id = phaseIdCounter;
+  const year = new Date().getFullYear();
+  div.innerHTML = `
+    <div class="phase-dot phase-dot--now"></div>
+    <div class="phase-body">
+      <div class="phase-year" style="color:var(--green-node);">now</div>
+      <div class="phase-label" contenteditable="true">my current era ✨</div>
+      <div class="phase-desc" contenteditable="true">describe your vibe…</div>
+    </div>
+    <button class="phase-remove" onclick="removePhase(this)">×</button>`;
+  timeline.appendChild(div);
+}
+
+function removePhase(btn) {
+  if (!editMode) return;
+  btn.closest('.phase-item').remove();
+  // Re-apply now dot to last item if none left
+  const items = document.querySelectorAll('.phase-item');
+  if (items.length && !document.querySelector('.phase-dot--now')) {
+    items[items.length-1].querySelector('.phase-dot').classList.add('phase-dot--now');
+  }
+}
+
+// Status song pulse bars (inject spans since CSS pseudo can't do 3 independently)
+document.addEventListener('DOMContentLoaded', () => {
+  const pulse = document.getElementById('ssPulse');
+  if (pulse) {
+    pulse.innerHTML = [10, 18, 7].map((h, i) =>
+      `<div class="ss-bar" style="height:${h}px;animation-delay:${i*0.15}s"></div>`
+    ).join('');
+  }
+});
+
+// ── ALBUM SEARCH (MusicBrainz releases) ──────
+async function searchAlbum(query) {
+  clearTimeout(albumSearchTimer);
+  if (query.length < 2) { document.getElementById('albumResults').innerHTML = ''; return; }
+  albumSearchTimer = setTimeout(async () => {
+    try {
+      const url = `https://musicbrainz.org/ws/2/release/?query=${encodeURIComponent(query)}&limit=6&fmt=json`;
+      const res = await fetch(url, { headers: { 'User-Agent': 'InTune/1.0 (demo)' } });
+      const data = await res.json();
+      const el = document.getElementById('albumResults');
+      el.innerHTML = '';
+      (data.releases || []).slice(0,6).forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'album-result-item';
+        div.innerHTML = `<img src="https://coverartarchive.org/release/${r.id}/front-250" alt="" onerror="this.style.display='none'" loading="lazy"><span><strong>${r.title}</strong><br>${r['artist-credit']?.[0]?.name||''}</span>`;
+        div.onclick = () => setAlbumCover(r.id, r.title, r['artist-credit']?.[0]?.name||'');
+        el.appendChild(div);
+      });
+    } catch(e) {}
+  }, 400);
+}
+
+function setAlbumCover(releaseId, title, artist) {
+  const img = document.getElementById('albumImg');
+  const emoji = document.getElementById('albumEmoji');
+  const coverUrl = `https://coverartarchive.org/release/${releaseId}/front-500`;
+  img.src = coverUrl;
+  img.style.display = 'block';
+  emoji.style.display = 'none';
+  document.getElementById('albumLabel').textContent = `${title} — ${artist}`;
+  document.getElementById('albumResults').innerHTML = '';
+  document.getElementById('albumSearchInput').value = '';
+  // Sync to hero thumb
+  const thumb = document.getElementById('heroAlbumThumb');
+  thumb.innerHTML = `<img src="${coverUrl}" alt="${title}" onerror="this.outerHTML='🕰️'">`;
+}
+</script>
+<style>
+@keyframes fadeInUp{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+</style>
+</body>
+</html>
