@@ -517,6 +517,7 @@ function Profile() {
                   + Search iTunes
                 </button>
               )}
+              {/* UI optimizations deployed */}
             </div>
             <div className="song-list" id="songList">
               {topSongs.length > 0 ? (
