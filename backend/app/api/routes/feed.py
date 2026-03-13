@@ -56,8 +56,13 @@ async def get_feed(
 
 @router.get("/recommendations", response_model=List[dict])
 async def get_recommendations(
+<<<<<<< HEAD
     limit: int = Query(10, ge=1, le=10),  # Max limit is 10
     min_similarity: float = Query(0.0, ge=0.0, le=1.0),  # Default to 0.0 to include all
+=======
+    limit: int = Query(10, ge=1, le=20),
+    min_similarity: float = Query(0.1, ge=0.0, le=1.0),
+>>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
     exclude_connected: bool = Query(True),
     diversity_factor: float = Query(0.2, ge=0.0, le=1.0),
     db: Session = Depends(get_db),
@@ -66,6 +71,7 @@ async def get_recommendations(
     """
     Get user recommendations using advanced recommendation algorithm
     
+<<<<<<< HEAD
     Always returns up to 'limit' recommendations (max 10), even if similarity scores are low.
     This ensures users always have someone to connect with.
     
@@ -78,6 +84,14 @@ async def get_recommendations(
     # Ensure limit doesn't exceed 10
     limit = min(limit, 10)
     
+=======
+    Parameters:
+    - limit: Maximum number of recommendations (1-20)
+    - min_similarity: Minimum similarity score threshold (0.0-1.0)
+    - exclude_connected: Whether to exclude users with existing connections
+    - diversity_factor: How much to prioritize diversity vs similarity (0.0-1.0)
+    """
+>>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
     recommendations = get_user_recommendations(
         current_user=current_user,
         db=db,

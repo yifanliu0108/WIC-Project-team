@@ -1,63 +1,22 @@
 import React, { useState, useEffect } from 'react'
-<<<<<<< HEAD
-import { feedAPI, connectionsAPI } from '../utils/api'
-import { AUTH_TOKEN_CHANGED } from '../utils/authEvents'
-=======
 import { feedAPI } from '../utils/api'
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
 import NetworkGraph from '../components/NetworkGraph'
 import './Dashboard.css'
 
 function Dashboard() {
   const [recommendations, setRecommendations] = useState([])
-<<<<<<< HEAD
-  const [connections, setConnections] = useState([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    fetchDashboardData()
-    
-    // Listen for token changes to refresh data
-    const handleTokenChange = () => {
-      const token = localStorage.getItem('token')
-      if (token) {
-        fetchDashboardData()
-      }
-    }
-    
-    window.addEventListener(AUTH_TOKEN_CHANGED, handleTokenChange)
-    window.addEventListener('storage', handleTokenChange)
-    return () => {
-      window.removeEventListener(AUTH_TOKEN_CHANGED, handleTokenChange)
-      window.removeEventListener('storage', handleTokenChange)
-    }
-=======
   const [loading, setLoading] = useState(true)
   const [currentView, setCurrentView] = useState('force')
 
   useEffect(() => {
     fetchDashboardData()
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
   }, [])
 
   const fetchDashboardData = async () => {
     try {
       setLoading(true)
-<<<<<<< HEAD
-      const [recs, sentConns, receivedConns] = await Promise.all([
-        feedAPI.getRecommendations({ limit: 10 }),  // Explicitly request 10 recommendations
-        connectionsAPI.getMyConnections({ status: 'accepted' }),
-        connectionsAPI.getReceivedConnections({ status: 'accepted' })
-      ])
-      // Limit to 10 recommendations for display
-      setRecommendations((recs.data || []).slice(0, 10))
-      // Combine sent and received connections
-      const allConnections = [...(sentConns.data || []), ...(receivedConns.data || [])]
-      setConnections(allConnections)
-=======
       const recs = await feedAPI.getRecommendations()
       setRecommendations(recs.data)
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
     } catch (err) {
       console.error('Dashboard error:', err)
     } finally {
@@ -76,20 +35,6 @@ function Dashboard() {
         <div className="find-panel">
           <div className="find-header">
             <button className="find-me-btn">Find Me</button>
-<<<<<<< HEAD
-            <div className="legend">
-              <div className="leg">
-                <div className="leg-dot" style={{ background: '#b8d96e' }}></div>
-                <span>Connected</span>
-              </div>
-              <div className="leg">
-                <div className="leg-dot" style={{ background: '#5fc4b8' }}></div>
-                <span>Available</span>
-              </div>
-            </div>
-          </div>
-          <NetworkGraph recommendations={recommendations} connections={connections} />
-=======
             <div className="find-header-right">
               <div className="legend">
                 <div className="leg">
@@ -135,7 +80,6 @@ function Dashboard() {
             </div>
           </div>
           <NetworkGraph recommendations={recommendations} currentView={currentView} />
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
         </div>
       </div>
     </div>

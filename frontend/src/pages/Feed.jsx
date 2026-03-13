@@ -17,9 +17,14 @@ function Feed() {
   const fetchFeedData = async () => {
     try {
       setLoading(true)
+<<<<<<< HEAD
       const feed = await feedAPI.getRecommendations({ limit: 10 })
       // Feed shows top 3 for Daily Triad layout
       setRecommendations((feed.data || []).slice(0, 3))
+=======
+      const feed = await feedAPI.getRecommendations()
+      setRecommendations(feed.data.slice(0, 3)) // Top 3 for Daily Triad
+>>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
     } catch (err) {
       console.error('Feed error:', err)
     } finally {
@@ -69,7 +74,11 @@ function Feed() {
               <div key={rec.user_id} className="panel" style={{ animationDelay: `${index * 0.07}s` }}>
                 <div className="panel-top">
                   <div className="match-avatar">{rec.username?.[0] || '🎵'}</div>
+<<<<<<< HEAD
                   <div className="match-info" style={{ cursor: 'pointer' }} onClick={() => navigate(`/profile/${rec.user_id}`)}>
+=======
+                  <div className="match-info">
+>>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
                     <div className="match-name">{rec.username}</div>
                     <div className="match-sub">{sharedSongs.length} shared song{sharedSongs.length !== 1 ? 's' : ''}</div>
                   </div>

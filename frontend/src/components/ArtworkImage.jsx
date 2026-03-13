@@ -35,6 +35,7 @@ function ArtworkImage({
         const url = type === 'song' 
           ? await getSongArtwork(title, artist, size)
           : await getArtistArtwork(title, size)
+<<<<<<< HEAD
         if (url) {
           console.log('Artwork loaded:', url, 'for', title, artist)
           setArtworkUrl(url)
@@ -43,6 +44,11 @@ function ArtworkImage({
         }
       } catch (error) {
         console.error('Error loading artwork:', error, 'for', title, artist)
+=======
+        setArtworkUrl(url)
+      } catch (error) {
+        console.error('Error loading artwork:', error)
+>>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
       } finally {
         setLoading(false)
       }
@@ -61,6 +67,7 @@ function ArtworkImage({
 
   if (artworkUrl) {
     return (
+<<<<<<< HEAD
       <div className={`artwork-container ${className}`} {...props}>
         <img 
           src={artworkUrl} 
@@ -80,6 +87,19 @@ function ArtworkImage({
           <div className="artwork-emoji">{fallbackEmoji}</div>
         </div>
       </div>
+=======
+      <img 
+        src={artworkUrl} 
+        alt={type === 'song' ? `${title} by ${artist || 'Unknown'}` : title}
+        className={`artwork-image ${className}`}
+        onError={(e) => {
+          // Fallback to emoji if image fails to load
+          e.target.style.display = 'none'
+          e.target.nextSibling.style.display = 'flex'
+        }}
+        {...props}
+      />
+>>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
     )
   }
 

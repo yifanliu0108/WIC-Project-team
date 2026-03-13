@@ -147,6 +147,7 @@
 .pc-close:hover {
   color: var(--text);
 }
+<<<<<<< HEAD
 
 .pc-view-profile {
   width: 100%;
@@ -168,3 +169,5 @@
   opacity: 0.88;
   transform: translateY(-1px);
 }
+=======
+>>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
