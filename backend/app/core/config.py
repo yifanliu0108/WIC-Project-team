@@ -2,11 +2,7 @@
 Application configuration settings
 """
 from pydantic_settings import BaseSettings, SettingsConfigDict
-<<<<<<< HEAD
 from typing import List, Union
-=======
-from typing import List
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
 
 
 class Settings(BaseSettings):
@@ -18,7 +14,6 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
-<<<<<<< HEAD
     # CORS - Can be comma-separated string or list
     # For production, use comma-separated string: "https://app1.com,https://app2.com"
     CORS_ORIGINS: Union[str, List[str]] = "http://localhost:3000,http://localhost:5173"
@@ -28,10 +23,6 @@ class Settings(BaseSettings):
         if isinstance(self.CORS_ORIGINS, str):
             return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
         return self.CORS_ORIGINS if isinstance(self.CORS_ORIGINS, list) else []
-=======
-    # CORS
-    CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:5173"]
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
     
     # Spotify API (for future integration)
     SPOTIFY_CLIENT_ID: str = ""
