@@ -38,7 +38,7 @@
 .nav-logo span {
   font-family: 'Syne', sans-serif;
   font-weight: 700;
-  font-size: 46px;
+  font-size: 20px;
   font-style: italic;
   color: #AEC477;
   letter-spacing: 0.01em;
@@ -57,7 +57,7 @@
 }
 
 .nav-page {
-  font-size: 37px;
+  font-size: 14px;
   color: var(--muted);
   line-height: 1;
 }
@@ -117,10 +117,10 @@
 
 @media (max-width: 1024px) {
   .nav-logo span {
-    font-size: 28px;
+    font-size: 18px;
   }
   .nav-page {
-    font-size: 22px;
+    font-size: 13px;
   }
   .nav-icon {
     width: 44px;
