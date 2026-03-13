@@ -1,0 +1,143 @@
+.music-setup-page {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.music-setup-card {
+  width: min(920px, 100%);
+  background: linear-gradient(to bottom, var(--card-bg) 0%, #1a2840 100%);
+  border-radius: 14px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
+  padding: 24px;
+}
+
+.music-setup-card h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.music-setup-card p {
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.setup-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.setup-grid h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  color: var(--green-node);
+  margin-bottom: 10px;
+}
+
+.setup-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.setup-field span {
+  width: 20px;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: right;
+}
+
+.setup-field input {
+  flex: 1;
+  background: #232d42;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 10px 12px;
+  outline: none;
+}
+
+.setup-field input:focus {
+  border-color: rgba(184, 217, 110, 0.45);
+}
+
+.song-suggestions {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 30px;
+  right: 0;
+  background: #1a2438;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  z-index: 20;
+}
+
+.song-suggestion-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.song-suggestion-item:hover {
+  background: rgba(184, 217, 110, 0.1);
+}
+
+.song-suggestion-item strong {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.song-suggestion-item small {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.muted-item {
+  color: var(--muted);
+  cursor: default;
+}
+
+.setup-error {
+  margin-top: 8px;
+  color: #ff9db9;
+  font-size: 13px;
+}
+
+.setup-submit {
+  margin-top: 18px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #c93b6a, #a02d54);
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 11px 16px;
+  cursor: pointer;
+}
+
+.setup-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 900px) {
+  .setup-grid {
+    grid-template-columns: 1fr;
+  }
+}
