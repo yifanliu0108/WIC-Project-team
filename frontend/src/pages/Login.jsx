@@ -1,10 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { authAPI } from '../utils/api'
-<<<<<<< HEAD
-import { dispatchAuthTokenChanged } from '../utils/authEvents'
-=======
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
 import './Login.css'
 
 function Login({ setIsAuthenticated, onLoginSuccess }) {
@@ -233,10 +229,6 @@ function Login({ setIsAuthenticated, onLoginSuccess }) {
       if (isLogin) {
         const response = await authAPI.login(formData.username.trim(), formData.password)
         localStorage.setItem('token', response.data.access_token)
-<<<<<<< HEAD
-        dispatchAuthTokenChanged() // Dispatch custom event
-=======
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
         setIsAuthenticated(true)
         if (onLoginSuccess) onLoginSuccess()
         const from = location.state?.from?.pathname || '/'
@@ -249,10 +241,6 @@ function Login({ setIsAuthenticated, onLoginSuccess }) {
         })
         const loginResponse = await authAPI.login(formData.username.trim(), formData.password)
         localStorage.setItem('token', loginResponse.data.access_token)
-<<<<<<< HEAD
-        dispatchAuthTokenChanged() // Dispatch custom event
-=======
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
         setIsAuthenticated(true)
         if (onLoginSuccess) onLoginSuccess()
         navigate('/', { replace: true })

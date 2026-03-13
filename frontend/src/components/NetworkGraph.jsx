@@ -1,23 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-<<<<<<< HEAD
-import { useNavigate } from 'react-router-dom'
-import * as d3 from 'd3'
-import './NetworkGraph.css'
-
-export default function NetworkGraph({ recommendations = [], connections = [] }) {
-  const svgRef = useRef(null)
-  const containerRef = useRef(null)
-  const [selectedNode, setSelectedNode] = useState(null)
-  const navigate = useNavigate()
-=======
-import * as d3 from 'd3'
-import './NetworkGraph.css'
-
-export default function NetworkGraph({ recommendations = [] }) {
-  const svgRef = useRef(null)
-  const containerRef = useRef(null)
-  const [selectedNode, setSelectedNode] = useState(null)
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
 
   useEffect(() => {
     if (!svgRef.current || !containerRef.current) return
@@ -31,20 +12,6 @@ export default function NetworkGraph({ recommendations = [] }) {
     const svg = d3.select(svgRef.current)
       .attr('width', width)
       .attr('height', height)
-<<<<<<< HEAD
-    
-    // Create a set of connected user IDs for quick lookup
-    // Connections can be sent (user_id is current user, connected_user_id is other) 
-    // or received (connected_user_id is current user, user_id is other)
-    const connectedUserIds = new Set(
-      connections.map(conn => {
-        // For sent connections, connected_user_id is the other user
-        // For received connections, user_id is the other user
-        return conn.connected_user_id || conn.user_id
-      })
-    )
-=======
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
 
     // Create dot grid background
     const dotSpacing = 36
@@ -57,94 +24,6 @@ export default function NetworkGraph({ recommendations = [] }) {
       .attr('r', dotRadius)
       .attr('fill', 'rgba(255,255,255,0.09)')
 
-<<<<<<< HEAD
-    // Create nodes data - include both recommendations and connections
-    const recommendationNodes = recommendations.slice(0, 15).map((rec, i) => ({
-      id: `node-${rec.user_id}`,
-      label: rec.username,
-      type: connectedUserIds.has(rec.user_id) ? 'green' : (rec.similarity_score > 0.5 ? 'green' : 'blue'),
-      userData: rec,
-      isConnected: connectedUserIds.has(rec.user_id),
-      x: width / 2 + (Math.random() - 0.5) * width * 0.6,
-      y: height / 2 + (Math.random() - 0.5) * height * 0.6,
-    }))
-    
-    // Add connected users that might not be in recommendations
-    // We need to fetch user details for connected users
-    const connectedNodes = []
-    const processedUserIds = new Set(recommendationNodes.map(n => n.userData?.user_id))
-    
-    connections.forEach((conn, i) => {
-      const userId = conn.connected_user_id || conn.user_id
-      if (!processedUserIds.has(userId)) {
-        connectedNodes.push({
-          id: `node-${userId}`,
-          label: `User ${userId}`, // Will be updated if we have username
-          type: 'green',
-          userData: { user_id: userId, username: `User ${userId}` },
-          isConnected: true,
-          x: width / 2 + (Math.random() - 0.5) * width * 0.6,
-          y: height / 2 + (Math.random() - 0.5) * height * 0.6,
-        })
-        processedUserIds.add(userId)
-      }
-    })
-    
-    const nodes = [
-      { id: 'you', label: 'you', type: 'you', x: width / 2, y: height / 2 },
-      ...recommendationNodes,
-      ...connectedNodes.slice(0, 10) // Limit additional connected nodes
-    ]
-
-    // Create links - show connections to "you" node
-    const recommendationLinks = recommendations.slice(0, 5).map(rec => ({
-      source: 'you',
-      target: `node-${rec.user_id}`,
-      isConnected: connectedUserIds.has(rec.user_id),
-    }))
-    
-    const connectionLinks = connections.slice(0, 10).map(conn => {
-      const userId = conn.connected_user_id || conn.user_id
-      return {
-        source: 'you',
-        target: `node-${userId}`,
-        isConnected: true,
-      }
-    })
-    
-    // Combine links, avoiding duplicates
-    const linkMap = new Map()
-    ;[...recommendationLinks, ...connectionLinks].forEach(link => {
-      const key = `${link.source}-${link.target}`
-      if (!linkMap.has(key)) {
-        linkMap.set(key, link)
-      } else if (link.isConnected) {
-        // Prefer connected links
-        linkMap.set(key, link)
-      }
-    })
-    
-    const links = Array.from(linkMap.values())
-=======
-    // Create nodes data
-    const nodes = [
-      { id: 'you', label: 'you', type: 'you', x: width / 2, y: height / 2 },
-      ...recommendations.slice(0, 15).map((rec, i) => ({
-        id: `node-${rec.user_id}`,
-        label: rec.username,
-        type: rec.similarity_score > 0.5 ? 'green' : 'blue',
-        userData: rec,
-        x: width / 2 + (Math.random() - 0.5) * width * 0.6,
-        y: height / 2 + (Math.random() - 0.5) * height * 0.6,
-      }))
-    ]
-
-    // Create links
-    const links = recommendations.slice(0, 5).map(rec => ({
-      source: 'you',
-      target: `node-${rec.user_id}`,
-    }))
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
 
     // Force simulation
     const simulation = d3.forceSimulation(nodes)
@@ -170,23 +49,6 @@ export default function NetworkGraph({ recommendations = [] }) {
       .data(links)
       .enter().append('line')
       .attr('stroke', d => {
-<<<<<<< HEAD
-        const link = typeof d === 'object' ? d : links.find(l => l === d)
-        return link?.isConnected ? 'rgba(184,217,110,0.8)' : 'rgba(255,255,255,0.3)'
-      })
-      .attr('stroke-width', d => {
-        const link = typeof d === 'object' ? d : links.find(l => l === d)
-        return link?.isConnected ? 3 : 1.5
-=======
-        const s = d.source.id || d.source
-        const t = d.target.id || d.target
-        return (s === 'you' || t === 'you') ? 'rgba(255,255,255,0.65)' : 'rgba(255,255,255,0.12)'
-      })
-      .attr('stroke-width', d => {
-        const s = d.source.id || d.source
-        const t = d.target.id || d.target
-        return (s === 'you' || t === 'you') ? 2.5 : 1
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
       })
       .attr('stroke-linecap', 'round')
 
@@ -262,12 +124,6 @@ export default function NetworkGraph({ recommendations = [] }) {
 
     otherNodes.each(function(d) {
       const g = d3.select(this)
-<<<<<<< HEAD
-      // Green nodes for connected users or high similarity
-      if (d.type === 'green' || d.isConnected) {
-=======
-      if (d.type === 'green') {
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
         // Green node with gradient polygon
         g.append('circle').attr('r', otherR).attr('fill', '#b8d96e').attr('opacity', 0.5)
         g.append('circle').attr('r', otherR * 0.8).attr('fill', '#1a2e10').attr('opacity', 0.4)
@@ -371,11 +227,6 @@ export default function NetworkGraph({ recommendations = [] }) {
       window.removeEventListener('resize', handleResize)
       simulation.stop()
     }
-<<<<<<< HEAD
-  }, [recommendations, connections])
-=======
-  }, [recommendations])
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
 
   return (
     <div className="graph-wrap" ref={containerRef}>
@@ -419,23 +270,6 @@ export default function NetworkGraph({ recommendations = [] }) {
               </div>
             </>
           )}
-<<<<<<< HEAD
-          {selectedNode.userData?.user_id && (
-            <>
-              <div className="pc-divider"></div>
-              <button 
-                className="pc-view-profile"
-                onClick={() => {
-                  navigate(`/profile/${selectedNode.userData.user_id}`)
-                  setSelectedNode(null)
-                }}
-              >
-                View Profile
-              </button>
-            </>
-          )}
-=======
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
         </div>
       )}
     </div>

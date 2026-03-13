@@ -2,10 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { usersAPI, songsAPI } from '../utils/api'
 import { MUSIC_PROFILE_EVENT, getMusicProfile } from '../utils/musicProfile'
-<<<<<<< HEAD
-import { AUTH_TOKEN_CHANGED, dispatchAuthTokenChanged } from '../utils/authEvents'
-=======
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
 import ArtworkImage from './ArtworkImage'
 import './Sidebar.css'
 
@@ -19,33 +15,10 @@ function Sidebar({ setIsAuthenticated }) {
 
   useEffect(() => {
     fetchUserData()
-<<<<<<< HEAD
-    
-    // Listen for token changes to refresh data
-    const handleTokenChange = () => {
-      const token = localStorage.getItem('token')
-      if (token) {
-        fetchUserData()
-      }
-    }
-    
-    // Listen for both custom auth event and storage event
-    window.addEventListener(AUTH_TOKEN_CHANGED, handleTokenChange)
-    window.addEventListener('storage', handleTokenChange)
-    return () => {
-      window.removeEventListener(AUTH_TOKEN_CHANGED, handleTokenChange)
-      window.removeEventListener('storage', handleTokenChange)
-    }
-=======
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
   }, [])
 
   const fetchUserData = async () => {
     try {
-<<<<<<< HEAD
-      setLoading(true)
-=======
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
       const [userData, songsData] = await Promise.all([
         usersAPI.getMyProfile(),
         songsAPI.getMySongs()
@@ -60,38 +33,6 @@ function Sidebar({ setIsAuthenticated }) {
         })
         .slice(0, 5)
       const profile = getMusicProfile()
-<<<<<<< HEAD
-      // Only use setup profile if there are NO songs in the database
-      // This ensures test users show their actual database songs
-      setTopSongs(
-        (sorted.length === 0 && profile.songs.length)
-          ? profile.songs.map((title, index) => {
-              const sep = title.lastIndexOf(' - ')
-              return {
-                id: `local-song-${index}`,
-                title: sep !== -1 ? title.slice(0, sep).trim() : title,
-                artist: sep !== -1 ? title.slice(sep + 3).trim() : 'From setup',
-              }
-            })
-          : sorted
-      )
-      setTopArtists(
-        (sorted.length === 0 && profile.artists.length)
-          ? profile.artists
-          : (userData.data.favorite_artists || []).slice(0, 5)
-      )
-=======
-      setTopSongs(
-        profile.songs.length
-          ? profile.songs.map((title, index) => ({
-              id: `local-song-${index}`,
-              title,
-              artist: 'From setup',
-            }))
-          : sorted
-      )
-      setTopArtists(profile.artists.length ? profile.artists : (userData.data.favorite_artists || []).slice(0, 5))
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
     } catch (err) {
       console.error('Sidebar error:', err)
     } finally {
@@ -129,13 +70,6 @@ function Sidebar({ setIsAuthenticated }) {
     if (setIsAuthenticated) {
       setIsAuthenticated(false)
     }
-<<<<<<< HEAD
-    // Trigger auth token changed event
-    dispatchAuthTokenChanged()
-=======
-    // Trigger storage event for other components listening
-    window.dispatchEvent(new Event('storage'))
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
     navigate('/login', { replace: true })
   }
 
@@ -174,46 +108,6 @@ function Sidebar({ setIsAuthenticated }) {
 
         <div className="album-wrap">
           <div className="album-art">
-<<<<<<< HEAD
-            {(() => {
-              // Find favorite song first, otherwise use top song
-              const favoriteSong = topSongs.find(song => song.is_favorite) || topSongs[0]
-              return favoriteSong ? (
-                <ArtworkImage
-                  type="song"
-                  title={favoriteSong.title}
-                  artist={favoriteSong.artist}
-                  size="100"
-                  fallbackEmoji="🕰️"
-                  className="absolute"
-                />
-              ) : (
-                <div className="album-emoji">🕰️</div>
-              )
-            })()}
-            <div className="album-overlay"></div>
-            <div className="album-label">
-              {(() => {
-                const favoriteSong = topSongs.find(song => song.is_favorite) || topSongs[0]
-                return favoriteSong ? `${favoriteSong.title} — ${favoriteSong.artist}` : 'A Matter of Time'
-              })()}
-=======
-            {topSongs.length > 0 ? (
-              <ArtworkImage
-                type="song"
-                title={topSongs[0].title}
-                artist={topSongs[0].artist}
-                size="100"
-                fallbackEmoji="🕰️"
-                className="absolute"
-              />
-            ) : (
-              <div className="album-emoji">🕰️</div>
-            )}
-            <div className="album-overlay"></div>
-            <div className="album-label">
-              {topSongs.length > 0 ? `${topSongs[0].title} — ${topSongs[0].artist}` : 'A Matter of Time'}
->>>>>>> 8d897440e7dd0ce9461b7b203eb2cc91b00dd6a1
             </div>
           </div>
         </div>
