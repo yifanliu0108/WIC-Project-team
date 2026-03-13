@@ -32,7 +32,27 @@ function Sidebar({ setIsAuthenticated }) {
           return (b.user_rating || 0) - (a.user_rating || 0)
         })
         .slice(0, 5)
+      setTopSongs(sorted)
+      
+      // Get top artists from user's favorite artists
+      if (userData.data?.favorite_artists) {
+        setTopArtists(userData.data.favorite_artists.slice(0, 5))
+      }
+      
+      // Fallback to music profile if no database songs
       const profile = getMusicProfile()
+      if (sorted.length === 0 && profile.songs.length > 0) {
+        setTopSongs(
+          profile.songs.map((title, index) => ({
+            id: `local-song-${index}`,
+            title,
+            artist: 'From setup',
+          }))
+        )
+      }
+      if (!userData.data?.favorite_artists?.length && profile.artists.length > 0) {
+        setTopArtists(profile.artists.slice(0, 5))
+      }
     } catch (err) {
       console.error('Sidebar error:', err)
     } finally {
@@ -108,7 +128,14 @@ function Sidebar({ setIsAuthenticated }) {
 
         <div className="album-wrap">
           <div className="album-art">
-            </div>
+            <ArtworkImage
+              type="song"
+              title={topSongs[0]?.title || user?.favorite_song || ''}
+              artist={topSongs[0]?.artist || ''}
+              size="200"
+              fallbackEmoji="🎵"
+              className="album-artwork"
+            />
           </div>
         </div>
 
