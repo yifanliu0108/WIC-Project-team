@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { usersAPI, songsAPI } from '../utils/api'
+import { MUSIC_PROFILE_EVENT, getMusicProfile } from '../utils/musicProfile'
 import './Sidebar.css'
 
 function Sidebar({ setIsAuthenticated }) {
@@ -8,6 +9,7 @@ function Sidebar({ setIsAuthenticated }) {
   const location = useLocation()
   const [user, setUser] = useState(null)
   const [topSongs, setTopSongs] = useState([])
+  const [topArtists, setTopArtists] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -29,13 +31,48 @@ function Sidebar({ setIsAuthenticated }) {
           return (b.user_rating || 0) - (a.user_rating || 0)
         })
         .slice(0, 5)
-      setTopSongs(sorted)
+      const profile = getMusicProfile()
+      setTopSongs(
+        profile.songs.length
+          ? profile.songs.map((title, index) => ({
+              id: `local-song-${index}`,
+              title,
+              artist: 'From setup',
+            }))
+          : sorted
+      )
+      setTopArtists(profile.artists.length ? profile.artists : (userData.data.favorite_artists || []).slice(0, 5))
     } catch (err) {
       console.error('Sidebar error:', err)
     } finally {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    const syncProfile = () => {
+      const profile = getMusicProfile()
+      if (profile.songs.length) {
+        setTopSongs(
+          profile.songs.map((title, index) => ({
+            id: `local-song-${index}`,
+            title,
+            artist: 'From setup',
+          }))
+        )
+      }
+      if (profile.artists.length) {
+        setTopArtists(profile.artists)
+      }
+    }
+
+    window.addEventListener(MUSIC_PROFILE_EVENT, syncProfile)
+    window.addEventListener('storage', syncProfile)
+    return () => {
+      window.removeEventListener(MUSIC_PROFILE_EVENT, syncProfile)
+      window.removeEventListener('storage', syncProfile)
+    }
+  }, [])
 
   const handleLogout = () => {
     localStorage.removeItem('token')
@@ -114,8 +151,8 @@ function Sidebar({ setIsAuthenticated }) {
 
         <div className="sec-title">Top 5 Artists</div>
         <div className="list">
-          {user?.favorite_artists && user.favorite_artists.length > 0 ? (
-            user.favorite_artists.slice(0, 5).map((artist, idx) => (
+          {topArtists.length > 0 ? (
+            topArtists.map((artist, idx) => (
               <div key={idx} className="li">
                 <span className="rank">{idx + 1}</span>
                 <div className="thumb">🎤</div>

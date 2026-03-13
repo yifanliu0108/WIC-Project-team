@@ -36,12 +36,6 @@
   flex-shrink: 0;
 }
 
-.find-header-right {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
 .find-me-btn {
   font-family: 'Syne', sans-serif;
   font-weight: 700;
@@ -80,58 +74,6 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-}
-
-.view-toggle {
-  display: flex;
-  gap: 4px;
-}
-
-.vtoggle {
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  background: var(--card2);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--muted);
-  transition: all 0.18s;
-}
-
-.vtoggle svg {
-  width: 14px;
-  height: 14px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  stroke-linecap: round;
-}
-
-.vtoggle:hover {
-  background: rgba(184,217,110,0.12);
-  color: var(--green-node);
-}
-
-.vtoggle.active {
-  background: rgba(184,217,110,0.18);
-  color: var(--green-node);
-  border-color: rgba(184,217,110,0.35);
-}
-
-@media (max-width: 900px) {
-  .find-header {
-    align-items: flex-start;
-    gap: 8px;
-    flex-direction: column;
-  }
-
-  .find-header-right {
-    width: 100%;
-    justify-content: space-between;
-  }
 }
 
 .network-graph,
