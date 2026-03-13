@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { usersAPI, songsAPI, musicbrainzAPI, itunesAPI } from '../utils/api'
+import { usersAPI, songsAPI, itunesAPI } from '../utils/api'
 import { MUSIC_PROFILE_EVENT, getMusicProfile } from '../utils/musicProfile'
 import { AUTH_TOKEN_CHANGED } from '../utils/authEvents'
 import ArtworkImage from '../components/ArtworkImage'
@@ -106,8 +106,17 @@ function Profile() {
     
     try {
       setSearching(true)
-      const results = await musicbrainzAPI.searchSong(searchQuery)
-      setSearchResults(results.data.songs || [])
+      const response = await itunesAPI.searchSong(searchQuery, 20)
+      const results = response.data?.results || []
+      // Transform iTunes results to match expected format
+      const transformedResults = results.map((item) => ({
+        title: item.trackName || item.collectionName || '',
+        artist: item.artistName || '',
+        album: item.collectionName || '',
+        genre: item.primaryGenreName || '',
+        artworkUrl: item.artworkUrl100 || item.artworkUrl60 || item.artworkUrl30 || null,
+      }))
+      setSearchResults(transformedResults)
     } catch (err) {
       console.error('Search error:', err)
       setSearchResults([])
@@ -505,7 +514,7 @@ function Profile() {
               Top 5 Songs
               {editMode && (
                 <button className="search-songs-btn" onClick={() => setShowAddSong(true)}>
-                  + Search MusicBrainz
+                  + Search iTunes
                 </button>
               )}
             </div>
@@ -730,8 +739,13 @@ function Profile() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSearchSong()}
             />
-            <button className="genre-add-btn" style={{ marginBottom: '10px' }} onClick={handleSearchSong}>
-              {searching ? 'Searching...' : 'Search'}
+            <button 
+              type="button"
+              className="ssm-search-btn" 
+              onClick={handleSearchSong}
+              disabled={searching || !searchQuery.trim()}
+            >
+              {searching ? 'Searching...' : 'Search iTunes'}
             </button>
             {searchResults.length > 0 && (
               <div className="ssm-results">

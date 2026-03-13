@@ -132,7 +132,7 @@ function Sidebar({ setIsAuthenticated }) {
               type="song"
               title={topSongs[0]?.title || user?.favorite_song || ''}
               artist={topSongs[0]?.artist || ''}
-              size="200"
+              size="100"
               fallbackEmoji="🎵"
               className="album-artwork"
             />
