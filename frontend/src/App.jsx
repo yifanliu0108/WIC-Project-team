@@ -5,6 +5,7 @@ import TopNav from './components/TopNav'
 import Dashboard from './pages/Dashboard'
 import Feed from './pages/Feed'
 import Profile from './pages/Profile'
+import Notifications from './pages/Notifications'
 import Login from './pages/Login'
 import MusicSetup from './pages/MusicSetup'
 import Settings from './pages/Settings'
@@ -93,6 +94,7 @@ function App() {
         <Route element={<LayoutWithSidebar />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/feed" element={<Feed />} />
+          <Route path="/notifications" element={<Notifications />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/:userId" element={<Profile />} />
           <Route path="/settings" element={<Settings setIsAuthenticated={setIsAuthenticated} />} />

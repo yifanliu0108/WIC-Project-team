@@ -1,0 +1,129 @@
+/* Top Navigation - InTune Design */
+.top-nav {
+  background: var(--nav-bg);
+  border-bottom: 1.5px solid #1b3258;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 56px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.top-nav::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: rgba(255, 126, 86, 0.4);
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.nav-logo span {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  font-style: italic;
+  color: #AEC477;
+  letter-spacing: 0.01em;
+  line-height: 1;
+}
+
+.nav-logo svg {
+  width: 22px;
+  height: 28px;
+}
+
+.nav-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+}
+
+.nav-page {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1;
+}
+
+.nav-icons {
+  display: flex;
+  gap: 12px;
+}
+
+.nav-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(32, 47, 80, 0.82);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s;
+  text-decoration: none;
+  color: var(--muted);
+}
+
+.nav-icon:hover {
+  background: rgba(184,217,110,0.14);
+  border-color: rgba(184,217,110,0.32);
+}
+
+.nav-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.badge {
+  position: absolute;
+  top: -3px;
+  right: -1px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--you-color);
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  border: 1.5px solid var(--nav-bg);
+}
+
+@media (max-width: 1024px) {
+  .nav-logo span {
+    font-size: 18px;
+  }
+  .nav-page {
+    font-size: 13px;
+  }
+  .nav-icon {
+    width: 44px;
+    height: 44px;
+  }
+}

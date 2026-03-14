@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { feedAPI, connectionsAPI } from '../utils/api'
+import ArtworkImage from '../components/ArtworkImage'
 import './Feed.css'
 
 function Feed() {
@@ -16,8 +17,9 @@ function Feed() {
   const fetchFeedData = async () => {
     try {
       setLoading(true)
-      const feed = await feedAPI.getRecommendations()
-      setRecommendations(feed.data.slice(0, 3)) // Top 3 for Daily Triad
+      const feed = await feedAPI.getRecommendations({ limit: 10 })
+      // Feed shows top 3 for Daily Triad layout
+      setRecommendations((feed.data || []).slice(0, 3))
     } catch (err) {
       console.error('Feed error:', err)
     } finally {
@@ -67,7 +69,7 @@ function Feed() {
               <div key={rec.user_id} className="panel" style={{ animationDelay: `${index * 0.07}s` }}>
                 <div className="panel-top">
                   <div className="match-avatar">{rec.username?.[0] || '🎵'}</div>
-                  <div className="match-info">
+                  <div className="match-info" style={{ cursor: 'pointer' }} onClick={() => navigate(`/profile/${rec.user_id}`)}>
                     <div className="match-name">{rec.username}</div>
                     <div className="match-sub">{sharedSongs.length} shared song{sharedSongs.length !== 1 ? 's' : ''}</div>
                   </div>
@@ -94,7 +96,20 @@ function Feed() {
                   <strong>{pct}% compatible</strong> · {sharedSongs.slice(0, 2).map(s => s.title).join(', ') || 'No shared songs yet'}
                 </div>
                 <div className="pt-album-row">
-                  <div className="pt-album-thumb">🎵</div>
+                  <div className="pt-album-thumb">
+                    {rec.top_songs && rec.top_songs.length > 0 ? (
+                      <ArtworkImage
+                        type="song"
+                        title={rec.top_songs[0].title}
+                        artist={rec.top_songs[0].artist}
+                        size="100"
+                        fallbackEmoji="🎵"
+                        className="absolute"
+                      />
+                    ) : (
+                      <span>🎵</span>
+                    )}
+                  </div>
                   <div className="pt-genres">
                     {rec.common_genres?.slice(0, 3).map((genre, idx) => (
                       <span key={idx} className="pt-genre">{genre}</span>
@@ -130,7 +145,16 @@ function Feed() {
                         return (
                           <div key={song.id || idx} className="li">
                             <span className="rank">{idx + 1}</span>
-                            <div className={`thumb ${isShared ? 'shared' : ''}`}>🎵</div>
+                            <div className={`thumb ${isShared ? 'shared' : ''}`}>
+                              <ArtworkImage
+                                type="song"
+                                title={song.title}
+                                artist={song.artist}
+                                size="60"
+                                fallbackEmoji="🎵"
+                                className="thumb-artwork"
+                              />
+                            </div>
                             <div className="ii">
                               <div className="it">{song.title}</div>
                               {isShared && <div className="is">✓ shared</div>}
@@ -152,7 +176,15 @@ function Feed() {
                     {rec.common_artists?.slice(0, 5).map((artist, idx) => (
                       <div key={idx} className="li">
                         <span className="rank">{idx + 1}</span>
-                        <div className="thumb">🎤</div>
+                        <div className="thumb">
+                          <ArtworkImage
+                            type="artist"
+                            title={artist}
+                            size="60"
+                            fallbackEmoji="🎤"
+                            className="thumb-artwork"
+                          />
+                        </div>
                         <div className="ii">
                           <div className="it">{artist}</div>
                         </div>

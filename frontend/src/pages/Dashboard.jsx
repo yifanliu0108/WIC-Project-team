@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { feedAPI } from '../utils/api'
+import { feedAPI, connectionsAPI } from '../utils/api'
+import { AUTH_TOKEN_CHANGED } from '../utils/authEvents'
 import NetworkGraph from '../components/NetworkGraph'
 import './Dashboard.css'
 
@@ -11,6 +12,18 @@ function Dashboard() {
 
   useEffect(() => {
     fetchDashboardData()
+
+    const handleTokenChange = () => {
+      const token = localStorage.getItem('token')
+      if (token) fetchDashboardData()
+    }
+
+    window.addEventListener(AUTH_TOKEN_CHANGED, handleTokenChange)
+    window.addEventListener('storage', handleTokenChange)
+    return () => {
+      window.removeEventListener(AUTH_TOKEN_CHANGED, handleTokenChange)
+      window.removeEventListener('storage', handleTokenChange)
+    }
   }, [])
 
   const fetchDashboardData = async () => {
@@ -32,7 +45,6 @@ function Dashboard() {
   return (
     <div className="dashboard">
       <div className="dashboard-content">
-        {/* Find Me Panel with Network Graph */}
         <div className="find-panel">
           <div className="find-header">
             <button className="find-me-btn" onClick={() => findMeRef.current?.()}>Find Me</button>
@@ -81,6 +93,11 @@ function Dashboard() {
             </div>
           </div>
           <NetworkGraph recommendations={recommendations} currentView={currentView} findMeRef={findMeRef} />
+          {recommendations.length === 0 && (
+            <div style={{ padding: '40px', textAlign: 'center', color: 'var(--muted)' }}>
+              <p>No recommendations yet. Add more songs to your profile to find matches!</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 from app.models.connection import ConnectionStatus
+from app.schemas.user import UserResponse
 
 
 class ConnectionBase(BaseModel):
@@ -29,6 +30,8 @@ class ConnectionResponse(ConnectionBase):
     status: ConnectionStatus
     created_at: datetime
     updated_at: Optional[datetime] = None
+    user: Optional[UserResponse] = None
+    connected_user: Optional[UserResponse] = None
     
     class Config:
         from_attributes = True

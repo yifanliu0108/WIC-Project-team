@@ -71,8 +71,8 @@ export const songsAPI = {
 // Connections API
 export const connectionsAPI = {
   createConnection: (data) => api.post('/api/connections/', data),
-  getMyConnections: () => api.get('/api/connections/me'),
-  getReceivedConnections: () => api.get('/api/connections/received'),
+  getMyConnections: (params = {}) => api.get('/api/connections/me', { params }),
+  getReceivedConnections: (params = {}) => api.get('/api/connections/received', { params }),
   updateConnection: (connectionId, data) => api.put(`/api/connections/${connectionId}`, data),
   getStats: () => api.get('/api/connections/stats'),
 }
@@ -80,7 +80,11 @@ export const connectionsAPI = {
 // Feed API
 export const feedAPI = {
   getFeed: () => api.get('/api/feed/'),
-  getRecommendations: (params = {}) => api.get('/api/feed/recommendations', { params }),
+  getRecommendations: (params = {}) => {
+    // Ensure limit is set (default to 10, max 10)
+    const finalParams = { limit: 10, min_similarity: 0.0, ...params }
+    return api.get('/api/feed/recommendations', { params: finalParams })
+  },
   getSongRecommendations: (params = {}) => api.get('/api/feed/song-recommendations', { params }),
 }
 
@@ -112,4 +116,74 @@ export const itunesAPI = {
         limit,
       },
     }),
+  // Get artwork for a specific song
+  getSongArtwork: async (title, artist) => {
+    try {
+      const term = artist ? `${title} ${artist}` : title
+      const response = await axios.get('https://itunes.apple.com/search', {
+        params: {
+          term,
+          entity: 'song',
+          media: 'music',
+          limit: 1,
+        },
+      })
+      const result = response.data?.results?.[0]
+      if (result) {
+        // iTunes returns artwork URLs, but we need to replace the size in the URL
+        // artworkUrl100 is usually available, but if not, we can construct it
+        const artworkUrl = result.artworkUrl100 || result.artworkUrl60 || result.artworkUrl30
+        if (artworkUrl) {
+          // Replace size in URL if needed (e.g., 100x100bb.jpg -> 600x600bb.jpg for better quality)
+          // Return all available sizes
+          return {
+            artworkUrl30: result.artworkUrl30 || artworkUrl.replace(/100x100|60x60|30x30/, '30x30'),
+            artworkUrl60: result.artworkUrl60 || artworkUrl.replace(/100x100|60x60|30x30/, '60x60'),
+            artworkUrl100: result.artworkUrl100 || artworkUrl,
+            collectionName: result.collectionName,
+          }
+        }
+      }
+      console.warn('No artwork found in iTunes response for:', term, result)
+      return null
+    } catch (error) {
+      console.error('Error fetching song artwork from iTunes:', error.message, 'for:', title, artist)
+      return null
+    }
+  },
+  // Get artwork for a specific artist
+  getArtistArtwork: async (artistName) => {
+    try {
+      const response = await axios.get('https://itunes.apple.com/search', {
+        params: {
+          term: artistName,
+          entity: 'musicArtist',
+          media: 'music',
+          limit: 1,
+        },
+      })
+      const result = response.data?.results?.[0]
+      if (result) {
+        // For artists, we need to search for their albums to get artwork
+        const albumResponse = await axios.get('https://itunes.apple.com/search', {
+          params: {
+            term: artistName,
+            entity: 'album',
+            media: 'music',
+            limit: 1,
+          },
+        })
+        const albumResult = albumResponse.data?.results?.[0]
+        return {
+          artworkUrl30: albumResult?.artworkUrl30,
+          artworkUrl60: albumResult?.artworkUrl60,
+          artworkUrl100: albumResult?.artworkUrl100,
+        }
+      }
+      return null
+    } catch (error) {
+      console.error('Error fetching artist artwork:', error)
+      return null
+    }
+  },
 }

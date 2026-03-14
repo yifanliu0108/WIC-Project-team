@@ -1,21 +1,39 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { usersAPI, songsAPI, musicbrainzAPI, feedAPI, connectionsAPI } from '../utils/api'
+import { usersAPI, songsAPI, itunesAPI } from '../utils/api'
+import { MUSIC_PROFILE_EVENT, getMusicProfile } from '../utils/musicProfile'
+import { AUTH_TOKEN_CHANGED } from '../utils/authEvents'
+import ArtworkImage from '../components/ArtworkImage'
 import './Profile.css'
 
 function Profile() {
   const { userId } = useParams()
   const [user, setUser] = useState(null)
   const [songs, setSongs] = useState([])
-  const [songSuggestions, setSongSuggestions] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [showAddSong, setShowAddSong] = useState(false)
+  const [showStatusSearch, setShowStatusSearch] = useState(false)
   const [editingSong, setEditingSong] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState([])
   const [searching, setSearching] = useState(false)
+  const [setupProfile, setSetupProfile] = useState(() => getMusicProfile())
+  const [genreTags, setGenreTags] = useState([])
   const [lyricSoundValue, setLyricSoundValue] = useState(30) // 0-100, 30 = more lyric
+  const [calmHypeValue, setCalmHypeValue] = useState(60)
+  const [acousticElectronicValue, setAcousticElectronicValue] = useState(55)
+  const [statusSong, setStatusSong] = useState({
+    title: 'Set a status song...',
+    artist: 'What are you feeling right now?',
+    emoji: '🎵',
+  })
+  const [statusCaption, setStatusCaption] = useState('')
+  const [phases, setPhases] = useState([
+    { id: 1, year: '2019', label: 'sad indie era 🌧️', desc: 'The Neighbourhood, Cigarettes After Sex on repeat' },
+    { id: 2, year: '2021', label: 'hyperpop summer ⚡', desc: 'everything loud, bright, and fast' },
+    { id: 3, year: 'now', label: 'pop crossover 🌸', desc: 'anything with a strong hook' },
+  ])
   const [editMode, setEditMode] = useState(false)
   const [connectionsCount, setConnectionsCount] = useState(null)
   const isOwnProfile = !userId
@@ -31,7 +49,33 @@ function Profile() {
 
   useEffect(() => {
     fetchData()
+    
+    // Listen for token changes to refresh data
+    const handleTokenChange = () => {
+      const token = localStorage.getItem('token')
+      if (token) {
+        fetchData()
+      }
+    }
+    
+    // Listen for both custom auth event and storage event
+    window.addEventListener(AUTH_TOKEN_CHANGED, handleTokenChange)
+    window.addEventListener('storage', handleTokenChange)
+    return () => {
+      window.removeEventListener(AUTH_TOKEN_CHANGED, handleTokenChange)
+      window.removeEventListener('storage', handleTokenChange)
+    }
   }, [userId])
+
+  useEffect(() => {
+    const syncProfile = () => setSetupProfile(getMusicProfile())
+    window.addEventListener(MUSIC_PROFILE_EVENT, syncProfile)
+    window.addEventListener('storage', syncProfile)
+    return () => {
+      window.removeEventListener(MUSIC_PROFILE_EVENT, syncProfile)
+      window.removeEventListener('storage', syncProfile)
+    }
+  }, [])
 
   const fetchData = async () => {
     try {
@@ -50,21 +94,6 @@ function Profile() {
         : await songsAPI.getMySongs()
       setSongs(songsData.data)
       
-      // Get song suggestions for own profile
-      if (isOwnProfile) {
-        try {
-          const suggestions = await feedAPI.getSongRecommendations({ limit: 5 })
-          setSongSuggestions(suggestions.data || [])
-        } catch (err) {
-          console.error('Failed to fetch song suggestions:', err)
-        }
-        try {
-          const stats = await connectionsAPI.getStats()
-          setConnectionsCount(stats.data?.accepted ?? stats.data?.total ?? null)
-        } catch (err) {
-          console.error('Failed to fetch connection stats:', err)
-        }
-      }
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to load profile')
       console.error('Profile error:', err)
@@ -78,8 +107,17 @@ function Profile() {
     
     try {
       setSearching(true)
-      const results = await musicbrainzAPI.searchSong(searchQuery)
-      setSearchResults(results.data.songs || [])
+      const response = await itunesAPI.searchSong(searchQuery, 20)
+      const results = response.data?.results || []
+      // Transform iTunes results to match expected format
+      const transformedResults = results.map((item) => ({
+        title: item.trackName || item.collectionName || '',
+        artist: item.artistName || '',
+        album: item.collectionName || '',
+        genre: item.primaryGenreName || '',
+        artworkUrl: item.artworkUrl100 || item.artworkUrl60 || item.artworkUrl30 || null,
+      }))
+      setSearchResults(transformedResults)
     } catch (err) {
       console.error('Search error:', err)
       setSearchResults([])
@@ -89,6 +127,18 @@ function Profile() {
   }
 
   const handleSelectSearchResult = (song) => {
+    if (showStatusSearch) {
+      setStatusSong({
+        title: song.title || 'Unknown Song',
+        artist: song.artist || 'Unknown Artist',
+        emoji: '🎵',
+      })
+      setShowStatusSearch(false)
+      setSearchResults([])
+      setSearchQuery('')
+      return
+    }
+
     setSongForm({
       title: song.title || '',
       artist: song.artist || '',
@@ -161,16 +211,11 @@ function Profile() {
     try {
       const nameEl = document.getElementById('heroName')
       const subtitleEl = document.getElementById('heroSubtitle')
-      const genreTags = document.getElementById('genreTags')
-      
-      const genres = Array.from(genreTags.querySelectorAll('.genre-tag'))
-        .map(tag => tag.textContent.replace('×', '').trim().toUpperCase())
-        .filter(g => g && g !== 'NO GENRES YET')
       
       await usersAPI.updateProfile({
         username: nameEl.textContent.trim(),
         bio: subtitleEl.value || subtitleEl.textContent || '',
-        top_genres: genres
+        top_genres: genreTags.map((genre) => genre.toUpperCase())
       })
       
       setEditMode(false)
@@ -184,26 +229,120 @@ function Profile() {
     const input = document.getElementById('genreInput')
     const val = input.value.trim().toUpperCase()
     if (!val) return
-    
-    const genreTags = document.getElementById('genreTags')
-    const existing = Array.from(genreTags.querySelectorAll('.genre-tag'))
-      .map(t => t.textContent.replace('×', '').trim().toUpperCase())
-    
+
+    const existing = genreTags.map((genre) => genre.toUpperCase())
     if (existing.includes(val)) {
       input.value = ''
       return
     }
-    
-    const tag = document.createElement('span')
-    tag.className = 'genre-tag'
-    tag.innerHTML = `${val} <span class="remove-tag" onClick="this.parentElement.remove()">×</span>`
-    genreTags.appendChild(tag)
+
+    setGenreTags((prev) => [...prev, val])
     input.value = ''
   }
 
-  const handleRemoveGenre = (tagElement) => {
-    tagElement.remove()
+  const handleRemoveGenre = (genreToRemove) => {
+    setGenreTags((prev) => prev.filter((genre) => genre !== genreToRemove))
   }
+
+  const addPhase = () => {
+    const next = [...phases]
+    next.push({
+      id: Date.now(),
+      year: 'now',
+      label: 'my current era ✨',
+      desc: 'describe your current vibe...',
+    })
+    setPhases(next)
+  }
+
+  const removePhase = (phaseId) => {
+    setPhases((prev) => prev.filter((phase) => phase.id !== phaseId))
+  }
+
+  const updatePhase = (phaseId, field, value) => {
+    setPhases((prev) =>
+      prev.map((phase) => (phase.id === phaseId ? { ...phase, [field]: value } : phase))
+    )
+  }
+
+  const parseSetupSong = (entry, index) => {
+    const raw = String(entry || '').trim()
+    const sep = raw.lastIndexOf(' - ')
+    if (sep !== -1) {
+      return {
+        id: `setup-song-${index}`,
+        title: raw.slice(0, sep).trim(),
+        artist: raw.slice(sep + 3).trim(),
+      }
+    }
+    return { id: `setup-song-${index}`, title: raw, artist: 'Unknown Artist' }
+  }
+
+  // Only use setup profile if there are NO songs in the database
+  // This ensures test users show their actual database songs
+  const useSetupProfile = isOwnProfile && songs.length === 0 && (setupProfile.songs.length || setupProfile.artists.length)
+
+  const topSongs = useSetupProfile && setupProfile.songs.length
+    ? setupProfile.songs.slice(0, 5).map(parseSetupSong)
+    : [...songs]
+        .sort((a, b) => {
+          if (a.is_favorite && !b.is_favorite) return -1
+          if (!a.is_favorite && b.is_favorite) return 1
+          return (b.user_rating || 0) - (a.user_rating || 0)
+        })
+        .slice(0, 5)
+
+  const topArtists = useSetupProfile && setupProfile.artists.length && songs.length === 0
+    ? setupProfile.artists.slice(0, 5)
+    : (user?.favorite_artists || []).slice(0, 5)
+
+  useEffect(() => {
+    let isCancelled = false
+
+    const populateGenresFromItunes = async () => {
+      const sourceSongs = useSetupProfile && setupProfile.songs.length && songs.length === 0
+        ? setupProfile.songs.slice(0, 5).map(parseSetupSong)
+        : topSongs
+      const sourceArtists = topArtists
+
+      if (!sourceSongs.length && !sourceArtists.length) {
+        setGenreTags((user?.top_genres || []).map((genre) => String(genre).toUpperCase()))
+        return
+      }
+
+      try {
+        const songGenrePromises = sourceSongs.map(async (song) => {
+          const term = `${song.title || ''} ${song.artist || ''}`.trim()
+          if (!term) return null
+          const response = await itunesAPI.searchSong(term, 1)
+          return response.data?.results?.[0]?.primaryGenreName || null
+        })
+
+        const artistGenrePromises = sourceArtists.map(async (artist) => {
+          const term = String(artist || '').trim()
+          if (!term) return null
+          const response = await itunesAPI.searchArtist(term, 1)
+          return response.data?.results?.[0]?.primaryGenreName || null
+        })
+
+        const allGenres = [...(await Promise.all(songGenrePromises)), ...(await Promise.all(artistGenrePromises))]
+        const uniqueGenres = [...new Set(allGenres.filter(Boolean).map((genre) => String(genre).toUpperCase()))]
+
+        if (!isCancelled) {
+          setGenreTags(uniqueGenres.length ? uniqueGenres : (user?.top_genres || []).map((genre) => String(genre).toUpperCase()))
+        }
+      } catch (fetchErr) {
+        if (!isCancelled) {
+          setGenreTags((user?.top_genres || []).map((genre) => String(genre).toUpperCase()))
+        }
+      }
+    }
+
+    populateGenresFromItunes()
+    return () => {
+      isCancelled = true
+    }
+  }, [setupProfile, songs, user])
 
   if (loading) {
     return <div className="profile"><p>Loading...</p></div>
@@ -213,16 +352,6 @@ function Profile() {
     return <div className="profile"><p>User not found</p></div>
   }
 
-  const topSongs = songs
-    .sort((a, b) => {
-      if (a.is_favorite && !b.is_favorite) return -1
-      if (!a.is_favorite && b.is_favorite) return 1
-      return (b.user_rating || 0) - (a.user_rating || 0)
-    })
-    .slice(0, 5)
-
-  const topArtists = (user.favorite_artists || []).slice(0, 5)
-
   return (
     <div className={`profile page ${editMode ? 'edit-mode' : ''}`}>
       {error && <div className="error-banner">{error}</div>}
@@ -231,8 +360,22 @@ function Profile() {
       <div className="hero">
         <div className="hero-left">
           <div className="hero-album-thumb" id="heroAlbumThumb">
-            <div className="album-emoji">🕰️</div>
-            <img id="albumImg" src="" alt="" style={{ display: 'none' }} />
+            {(() => {
+              // Find favorite song first, otherwise use top song
+              const favoriteSong = topSongs.find(song => song.is_favorite) || topSongs[0]
+              return favoriteSong ? (
+                <ArtworkImage
+                  type="song"
+                  title={favoriteSong.title}
+                  artist={favoriteSong.artist}
+                  size="100"
+                  fallbackEmoji="🕰️"
+                  className="absolute"
+                />
+              ) : (
+                <div className="album-emoji">🕰️</div>
+              )
+            })()}
           </div>
           <div className="hero-name-wrap">
             <h1
@@ -290,21 +433,40 @@ function Profile() {
           {/* Left Column - Album Art & Genres */}
           <div>
             <div className="album-card" id="albumCard">
-              <div className="album-emoji" id="albumEmoji">🕰️</div>
-              <img id="albumImg2" src="" alt="" style={{ display: 'none' }} />
+              {(() => {
+                // Find favorite song first, otherwise use top song
+                const favoriteSong = topSongs.find(song => song.is_favorite) || topSongs[0]
+                return favoriteSong ? (
+                  <ArtworkImage
+                    type="song"
+                    title={favoriteSong.title}
+                    artist={favoriteSong.artist}
+                    size="100"
+                    fallbackEmoji="🕰️"
+                    className="absolute"
+                  />
+                ) : (
+                  <div className="album-emoji" id="albumEmoji">🕰️</div>
+                )
+              })()}
               <div className="album-overlay"></div>
-              <div className="album-label" id="albumLabel">A Matter of Time</div>
+              <div className="album-label" id="albumLabel">
+                {(() => {
+                  const favoriteSong = topSongs.find(song => song.is_favorite) || topSongs[0]
+                  return favoriteSong ? `${favoriteSong.title} — ${favoriteSong.artist}` : 'A Matter of Time'
+                })()}
+              </div>
             </div>
             
             <div className="genre-row">
               <div className="genre-label">Genres</div>
               <div className="genre-tags" id="genreTags">
-                {user.top_genres && user.top_genres.length > 0 ? (
-                  user.top_genres.map((genre, idx) => (
+                {genreTags.length > 0 ? (
+                  genreTags.map((genre, idx) => (
                     <span key={idx} className="genre-tag">
-                      {genre.toUpperCase()}
+                      {genre}
                       {editMode && <span className="remove-tag" onClick={(e) => {
-                        e.currentTarget.parentElement.remove()
+                        handleRemoveGenre(genre)
                       }}>×</span>}
                     </span>
                   ))
@@ -359,21 +521,31 @@ function Profile() {
               Top 5 Songs
               {editMode && (
                 <button className="search-songs-btn" onClick={() => setShowAddSong(true)}>
-                  + Add
+                  + Search iTunes
                 </button>
               )}
+              {/* UI optimizations deployed */}
             </div>
             <div className="song-list" id="songList">
               {topSongs.length > 0 ? (
                 topSongs.map((song, idx) => (
                   <div key={song.id} className="song-row">
                     <span className="song-rank">{idx + 1}</span>
-                    <div className="song-thumb">🎵</div>
+                    <div className="song-thumb">
+                      <ArtworkImage
+                        type="song"
+                        title={song.title}
+                        artist={song.artist}
+                        size="60"
+                        fallbackEmoji="🎵"
+                        className="song-artwork"
+                      />
+                    </div>
                     <div className="song-info">
                       <div className="song-name">{song.title}</div>
                       <div className="song-artist">{song.artist}</div>
                     </div>
-                    {editMode && isOwnProfile && (
+                    {editMode && isOwnProfile && typeof song.id === 'number' && (
                       <button className="song-remove" onClick={() => handleDeleteSong(song.id)}>×</button>
                     )}
                   </div>
@@ -387,14 +559,25 @@ function Profile() {
               )}
             </div>
             
-            {/* Top 5 Artists */}
-            <div className="list-title" style={{ marginTop: '24px' }}>Top 5 Artists</div>
+          </div>
+          
+          {/* Right Column - Top 5 Artists */}
+          <div>
+            <div className="list-title">Top 5 Artists</div>
             <div className="song-list" id="artistList">
               {topArtists.length > 0 ? (
                 topArtists.map((artist, idx) => (
                   <div key={idx} className="song-row">
                     <span className="song-rank">{idx + 1}</span>
-                    <div className="song-thumb">🎤</div>
+                    <div className="song-thumb">
+                      <ArtworkImage
+                        type="artist"
+                        title={artist}
+                        size="60"
+                        fallbackEmoji="🎤"
+                        className="song-artwork"
+                      />
+                    </div>
                     <div className="song-info">
                       <div className="song-name">{artist}</div>
                     </div>
@@ -409,47 +592,150 @@ function Profile() {
               )}
             </div>
           </div>
-          
-          {/* Right Column - Top Song Suggestions */}
-          <div>
-            <div className="list-title">Top Song Suggestions</div>
-            <div className="song-list">
-              {songSuggestions.length > 0 ? (
-                songSuggestions.map((suggestion, idx) => (
-                  <div key={suggestion.id || idx} className="song-row">
-                    <span className="song-rank">{idx + 1}</span>
-                    <div className="song-thumb">🎵</div>
-                    <div className="song-info">
-                      <div className="song-name">{suggestion.title || suggestion.song_title || 'Unknown'}</div>
-                      <div className="song-artist">{suggestion.artist || suggestion.song_artist || 'Unknown Artist'}</div>
+        </div>
+      </div>
+
+      {/* Bottom strip */}
+      <div className="bottom-strip">
+        <div className="strip-card">
+          <div className="strip-title">Listening Preferences</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '13px' }}>
+            <div className="pref-row">
+              <span className="pref-lbl">Lyric</span>
+              <input
+                type="range"
+                className="ls-slider"
+                min="0"
+                max="100"
+                value={lyricSoundValue}
+                onChange={(e) => setLyricSoundValue(Number(e.target.value))}
+                disabled={!isOwnProfile || !editMode}
+              />
+              <span className="pref-lbl2">Sound</span>
+            </div>
+            <div className="pref-row">
+              <span className="pref-lbl">Calm</span>
+              <input
+                type="range"
+                className="ls-slider"
+                min="0"
+                max="100"
+                value={calmHypeValue}
+                onChange={(e) => setCalmHypeValue(Number(e.target.value))}
+                disabled={!isOwnProfile || !editMode}
+              />
+              <span className="pref-lbl2">Hype</span>
+            </div>
+            <div className="pref-row">
+              <span className="pref-lbl">Acoustic</span>
+              <input
+                type="range"
+                className="ls-slider"
+                min="0"
+                max="100"
+                value={acousticElectronicValue}
+                onChange={(e) => setAcousticElectronicValue(Number(e.target.value))}
+                disabled={!isOwnProfile || !editMode}
+              />
+              <span className="pref-lbl2">Electronic</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="strip-card">
+          <div className="strip-title">Status Song</div>
+          <div className="status-song-card">
+            <div className="ss-art">{statusSong.emoji}</div>
+            <div className="ss-info">
+              <div className="ss-name">{statusSong.title}</div>
+              <div className="ss-artist">{statusSong.artist}</div>
+            </div>
+            <div className="ss-pulse">
+              <div className="ss-bar" style={{ height: '10px', animationDelay: '0s' }}></div>
+              <div className="ss-bar" style={{ height: '18px', animationDelay: '0.15s' }}></div>
+              <div className="ss-bar" style={{ height: '7px', animationDelay: '0.3s' }}></div>
+            </div>
+          </div>
+          <input
+            className="ss-caption"
+            placeholder='Add a caption, e.g. "this one hits different lately"'
+            value={statusCaption}
+            disabled={!editMode || !isOwnProfile}
+            onChange={(e) => setStatusCaption(e.target.value)}
+          />
+          {editMode && isOwnProfile && (
+            <button
+              className="ss-change-btn"
+              onClick={() => {
+                setShowStatusSearch(true)
+                setShowAddSong(false)
+                setEditingSong(null)
+              }}
+            >
+              Change song
+            </button>
+          )}
+        </div>
+
+        <div className="strip-card">
+          <div className="strip-title strip-title-row">
+            My Music Phases
+            {editMode && isOwnProfile && (
+              <button className="add-phase-btn" onClick={addPhase}>+ Add phase</button>
+            )}
+          </div>
+          <div className="phases-timeline">
+            {phases.map((phase, index) => {
+              const isNow = phase.year.toLowerCase() === 'now' || index === phases.length - 1
+              return (
+                <div key={phase.id} className="phase-item">
+                  <div className={`phase-dot ${isNow ? 'phase-dot--now' : ''}`}></div>
+                  <div className="phase-body">
+                    <div className="phase-year" style={isNow ? { color: 'var(--green-node)' } : undefined}>
+                      {phase.year}
+                    </div>
+                    <div
+                      className="phase-label"
+                      contentEditable={editMode && isOwnProfile}
+                      suppressContentEditableWarning
+                      onBlur={(e) => updatePhase(phase.id, 'label', e.currentTarget.textContent || '')}
+                    >
+                      {phase.label}
+                    </div>
+                    <div
+                      className="phase-desc"
+                      contentEditable={editMode && isOwnProfile}
+                      suppressContentEditableWarning
+                      onBlur={(e) => updatePhase(phase.id, 'desc', e.currentTarget.textContent || '')}
+                    >
+                      {phase.desc}
                     </div>
                   </div>
-                ))
-              ) : (
-                <div className="song-row">
-                  <div className="song-info">
-                    <div className="song-name" style={{ color: 'var(--muted)' }}>No suggestions yet</div>
-                  </div>
+                  {editMode && isOwnProfile && (
+                    <button className="phase-remove" onClick={() => removePhase(phase.id)}>×</button>
+                  )}
                 </div>
-              )}
-            </div>
+              )
+            })}
           </div>
         </div>
       </div>
       
       {/* Song Add/Edit Modal */}
-      {(showAddSong || editingSong) && isOwnProfile && (
+      {(showAddSong || editingSong || showStatusSearch) && isOwnProfile && (
         <div className="song-search-overlay show" onClick={(e) => {
           if (e.target.className === 'song-search-overlay show') {
             setShowAddSong(false)
+            setShowStatusSearch(false)
             setEditingSong(null)
           }
         }}>
           <div className="song-search-modal" onClick={(e) => e.stopPropagation()}>
             <div className="ssm-title">
-              {editingSong ? 'Edit Song' : 'Add New Song'}
+              {showStatusSearch ? 'Set Your Status Song' : (editingSong ? 'Edit Song' : 'Add New Song')}
               <button className="ssm-close" onClick={() => {
                 setShowAddSong(false)
+                setShowStatusSearch(false)
                 setEditingSong(null)
               }}>×</button>
             </div>
@@ -461,6 +747,14 @@ function Profile() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSearchSong()}
             />
+            <button 
+              type="button"
+              className="ssm-search-btn" 
+              onClick={handleSearchSong}
+              disabled={searching || !searchQuery.trim()}
+            >
+              {searching ? 'Searching...' : 'Search iTunes'}
+            </button>
             {searchResults.length > 0 && (
               <div className="ssm-results">
                 {searchResults.map((result, idx) => (
@@ -478,6 +772,7 @@ function Profile() {
                 ))}
               </div>
             )}
+            {!showStatusSearch && (
             <form onSubmit={editingSong ? handleEditSong : handleAddSong} style={{ marginTop: '12px' }}>
               <div className="form-row">
                 <div className="form-group">
@@ -516,6 +811,7 @@ function Profile() {
                 </button>
               </div>
             </form>
+            )}
           </div>
         </div>
       )}
